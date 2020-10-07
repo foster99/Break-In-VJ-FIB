@@ -28,7 +28,7 @@ private:
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
-
+	// salu2
 };
 
 
