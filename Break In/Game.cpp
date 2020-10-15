@@ -6,13 +6,18 @@
 void Game::init()
 {
 	bPlay = true;
+	playing = false;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	Mscene.init();
 	scene.init();
 }
 
 bool Game::update(int deltaTime)
 {
-	scene.update(deltaTime);
+	if(!playing)
+		Mscene.update(deltaTime);
+	else
+		scene.update(deltaTime);
 	
 	return bPlay;
 }
@@ -20,13 +25,20 @@ bool Game::update(int deltaTime)
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	scene.render();
+	if(!playing)
+		Mscene.render();
+	else
+		scene.render();
 }
 
 void Game::keyPressed(int key)
 {
-	if(key == 27) // Escape code
+	if (key == 27) // Escape code
 		bPlay = false;
+	else if (key == 'c' && !playing)
+		Mscene.changeTex();
+	else if (key == ' ')
+		playing = !playing;
 	keys[key] = true;
 }
 
