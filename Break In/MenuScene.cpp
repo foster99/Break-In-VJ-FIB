@@ -25,9 +25,9 @@ void MenuScene::init()
 
 	initShaders();
 	texQuad = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
-	tex[0].loadFromFile("images/bee.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	tex[1].loadFromFile("images/varied.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	projection = glm::ortho(0.f, float(CAMERA_WIDTH-1), float(CAMERA_HEIGHT-1), 0.f);
+	tex[0].loadFromFile("images/menu.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	tex[1].loadFromFile("images/opciones.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH-1), float(SCREEN_HEIGHT-1), 0.f);
 	currentTime = 0.0f;
 }
 
