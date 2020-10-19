@@ -8,8 +8,16 @@ void Game::init()
 	bPlay = true;
 	playing = false;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+
+	loadSounds();
+
 	Mscene.init();
 	scene.init();
+}
+
+void Game::loadSounds()
+{
+	bell_sound = Sound("bell.wav", false);
 }
 
 bool Game::update(int deltaTime)
@@ -33,12 +41,24 @@ void Game::render()
 
 void Game::keyPressed(int key)
 {
-	if (key == 27) // Escape code
-		bPlay = false;
-	else if (key == 'c' && !playing)
-		Mscene.changeTex();
-	else if (key == ' ')
-		playing = !playing;
+	switch (key) {
+		case 27: // Escape code
+			bPlay = false;
+			break;
+		case 'c':
+			if (!playing) Mscene.changeTex();
+			break;
+		case ' ':
+			playing = !playing;
+			break;
+		case 's':
+			bell_sound.play();
+			break;
+
+		default:
+			break;
+	}
+		
 	keys[key] = true;
 }
 

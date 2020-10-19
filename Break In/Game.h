@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 #include "MenuScene.h"
+#include "Sound.h"
 
 
 #define SCREEN_WIDTH 640
@@ -28,6 +29,7 @@ public:
 	}
 	
 	void init();
+	void loadSounds();
 	bool update(int deltaTime);
 	void render();
 	
@@ -50,6 +52,9 @@ private:
 	                                  // we can have access at any time
 	MenuScene Mscene;		// EXPERIMENT
 	bool playing;			// CANVIAR PER HERENCIA?
+
+	Sound bell_sound;
+
 
 };
 
