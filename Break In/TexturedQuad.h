@@ -18,6 +18,7 @@ public:
 
 	void render(const Texture &tex) const;
 	void free();
+	
 
 private:
 	GLuint vao;
