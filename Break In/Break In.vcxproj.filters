@@ -10,6 +10,12 @@
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
     <Filter Include="Resource Files">
+      <UniqueIdentifier>{31b9233d-08ef-4b9c-9796-72b597cd1574}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\sound">
+      <UniqueIdentifier>{a89a3a6e-8538-41b7-a5ff-ef05ec3c135e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\images">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
@@ -89,5 +95,48 @@
     <ClInclude Include="TexturedQuad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Ball.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\backgrounds.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\ball.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\bank_items.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\bars.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\bonus.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\bricks.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\eyes.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\title_screen.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\chars.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\numbers.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="sounds\bell.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
   </ItemGroup>
 </Project>

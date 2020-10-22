@@ -8,8 +8,8 @@
 
 void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {	
-	sizeBall = 16;
-	tex.loadFromFile("images/bee.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sizeBall = 9;
+	tex.loadFromFile("images/ball.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(sizeBall, sizeBall), glm::vec2(1.f, 1.f), &tex, &shaderProgram);
 	sprite->setNumberAnimations(1);
 

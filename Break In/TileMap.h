@@ -39,6 +39,20 @@ private:
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
 
 private:
+
+	static constexpr char brickRed		= 'R';
+	static constexpr char brickGreen	= 'G';
+	static constexpr char brickBlue		= 'B';
+	static constexpr char brickLow		= 'L';
+	static constexpr char brickHigh		= 'H';
+	static constexpr char door			= 'D';
+	static constexpr char alarm			= 'A';
+	static constexpr char key			= 'K';
+	static constexpr char coin			= 'C';
+	static constexpr char moneyBag		= 'M';
+	static constexpr char outCard		= 'O';
+	static constexpr char blueSpheres	= 'S';
+	
 	GLuint vao;
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;

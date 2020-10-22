@@ -48,10 +48,26 @@
     <ClInclude Include="TexturedQuad.h" />
     <ClInclude Include="TileMap.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\backgrounds.png" />
+    <Image Include="images\ball.png" />
+    <Image Include="images\bank_items.png" />
+    <Image Include="images\bars.png" />
+    <Image Include="images\bonus.png" />
+    <Image Include="images\bricks.png" />
+    <Image Include="images\chars.png" />
+    <Image Include="images\eyes.png" />
+    <Image Include="images\numbers.png" />
+    <Image Include="images\title_screen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="sounds\bell.wav" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{00FAE067-05E6-4B1D-A525-F20513237771}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -106,6 +122,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\libs\Simple OpenGL Image Library\src;..\libs\freeglut\include;..\libs\glew-1.13.0\include;..\libs\glm;..\libs\irrKlang-1.6.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
