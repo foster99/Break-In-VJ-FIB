@@ -1,63 +1,166 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
-
+#include "StartMenuScene.h"
 
 void Game::init()
 {
-	bPlay = true;
-	playing = false;
+	modeHist.push(startMenu);
+
+	//playing = false; // REMOVE
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
+	// Sound Initialization
+	// Should sound go into Scene clases ????? REMOVE
 	loadSounds();
 
-	Mscene.init();
-	scene.init();
+	// Scene initialization
+	startMenuScene.init();
+	gameScene.init();
+	//optionsScene.init();
+	//instructionsScene.init();
+	//creditsScene.init();
+	//passwordScene.init();
 }
 
 void Game::loadSounds()
 {
-	bell_sound = Sound("bell.wav", false);
+	bell_sound = Sound("bell.wav", false); // REMOVE
 }
 
 bool Game::update(int deltaTime)
 {
-	if(!playing)
-		Mscene.update(deltaTime);
-	else
-		scene.update(deltaTime);
+	//if(!playing)
+	//	Mscene.update(deltaTime);
+	//else
+
+	switch (currMode()) {
+	case startMenu:
+		startMenuScene.update(deltaTime);
+		break;
+
+	case playing:
+		gameScene.update(deltaTime);
+		break;
+
+	case options:
+		//optionsScene.update(deltaTime);
+		break;
+
+	case instructions:
+		//instructionsScene.update(deltaTime);
+		break;
+
+	case credits:
+		//creditsScene.update(deltaTime);
+		break;
+
+	case password:
+		//passwordScene.update(deltaTime);
+		break;
+
+	case exitGame: break;
+	}
 	
-	return bPlay;
+	return currMode() != exitGame;
 }
 
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if(!playing)
-		Mscene.render();
-	else
-		scene.render();
+	
+	switch (currMode()) {
+	case startMenu:
+		startMenuScene.render();
+		break;
+
+	case playing:
+		gameScene.render();
+		break;
+
+	case options:
+		//optionsScene.render();
+		break;
+
+	case instructions:
+		//instructionsScene.render();
+		break;
+
+	case credits:
+		//creditsScene.render();
+		break;
+
+	case password:
+		//passwordScene.render();
+		break;
+
+	case exitGame: break;
+	}
 }
 
 void Game::keyPressed(int key)
 {
-	switch (key) {
-		case 27: // Escape code
-			bPlay = false;
-			break;
-		case 'c':
-			if (!playing) Mscene.changeTex();
-			break;
-		case ' ':
-			playing = !playing;
-			break;
-		case 's':
-			bell_sound.play();
-			break;
+	static constexpr int ESC = 27;
 
-		default:
-			break;
+	switch (currMode()) {
+	case startMenu:
+		cout << "start" << endl;
+		switch (key) {
+			case ESC:	setMode(options);	break;
+			case 'p':	setMode(password);	break;
+			case 'e':	setMode(exitGame);	break;
+			case ' ':	setMode(playing);	break;
+			default:	break;
+		} break;
+
+	case playing:
+		switch (key) {
+			case ESC:	setMode(options);	break;
+			case 'g':	toggleGodMode();	break;
+			default:	break;
+		} break;
+
+	case options:
+		switch (key) {
+			case ESC:	rollbackMode();			break;
+			case 'i':	setMode(instructions);	break;
+			case 'c':	setMode(credits);		break;
+			case 'e':	setMode(startMenu);		break;
+			default:	break;
+		} break;
+
+	case instructions: 
+		switch (key) {
+			case ESC:	rollbackMode();	break;
+			default:	break;
+		} break;
+
+	case credits: break;
+		switch (key) {
+			case ESC:	rollbackMode();	break;
+			default:	break;
+		} break;
+
+	case password: break;
+		switch (key) {
+			case ESC:	rollbackMode();	break;
+			default:	break;
+		} break;
 	}
+
+	//
+	//switch (key) {
+	//	case 'm': // Options Key
+	//		if (!playing) menuScene.changeTex(); // REMOVE
+	//		break;
+
+	//	case 's': // REMOVE
+	//		bell_sound.play();
+	//		break;
+
+	//	default:
+	//		break;
+	//}
 		
 	keys[key] = true;
 }
@@ -97,6 +200,29 @@ bool Game::getKey(int key) const
 bool Game::getSpecialKey(int key) const
 {
 	return specialKeys[key];
+}
+
+Mode Game::currMode()
+{
+	return modeHist.top();
+}
+
+void Game::setMode(Mode newMode)
+{
+	if (newMode == startMenu)
+		modeHist = {};
+
+	modeHist.push(newMode);
+}
+
+void Game::rollbackMode()
+{
+	if (!modeHist.empty()) modeHist.pop();
+}
+
+void Game::toggleGodMode()
+{
+	gameScene.toggleGodMode();
 }
 
 

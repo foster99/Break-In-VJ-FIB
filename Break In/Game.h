@@ -2,18 +2,17 @@
 #define _GAME_INCLUDE
 
 
-#include "Scene.h"
-#include "MenuScene.h"
 #include "Sound.h"
+#include <stack>
+#include <iostream>
 
+#include "GameScene.h"
+#include "StartMenuScene.h"
 
 //#define SCREEN_WIDTH 640
 //#define SCREEN_HEIGHT 480
 
-#define SCREEN_WIDTH 256
-#define SCREEN_HEIGHT 192
-
-
+typedef unsigned short Mode;
 // Game is a singleton (a class with a single instance) that represents our whole application
 // UwU
 
@@ -21,8 +20,12 @@ class Game
 {
 
 public:
+
+	static constexpr int SCREEN_WIDTH	= 256;
+	static constexpr int SCREEN_HEIGHT	= 192;
+	static constexpr int TILESIZE		= 8;
+
 	Game() {}
-	
 	
 	static Game &instance()
 	{
@@ -49,14 +52,33 @@ public:
 	bool getSpecialKey(int key) const;
 
 private:
-	bool bPlay;                       // Continue to play game?
-	Scene scene;                      // Scene to render
-	bool keys[256], specialKeys[256]; // Store key states so that 
-	                                  // we can have access at any time
-	MenuScene Mscene;		// EXPERIMENT
-	bool playing;			// CANVIAR PER HERENCIA?
 
-	Sound bell_sound;
+	// Different Modes
+	static constexpr Mode exitGame		= Mode(0);
+	static constexpr Mode startMenu		= Mode(1);
+	static constexpr Mode playing		= Mode(2);
+	static constexpr Mode options		= Mode(3);
+	static constexpr Mode instructions	= Mode(4);
+	static constexpr Mode credits		= Mode(5);
+	static constexpr Mode password		= Mode(6);
+
+	Mode currMode();
+	void setMode(Mode newMode);
+	void rollbackMode();
+	void toggleGodMode();
+
+	// Application Scenes
+	GameScene gameScene;	// Scene to render when playing
+	StartMenuScene startMenuScene;	// Scene to render when showing the Menu
+	
+	stack<Mode> modeHist;	// Defines the mode history (startmenu, playing, credits, ...)
+
+	bool keys[256], specialKeys[256]; // Store key states so that we can have access at any time
+	
+									  //MenuScene scene;		// EXPERIMENT
+	//bool playing;			// CANVIAR PER HERENCIA? // REMOVE
+
+	Sound bell_sound; // REMOVE
 
 
 };
