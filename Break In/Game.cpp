@@ -18,8 +18,6 @@ void Game::init()
 	startMenuScene.init();
 	gameScene.init();
 	optionsScene.init();
-	//instructionsScene.init();
-	//creditsScene.init();
 	passwordScene.init();
 }
 

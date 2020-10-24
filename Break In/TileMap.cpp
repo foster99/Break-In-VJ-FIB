@@ -157,6 +157,12 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	x = (pos.x - speed)/tileSize;
 	y0 = pos.y / tileSize;
 	y1 = (pos.y + size.y - 1) / tileSize;
+
+	if (x < 0) {
+		*posX = tileSize;
+		return true;
+	}
+
 	for (int y = y0; y <= y1; y++)
 	{
 		if (map[y * mapSize.x + x] != 0) {
@@ -175,6 +181,12 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, 
 	x = (pos.x + size.x + speed) / tileSize;
 	y0 = pos.y / tileSize;
 	y1 = (pos.y + size.y - 1) / tileSize;
+	
+	if (x > mapSize.y) {
+		*posX = mapSize.y * tileSize - tileSize;
+		return true;
+	}
+	
 	for (int y = y0; y <= y1; y++)
 	{
 		if (map[y * mapSize.x + x] != 0) {
@@ -192,6 +204,12 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	x0 = pos.x / tileSize;
 	x1 = (pos.x + size.x - 1) / tileSize;
 	y = (pos.y + size.y + speed) / tileSize;
+
+	if (y > mapSize.y) {
+		*posY = mapSize.y*tileSize - size.y -tileSize;
+		return true;
+	}
+
 	for(int x=x0; x<=x1; x++)
 	{
 		if(map[y*mapSize.x+x] != 0)
@@ -214,6 +232,12 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int
 	x0 = pos.x / tileSize;
 	x1 = (pos.x + size.x - 1) / tileSize;
 	y = (pos.y - speed) / tileSize;
+
+	if (y < 0) {
+		*posY = tileSize;
+		return true;
+	}
+
 	for (int x = x0; x <= x1; x++)
 	{
 		if (map[y * mapSize.x + x] != 0)
