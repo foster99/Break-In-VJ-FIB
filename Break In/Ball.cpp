@@ -9,7 +9,7 @@
 void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {	
 	sizeBall = 9;
-	speed = 4;
+	speed = 2;
 	spdModifierX = spdModifierY = 1;
 
 	tex.loadFromFile("images/ball.png", TEXTURE_PIXEL_FORMAT_RGBA);
