@@ -17,6 +17,9 @@ public:
 
     void toggleGodMode();
 
+    static constexpr float INIT_PLAYER_X_TILES = 10;
+    static constexpr float INIT_PLAYER_Y_TILES = 10;
+
 private:
     bool godMode;
     TileMap* map;

@@ -18,8 +18,6 @@ public:
 
 	static constexpr float SCREEN_X = 0;
 	static constexpr float SCREEN_Y = 0;
-	static constexpr float INIT_PLAYER_X_TILES = 11;
-	static constexpr float INIT_PLAYER_Y_TILES = 19;
 	static constexpr float CAMERA_WIDTH = 256;
 	static constexpr float CAMERA_HEIGHT = 192;
 
