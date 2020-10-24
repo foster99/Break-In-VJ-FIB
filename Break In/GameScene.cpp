@@ -48,7 +48,7 @@ void GameScene::update(int deltaTime) {
 
 void GameScene::render()
 {
-	if (loopsToRender == actLoop) {
+	if (loopsToRender <= actLoop) {
 		actLoop = 0;
 		this->Scene::render();
 		map->render();
