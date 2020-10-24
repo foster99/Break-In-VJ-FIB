@@ -150,7 +150,7 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 // Method collisionMoveDown also corrects Y coordinate if the box is
 // already intersecting a tile below.
 
-bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, int *posX, int speed) const
+bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speed) const
 {
 	int x, y0, y1;
 
@@ -174,7 +174,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	return false;
 }
 
-bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, int *posX, int speed) const
+bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speed) const
 {
 	int x, y0, y1;
 
@@ -197,7 +197,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, 
 	return false;
 }
 
-bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, int speed) const
+bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed) const
 {
 	int x0, x1, y;
 	
@@ -205,8 +205,8 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	x1 = (pos.x + size.x - 1) / tileSize;
 	y = (pos.y + size.y + speed) / tileSize;
 
-	if (y > mapSize.y) {
-		*posY = mapSize.y*tileSize - size.y -tileSize;
+	if (y >= mapSize.y) {
+		*posY = mapSize.y*tileSize - size.y;
 		return true;
 	}
 
@@ -225,7 +225,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	return false;
 }
  
-bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY, int speed) const
+bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed) const
 {
 	int x0, x1, y;
 

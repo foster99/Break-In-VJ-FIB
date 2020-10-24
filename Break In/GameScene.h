@@ -22,5 +22,8 @@ private:
     TileMap* map;
     Player* player;
     Ball* ball;
+
+    int loopsToRender;
+    int actLoop;
 };
 

@@ -16,7 +16,8 @@ public:
 	void setPosition(const glm::vec2& pos);
 
 private:
-	glm::ivec2 tileMapDispl, posBall, direction;
+	glm::ivec2 tileMapDispl, direction;
+	glm::vec2 posBall;
 	Texture tex;
 	Sprite* sprite;
 	TileMap* map;
