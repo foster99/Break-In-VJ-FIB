@@ -1,19 +1,19 @@
-#ifndef _MENUSCENE_INCLUDE
-#define _MENUSCENE_INCLUDE
+#ifndef _OPTIONSCENE_INCLUDE
+#define _OPTIONSCENE_INCLUDE
 
 #include <glm/glm.hpp>
 #include "Scene.h"
 #include "TexturedQuad.h"
 
+typedef unsigned short Mode;
 
-// This class represents the menu scene
 
-class StartMenuScene : public Scene
+class OptionsScene : public Scene
 {
 
 public:
-	StartMenuScene();
-	~StartMenuScene();
+	OptionsScene();
+	~OptionsScene();
 	
 	// Inherited Methods
 	void init();
@@ -22,10 +22,14 @@ public:
 
 	// Menu Methods
 	void changeTex();
+	void setMode(Mode m);
 
 private:
 	TexturedQuad* texQuad;
-	Texture tex1, tex2;
+	Texture texOptions;
+	Texture texInstructions;
+	Texture texCredits;
+	Mode mode;
 	//int actTexture; // REMOVE
 };
 #endif

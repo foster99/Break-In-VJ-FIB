@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
 #include <GL/glut.h>
+#include <glm/glm.hpp>
 #include "StartMenuScene.h"
 #include "Game.h"
 
@@ -20,9 +21,9 @@ StartMenuScene::~StartMenuScene()
 void StartMenuScene::init()
 {
 	this->Scene::init();
-	
-	//actTexture = 0; // REMOVE
-	tex.loadFromFile("images/title_screen.png", TEXTURE_PIXEL_FORMAT_RGBA);
+
+	tex1.loadFromFile("images/title_screen_01.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	tex2.loadFromFile("images/title_screen_02.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	glm::vec2 geom[2] = { glm::vec2(0.f,0.f),glm::vec2(Game::SCREEN_WIDTH,Game::SCREEN_HEIGHT) };
 	glm::vec2 texCoords[2] = { glm::vec2(0.f,0.f), glm::vec2(1.f,1.f) };
 	texQuad = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
@@ -37,7 +38,10 @@ void StartMenuScene::update(int deltaTime)
 
 void StartMenuScene::render()
 {
-	texQuad->render(tex);
+	if (glm::mod(currentTime,1000.f) < 700.f)
+		texQuad->render(tex1);
+	else 
+		texQuad->render(tex2);
 
 	this->Scene::render();
 	

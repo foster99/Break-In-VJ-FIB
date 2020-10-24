@@ -17,10 +17,10 @@ void Game::init()
 	// Scene initialization
 	startMenuScene.init();
 	gameScene.init();
-	//optionsScene.init();
+	optionsScene.init();
 	//instructionsScene.init();
 	//creditsScene.init();
-	//passwordScene.init();
+	passwordScene.init();
 }
 
 void Game::loadSounds()
@@ -43,20 +43,14 @@ bool Game::update(int deltaTime)
 		gameScene.update(deltaTime);
 		break;
 
-	case options:
-		//optionsScene.update(deltaTime);
-		break;
-
 	case instructions:
-		//instructionsScene.update(deltaTime);
-		break;
-
 	case credits:
-		//creditsScene.update(deltaTime);
+	case options:
+		optionsScene.update(deltaTime);
 		break;
 
 	case password:
-		//passwordScene.update(deltaTime);
+		passwordScene.update(deltaTime);
 		break;
 
 	case exitGame: break;
@@ -68,7 +62,7 @@ bool Game::update(int deltaTime)
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	switch (currMode()) {
 	case startMenu:
 		startMenuScene.render();
@@ -78,20 +72,15 @@ void Game::render()
 		gameScene.render();
 		break;
 
-	case options:
-		//optionsScene.render();
-		break;
-
 	case instructions:
-		//instructionsScene.render();
-		break;
-
 	case credits:
-		//creditsScene.render();
+	case options:
+		optionsScene.setMode(currMode());
+		optionsScene.render();
 		break;
 
 	case password:
-		//passwordScene.render();
+		passwordScene.render();
 		break;
 
 	case exitGame: break;

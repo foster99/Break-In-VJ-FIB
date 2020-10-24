@@ -1,5 +1,5 @@
-#ifndef _MENUSCENE_INCLUDE
-#define _MENUSCENE_INCLUDE
+#ifndef _PASSWORDSCENE_INCLUDE
+#define _PASSWORDSCENE_INCLUDE
 
 #include <glm/glm.hpp>
 #include "Scene.h"
@@ -8,12 +8,12 @@
 
 // This class represents the menu scene
 
-class StartMenuScene : public Scene
+class PasswordScene : public Scene
 {
 
 public:
-	StartMenuScene();
-	~StartMenuScene();
+	PasswordScene();
+	~PasswordScene();
 	
 	// Inherited Methods
 	void init();
@@ -25,7 +25,7 @@ public:
 
 private:
 	TexturedQuad* texQuad;
-	Texture tex1, tex2;
+	Texture tex;
 	//int actTexture; // REMOVE
 };
 #endif

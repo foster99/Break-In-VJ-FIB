@@ -24,6 +24,8 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OptionsScene.cpp" />
+    <ClCompile Include="PasswordScene.cpp" />
     <ClCompile Include="StartMenuScene.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -41,6 +43,8 @@
     <ClInclude Include="CharsTexture.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="OptionsScene.h" />
+    <ClInclude Include="PasswordScene.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="StartMenuScene.h" />
     <ClInclude Include="Player.h" />
@@ -62,7 +66,12 @@
     <Image Include="images\chars.png" />
     <Image Include="images\eyes.png" />
     <Image Include="images\numbers.png" />
+    <Image Include="images\options_screen.png" />
+    <Image Include="images\password_screen.png" />
+    <Image Include="images\plane_colors.png" />
     <Image Include="images\title_screen.png" />
+    <Image Include="images\title_screen_01.png" />
+    <Image Include="images\title_screen_02.png" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="sounds\bell.wav" />

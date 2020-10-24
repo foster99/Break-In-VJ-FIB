@@ -8,9 +8,9 @@
 
 #include "GameScene.h"
 #include "StartMenuScene.h"
+#include "OptionsScene.h"
+#include "PasswordScene.h"
 
-//#define SCREEN_WIDTH 640
-//#define SCREEN_HEIGHT 480
 
 typedef unsigned short Mode;
 // Game is a singleton (a class with a single instance) that represents our whole application
@@ -30,7 +30,6 @@ public:
 	static Game &instance()
 	{
 		static Game G;
-	
 		return G;
 	}
 	
@@ -51,16 +50,16 @@ public:
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
 
-private:
-
 	// Different Modes
-	static constexpr Mode exitGame		= Mode(0);
-	static constexpr Mode startMenu		= Mode(1);
-	static constexpr Mode playing		= Mode(2);
-	static constexpr Mode options		= Mode(3);
-	static constexpr Mode instructions	= Mode(4);
-	static constexpr Mode credits		= Mode(5);
-	static constexpr Mode password		= Mode(6);
+	static constexpr Mode exitGame = Mode(0);
+	static constexpr Mode startMenu = Mode(1);
+	static constexpr Mode playing = Mode(2);
+	static constexpr Mode options = Mode(3);
+	static constexpr Mode instructions = Mode(4);
+	static constexpr Mode credits = Mode(5);
+	static constexpr Mode password = Mode(6);
+
+private:
 
 	Mode currMode();
 	void setMode(Mode newMode);
@@ -68,15 +67,18 @@ private:
 	void toggleGodMode();
 
 	// Application Scenes
-	GameScene gameScene;	// Scene to render when playing
-	StartMenuScene startMenuScene;	// Scene to render when showing the Menu
-	
-	stack<Mode> modeHist;	// Defines the mode history (startmenu, playing, credits, ...)
+	GameScene gameScene;				// Scene to render when playing
+	StartMenuScene startMenuScene;		// Scene to render when showing the StartMenu
+	OptionsScene optionsScene;			// Scene to render when showing the Options
+	PasswordScene passwordScene;		// Scene to render when showing the Passwords Menu.
 
-	bool keys[256], specialKeys[256]; // Store key states so that we can have access at any time
 	
-									  //MenuScene scene;		// EXPERIMENT
-	//bool playing;			// CANVIAR PER HERENCIA? // REMOVE
+	stack<Mode> modeHist;				// Defines the mode history (startmenu, playing, credits, ...)
+
+	bool keys[256], specialKeys[256];	// Store key states so that we can have access at any time
+	
+										//MenuScene scene;		// EXPERIMENT
+	//bool playing;						// CANVIAR PER HERENCIA? // REMOVE
 
 	Sound bell_sound; // REMOVE
 

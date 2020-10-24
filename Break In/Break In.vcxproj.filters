@@ -66,6 +66,12 @@
     <ClCompile Include="StartMenuScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OptionsScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PasswordScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h">
@@ -113,6 +119,12 @@
     <ClInclude Include="StartMenuScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OptionsScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PasswordScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\backgrounds.png">
@@ -143,6 +155,21 @@
       <Filter>Resource Files\images</Filter>
     </Image>
     <Image Include="images\numbers.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\options_screen.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\password_screen.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\plane_colors.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\title_screen_01.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\title_screen_02.png">
       <Filter>Resource Files\images</Filter>
     </Image>
   </ItemGroup>
