@@ -1,7 +1,6 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
-#include "StartMenuScene.h"
 
 void Game::init()
 {
@@ -17,13 +16,21 @@ void Game::init()
 	// Scene initialization
 	startMenuScene.init();
 	gameScene.init();
-	optionsScene.init();
 	passwordScene.init();
+	optionsScene.init(); 
+	creditsScene.init(); 
+	instructionsScene.init(); 
+
+	// Set options scene textures
+	creditsScene.setTexture("images/bricks.png");
+	instructionsScene.setTexture("images/bank_items.png");
+	optionsScene.setTexture("images/options_screen.png");
 }
 
 void Game::loadSounds()
 {
-	bell_sound = Sound("bell.wav", false); // REMOVE
+	//ball_sound = Sound("tueeeeeeeeee.wav", false); // REMOVE
+	ball_sound = Sound("ball.wav", false); // REMOVE
 }
 
 bool Game::update(int deltaTime)
@@ -42,7 +49,13 @@ bool Game::update(int deltaTime)
 		break;
 
 	case instructions:
+		instructionsScene.update(deltaTime);
+		break;
+
 	case credits:
+		creditsScene.update(deltaTime);
+		break;
+
 	case options:
 		optionsScene.update(deltaTime);
 		break;
@@ -71,9 +84,14 @@ void Game::render()
 		break;
 
 	case instructions:
+		instructionsScene.render();
+		break;
+
 	case credits:
+		creditsScene.render();
+		break;
+
 	case options:
-		optionsScene.setMode(currMode());
 		optionsScene.render();
 		break;
 
@@ -122,32 +140,19 @@ void Game::keyPressed(int key)
 			default:	break;
 		} break;
 
-	case credits: break;
+	case credits:
 		switch (key) {
 			case ESC:	rollbackMode();	break;
 			default:	break;
 		} break;
 
-	case password: break;
+	case password:
 		switch (key) {
 			case ESC:	rollbackMode();	break;
 			default:	break;
 		} break;
 	}
 
-	//
-	//switch (key) {
-	//	case 'm': // Options Key
-	//		if (!playing) menuScene.changeTex(); // REMOVE
-	//		break;
-
-	//	case 's': // REMOVE
-	//		bell_sound.play();
-	//		break;
-
-	//	default:
-	//		break;
-	//}
 		
 	keys[key] = true;
 }
@@ -189,6 +194,11 @@ bool Game::getSpecialKey(int key) const
 	return specialKeys[key];
 }
 
+void Game::playBallSound()
+{
+	ball_sound.play();
+}
+
 Mode Game::currMode()
 {
 	return modeHist.top();
@@ -211,7 +221,6 @@ void Game::toggleGodMode()
 {
 	gameScene.toggleGodMode();
 }
-
 
 
 

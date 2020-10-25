@@ -11,6 +11,12 @@ OptionsScene::OptionsScene()
 	texQuad = NULL;
 }
 
+OptionsScene::OptionsScene(string filename)
+{
+	texQuad = NULL;
+	setTexture(filename);
+}
+
 OptionsScene::~OptionsScene()
 {
 	if (texQuad != NULL) 
@@ -20,11 +26,6 @@ OptionsScene::~OptionsScene()
 void OptionsScene::init()
 {
 	this->Scene::init();
-	
-	//actTexture = 0; // REMOVE
-	texOptions.loadFromFile("images/options_screen.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	texInstructions.loadFromFile("images/plane_colors.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	texCredits.loadFromFile("images/bricks.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	glm::vec2 geom[2] = { glm::vec2(0.f,0.f),glm::vec2(Game::SCREEN_WIDTH,Game::SCREEN_HEIGHT) };
 	glm::vec2 texCoords[2] = { glm::vec2(0.f,0.f), glm::vec2(1.f,1.f) };
 	texQuad = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
@@ -39,21 +40,8 @@ void OptionsScene::update(int deltaTime)
 
 void OptionsScene::render()
 {
-	switch (mode) {
-	case Game::options:
-		texQuad->render(texOptions);
-		break;
-	case Game::credits:
-		texQuad->render(texCredits);
-		break;
-	case Game::instructions:
-		texQuad->render(texInstructions);
-		break;
-	}
-
+	texQuad->render(tex);
 	this->Scene::render();
-	
-
 }
 
 void OptionsScene::changeTex()
@@ -61,7 +49,7 @@ void OptionsScene::changeTex()
 	// actTexture = (actTexture + 1) % 2; // REMOVE
 }
 
-void OptionsScene::setMode(Mode m)
+void OptionsScene::setTexture(string filename)
 {
-	mode = m;
+	tex.loadFromFile(filename.c_str(), TEXTURE_PIXEL_FORMAT_RGBA);
 }

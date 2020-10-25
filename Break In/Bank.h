@@ -1,38 +1,19 @@
-#ifndef _BANK_INCLUDE
-#define _BANK_INCLUDE
-
-
-//#include "LevelScene.h"
-//#include "TransitionScene.h"
-//#include 
-
-
-// Level is a class that represent a Level of the Game.
-
-class Bank
+#pragma once
+#include "TileMap.h"
+class Bank :
+    public TileMap
 {
 
 public:
 
-	Bank() {
+    Bank(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
 
-	}
-
-	void loadBank();
-	bool update(int deltaTime);
-	void render();
-
+    bool loadLevel(const string& levelFile);
+    void loadTextures();
+    void prepareArrays(const glm::vec2& minCoords, ShaderProgram& program);
 
 private:
-
-	int id;                       // Continue to play game?
-
-	//vector<LevelScene> scenes;
-	//TransitionScene trans_scene;
-
-
+    int bankID;
+    Texture static_tiles, plane_colors;
 };
-
-
-#endif // _BANK_INCLUDE
 

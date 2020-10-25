@@ -50,6 +50,8 @@ public:
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
 
+	void playBallSound();
+
 	// Different Modes
 	static constexpr Mode exitGame = Mode(0);
 	static constexpr Mode startMenu = Mode(1);
@@ -70,6 +72,8 @@ private:
 	GameScene gameScene;				// Scene to render when playing
 	StartMenuScene startMenuScene;		// Scene to render when showing the StartMenu
 	OptionsScene optionsScene;			// Scene to render when showing the Options
+	OptionsScene creditsScene;			// Scene to render when showing the Credits
+	OptionsScene instructionsScene;		// Scene to render when showing the Instructions
 	PasswordScene passwordScene;		// Scene to render when showing the Passwords Menu.
 
 	
@@ -80,7 +84,7 @@ private:
 										//MenuScene scene;		// EXPERIMENT
 	//bool playing;						// CANVIAR PER HERENCIA? // REMOVE
 
-	Sound bell_sound; // REMOVE
+	Sound ball_sound; // REMOVE
 
 
 };

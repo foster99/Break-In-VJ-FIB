@@ -22,7 +22,7 @@ public:
 
 private:
     bool godMode;
-    TileMap* map;
+    Bank* map;
     Player* player;
     Ball* ball;
 

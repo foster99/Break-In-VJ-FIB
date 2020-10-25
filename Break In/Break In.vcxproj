@@ -33,6 +33,7 @@
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Bank.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedQuad.cpp" />
     <ClCompile Include="TileMap.cpp" />
@@ -40,6 +41,7 @@
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="Bank.h" />
     <ClInclude Include="CharsTexture.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene.h" />
@@ -57,24 +59,19 @@
     <ClInclude Include="TileMap.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="images\backgrounds.png" />
-    <Image Include="images\ball.png" />
-    <Image Include="images\bank_items.png" />
-    <Image Include="images\bars.png" />
-    <Image Include="images\bonus.png" />
-    <Image Include="images\bricks.png" />
-    <Image Include="images\chars.png" />
-    <Image Include="images\eyes.png" />
-    <Image Include="images\numbers.png" />
-    <Image Include="images\options_screen.png" />
-    <Image Include="images\password_screen.png" />
-    <Image Include="images\plane_colors.png" />
-    <Image Include="images\title_screen.png" />
-    <Image Include="images\title_screen_01.png" />
-    <Image Include="images\title_screen_02.png" />
+    <Media Include="sounds\bell.wav" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="sounds\bell.wav" />
+    <Text Include="levels\level01.txt" />
+    <Text Include="levels\leveltest.txt" />
+    <Text Include="levels\no_path_test.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\ball.png" />
+    <Image Include="images\bars.png" />
+    <Image Include="images\dynamic_tiles.png" />
+    <Image Include="images\eyes.png" />
+    <Image Include="images\static_tiles.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

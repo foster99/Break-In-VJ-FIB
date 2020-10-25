@@ -13,6 +13,7 @@ class OptionsScene : public Scene
 
 public:
 	OptionsScene();
+	OptionsScene(string filename);
 	~OptionsScene();
 	
 	// Inherited Methods
@@ -22,13 +23,11 @@ public:
 
 	// Menu Methods
 	void changeTex();
-	void setMode(Mode m);
+	void setTexture(string filename);
 
 private:
 	TexturedQuad* texQuad;
-	Texture texOptions;
-	Texture texInstructions;
-	Texture texCredits;
+	Texture tex;
 	Mode mode;
 	//int actTexture; // REMOVE
 };

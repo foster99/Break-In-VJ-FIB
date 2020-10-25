@@ -19,6 +19,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="Resource Files\levels">
+      <UniqueIdentifier>{57e33690-41c5-4b67-8ef7-15ac705902fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\images\screen_texture">
+      <UniqueIdentifier>{9cc6c682-72a5-47b1-b5a7-af77ab30ea68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\images\tile_texture">
+      <UniqueIdentifier>{a0b51eb7-12b4-44cb-b356-8888dffb65b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\images\sprites">
+      <UniqueIdentifier>{56c5b3de-17a7-41e7-99db-2a242668ffd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -70,6 +82,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PasswordScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bank.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -125,57 +140,41 @@
     <ClInclude Include="PasswordScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="images\backgrounds.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-    <Image Include="images\ball.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-    <Image Include="images\bank_items.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-    <Image Include="images\bars.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-    <Image Include="images\bonus.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-    <Image Include="images\bricks.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-    <Image Include="images\eyes.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-    <Image Include="images\title_screen.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-    <Image Include="images\chars.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-    <Image Include="images\numbers.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-    <Image Include="images\options_screen.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-    <Image Include="images\password_screen.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-    <Image Include="images\plane_colors.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-    <Image Include="images\title_screen_01.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
-    <Image Include="images\title_screen_02.png">
-      <Filter>Resource Files\images</Filter>
-    </Image>
+    <ClInclude Include="Bank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Media Include="sounds\bell.wav">
       <Filter>Resource Files\sound</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="levels\level01.txt">
+      <Filter>Resource Files\levels</Filter>
+    </Text>
+    <Text Include="levels\leveltest.txt">
+      <Filter>Resource Files\levels</Filter>
+    </Text>
+    <Text Include="levels\no_path_test.txt">
+      <Filter>Resource Files\levels</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\ball.png">
+      <Filter>Resource Files\images\sprites</Filter>
+    </Image>
+    <Image Include="images\eyes.png">
+      <Filter>Resource Files\images\sprites</Filter>
+    </Image>
+    <Image Include="images\dynamic_tiles.png">
+      <Filter>Resource Files\images\tile_texture</Filter>
+    </Image>
+    <Image Include="images\static_tiles.png">
+      <Filter>Resource Files\images\tile_texture</Filter>
+    </Image>
+    <Image Include="images\bars.png">
+      <Filter>Resource Files\images\sprites</Filter>
+    </Image>
   </ItemGroup>
 </Project>

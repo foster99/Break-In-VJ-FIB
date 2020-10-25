@@ -15,6 +15,9 @@ TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoo
 	return map;
 }
 
+TileMap::TileMap() {
+
+}
 
 TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
 {
@@ -77,6 +80,10 @@ bool TileMap::loadLevel(const string &levelFile)
 	sstream >> tilesheetSize.x >> tilesheetSize.y;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 	
+	// EDGAR!! ESTAS INTENTANDO CARGAR BIEN LAS TEXTURAS DE LOS TILES. HAS CAMBIADO 
+	// LOS FICHEROS DE LAS TEXTURAS, Y AHORA HAY QUE CARGAR TODAS LAS TEXTURAS
+	// PARA CADA TIPO DE TILE CODIFICADO EN EL TXT
+
 	map = new int[mapSize.x * mapSize.y];
 	for(int j=0; j<mapSize.y; j++)
 	{
@@ -104,7 +111,7 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 	glm::vec2 posTile, texCoordTile[2], halfTexel;
 	vector<float> vertices;
 	
-	halfTexel = glm::vec2(0.5f / tilesheet.width(), 0.5f / tilesheet.height());
+	halfTexel = glm::vec2(0.125f / tilesheet.width(), 0.125f / tilesheet.height());
 	for(int j=0; j<mapSize.y; j++)
 	{
 		for(int i=0; i<mapSize.x; i++)
@@ -112,27 +119,46 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 			tile = map[j * mapSize.x + i];
 			if(tile != 0)
 			{
+
 				// Non-empty tile
 				nTiles++;
 				posTile = glm::vec2(minCoords.x + i * tileSize, minCoords.y + j * tileSize);
-				texCoordTile[0] = glm::vec2(float((tile-1)%2) / tilesheetSize.x, float((tile-1)/2) / tilesheetSize.y);
-				texCoordTile[1] = texCoordTile[0] + tileTexSize;
+
+				
+				switch (char(tile)) {
+				case brickRed:
+					texCoordTile[0] = glm::vec2(float((tile - 1) % 2) / tilesheetSize.x, float((tile - 1) / 2) / tilesheetSize.y);
+					texCoordTile[1] = texCoordTile[0] + tileTexSize;
+				default:
+					texCoordTile[0] = glm::vec2(float((tile - 1) % 8) / tilesheetSize.x, float((tile - 1) / 8) / tilesheetSize.y);
+					texCoordTile[1] = texCoordTile[0] + tileTexSize;
+					break;
+				}
+
 				//texCoordTile[0] += halfTexel;
 				texCoordTile[1] -= halfTexel;
+				
+				
 				// First triangle
-				vertices.push_back(posTile.x); vertices.push_back(posTile.y);
-				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[0].y);
-				vertices.push_back(posTile.x + blockSize); vertices.push_back(posTile.y);
-				vertices.push_back(texCoordTile[1].x); vertices.push_back(texCoordTile[0].y);
-				vertices.push_back(posTile.x + blockSize); vertices.push_back(posTile.y + blockSize);
-				vertices.push_back(texCoordTile[1].x); vertices.push_back(texCoordTile[1].y);
+				vertices.push_back(posTile.x);				vertices.push_back(posTile.y);
+				vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[0].y);
+
+				vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y);
+				vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[0].y);
+
+				vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y + blockSize);
+				vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[1].y);
+				
+				
 				// Second triangle
-				vertices.push_back(posTile.x); vertices.push_back(posTile.y);
-				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[0].y);
-				vertices.push_back(posTile.x + blockSize); vertices.push_back(posTile.y + blockSize);
-				vertices.push_back(texCoordTile[1].x); vertices.push_back(texCoordTile[1].y);
-				vertices.push_back(posTile.x); vertices.push_back(posTile.y + blockSize);
-				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[1].y);
+				vertices.push_back(posTile.x);				vertices.push_back(posTile.y);
+				vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[0].y);
+
+				vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y + blockSize);
+				vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[1].y);
+
+				vertices.push_back(posTile.x);				vertices.push_back(posTile.y + blockSize);
+				vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[1].y);
 			}
 		}
 	}

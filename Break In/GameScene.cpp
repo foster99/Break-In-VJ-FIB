@@ -24,7 +24,7 @@ void GameScene::init() {
 	actLoop = 0;
 	godMode = false;
 
-	map = TileMap::createTileMap("levels/leveltest.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = new Bank("levels/no_path_test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
