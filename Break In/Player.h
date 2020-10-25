@@ -22,9 +22,9 @@ public:
 	void setPosition(const glm::vec2 &pos);
 	
 private:
-	bool bJumping;
-	glm::ivec2 tileMapDispl, posPlayer;
-	int jumpAngle, startY;
+	glm::ivec2 tileMapDispl;
+	glm::vec2 posPlayer;
+	int jumpAngle, startY, sizePlayer, speedX, speedY;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;

@@ -12,6 +12,8 @@ public:
 	void update(int deltaTime);
 	void render();
 
+	void changeModifierX(float value);
+	void changeModifierY(float value);
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
 
@@ -22,6 +24,9 @@ private:
 	Sprite* sprite;
 	TileMap* map;
 	int sizeBall;
+	float speed;
+	float spdModifierX;
+	float spdModifierY;
 };
 
 #endif // _BALL_INCLUDE

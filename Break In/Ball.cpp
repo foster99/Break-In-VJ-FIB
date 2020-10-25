@@ -9,6 +9,9 @@
 void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {	
 	sizeBall = 9;
+	speed = 2;
+	spdModifierX = spdModifierY = 1;
+
 	tex.loadFromFile("images/ball.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(sizeBall, sizeBall), glm::vec2(1.f, 1.f), &tex, &shaderProgram);
 	sprite->setNumberAnimations(1);
@@ -27,7 +30,6 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 void Ball::update(int deltaTime)
 {
-	float speed = 4;
 	if (direction.y > 0 && map->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, speed))
 		direction.y = -1;
 	else if (direction.y < 0 && map->collisionMoveUp(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y,speed))
@@ -38,8 +40,8 @@ void Ball::update(int deltaTime)
 		direction.x = 1;
 	
 
-	posBall.x += speed * 0.7 * direction.x;
-	posBall.y += speed * 0.5 * direction.y;
+	posBall.x += speed * spdModifierX * direction.x;
+	posBall.y += speed * spdModifierY * direction.y;
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
 }
@@ -47,6 +49,16 @@ void Ball::update(int deltaTime)
 void Ball::render()
 {
 	sprite->render();
+}
+
+void Ball::changeModifierX(float value)
+{
+	spdModifierX = value;
+}
+
+void Ball::changeModifierY(float value)
+{
+	spdModifierY = value;
 }
 
 void Ball::setTileMap(TileMap* tileMap)
