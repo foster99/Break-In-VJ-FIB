@@ -14,6 +14,17 @@ Bank::Bank(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& p
 	prepareArrays(minCoords, program);
 }
 
+void Bank::render() const
+{
+	glEnable(GL_TEXTURE_2D);
+	tilesheet.use();
+	glBindVertexArray(vao);
+	glEnableVertexAttribArray(posLocation);
+	glEnableVertexAttribArray(texCoordLocation);
+	glDrawArrays(GL_TRIANGLES, 0, 6 * mapSize.x * mapSize.y);
+	glDisable(GL_TEXTURE_2D);
+}
+
 bool Bank::loadLevel(const string& levelFile)
 {
 	ifstream fin;
@@ -28,9 +39,12 @@ bool Bank::loadLevel(const string& levelFile)
 	if (line.compare(0, 7, "TILEMAP") != 0)
 		return false;
 	getline(fin, line);
+
 	sstream.str(line);
 	sstream >> mapSize.x >> mapSize.y;
 	getline(fin, line);
+	solids = vector<vector<bool>> (mapSize.y, vector<bool>(mapSize.x));
+
 	sstream.str(line);
 	sstream >> tileSize >> blockSize;
 	getline(fin, line);
@@ -38,10 +52,10 @@ bool Bank::loadLevel(const string& levelFile)
 	sstream.str(line);
 	sstream >> tilesheetSize.x >> tilesheetSize.y;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
+	getline(fin, line);
 
 	sstream.str(line);
 	sstream >> bankID;
-	getline(fin, line);
 
 	// READ TEXTURE PATH
 
@@ -57,10 +71,13 @@ bool Bank::loadLevel(const string& levelFile)
 	// PARA CADA TIPO DE TILE CODIFICADO EN EL TXT
 	int temp;
 	map = new int[mapSize.x * mapSize.y];
-	for (int j = 0; j < mapSize.y; j++)
+	for (int i = 0; i < mapSize.y; i++)
 	{
-		for (int i = 0; i < mapSize.x; i++)
+		for (int j = 0; j < mapSize.x; j++)
 		{
+			// Fila i, Columna j
+			solids[i][j] = -1;
+
 			fin.get(tile);
 			
 			switch (tile)
@@ -69,12 +86,25 @@ bool Bank::loadLevel(const string& levelFile)
 				temp = bankID;
 				break;
 			case ' ':
-				temp = 16;//1 * tilesheetSize.y + 2 * (bankID - 1) + tilesheetSize.x * (i % 2) + (j % 2);
+				solids[i][j] = 0;
+				temp = tilesheetSize.x + 2 * (bankID - 1) + ((j+1) % 2) + tilesheetSize.x * ((i+1) % 2);
+				break;
+			case '#':
+				temp = 38; // black tile
+				break;
+			case ':':
+				temp = 75;
+				break;
+			case '.':
+				temp = 74;
 				break;
 			default: temp = 0;	break;
 			}
+
+			if ('A' <= tile && tile <= 'Z')			temp = 48 + tile - 'A';
+			else if ('0' <= tile && tile <= '9')	temp = 80 + tile - '0';
 			
-			map[j * mapSize.x + i] = temp;
+			map[i * mapSize.x + j] = temp;
 		}
 		fin.get(tile);
 #ifndef _WIN32
@@ -96,20 +126,23 @@ void Bank::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 	glm::vec2 posTile, texCoordTile[2], halfTexel;
 	vector<float> vertices;
 
-	halfTexel = glm::vec2(0.125f / tilesheet.width(), 0.125f / tilesheet.height());
-	for (int j = 0; j < mapSize.y; j++)
+	halfTexel = glm::vec2((1.f/float(tileSize))/ tilesheet.width(), (1.f / float(tileSize)) / tilesheet.height());
+	for (int i = 0; i < mapSize.y; i++)
 	{
-		for (int i = 0; i < mapSize.x; i++)
+		for (int j = 0; j < mapSize.x; j++)
 		{
-			tile = map[j * mapSize.x + i];
+			tile = map[i * mapSize.x + j];
 			if (tile != 0)
 			{
 
 				// Non-empty tile
 				nTiles++;
-				posTile = glm::vec2(minCoords.x + i * tileSize, minCoords.y + j * tileSize);
+				posTile = glm::vec2( minCoords.x + j * tileSize,
+									 minCoords.y + i * tileSize);
 
-				texCoordTile[0] = glm::vec2(float(tile / N) / tilesheetSize.x, float(tile % N) / tilesheetSize.y);
+				texCoordTile[0] = glm::vec2(float(tile % tilesheetSize.x) / float(tilesheetSize.x),
+											float(tile / tilesheetSize.x) / float(tilesheetSize.y));
+				//texCoordTile[0] = glm::vec2(1.f/16.f, 0.f/16.f);
 				texCoordTile[1] = texCoordTile[0] + tileTexSize;
 
 				//texCoordTile[0] += halfTexel;

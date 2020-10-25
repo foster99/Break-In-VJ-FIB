@@ -8,6 +8,8 @@ public:
 
     Bank(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
 
+    void render() const;
+
     bool loadLevel(const string& levelFile);
     void loadTextures();
     void prepareArrays(const glm::vec2& minCoords, ShaderProgram& program);

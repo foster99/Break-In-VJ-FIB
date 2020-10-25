@@ -69,6 +69,7 @@
   <ItemGroup>
     <Image Include="images\ball.png" />
     <Image Include="images\bars.png" />
+    <Image Include="images\chars.png" />
     <Image Include="images\dynamic_tiles.png" />
     <Image Include="images\eyes.png" />
     <Image Include="images\static_tiles.png" />

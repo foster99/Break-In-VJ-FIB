@@ -30,18 +30,22 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 void Ball::update(int deltaTime)
 {
-	if (direction.y > 0 && map->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, speed))
+	bool collision = false;
+	if (collision = (direction.y > 0 && map->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, speed)))
 		direction.y = -1;
-	else if (direction.y < 0 && map->collisionMoveUp(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y,speed))
+	else if (collision = (direction.y < 0 && map->collisionMoveUp(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y,speed)))
 		direction.y = 1;
-	else if(direction.x > 0 && map->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, speed))
+	else if (collision = (direction.x > 0 && map->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, speed)))
 		direction.x = -1;
-	else if (direction.x < 0 && map->collisionMoveLeft(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, speed))
+	else if (collision = (direction.x < 0 && map->collisionMoveLeft(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, speed)))
 		direction.x = 1;
 	
+	if (collision) Game::instance().playBallSound();
 
 	posBall.x += speed * spdModifierX * direction.x;
 	posBall.y += speed * spdModifierY * direction.y;
+
+
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
 }

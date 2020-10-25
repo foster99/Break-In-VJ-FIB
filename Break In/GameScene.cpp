@@ -1,5 +1,7 @@
+#include "Game.h"
 #include "GameScene.h"
-
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
 GameScene::GameScene()
 {
@@ -50,11 +52,22 @@ void GameScene::render()
 {
 	if (loopsToRender <= actLoop) {
 		actLoop = 0;
-		this->Scene::render();
+		
+		glm::mat4 modelview = glm::mat4(1.f);
+		modelview = glm::translate(modelview, glm::vec3(0.f, float(0.f), 0.f));
+		// creo que la solucion es una matriz de traslacion o algo para mirar mas abajo
+		texProgram.use();
+		texProgram.setUniformMatrix4f("projection", projection);
+		texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+		texProgram.setUniformMatrix4f("modelview", modelview);
+		texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+
 		map->render();
 		player->render();
 		ball->render();
 	}
+
+
 }
 
 void GameScene::toggleGodMode()

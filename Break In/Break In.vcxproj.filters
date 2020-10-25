@@ -176,5 +176,8 @@
     <Image Include="images\bars.png">
       <Filter>Resource Files\images\sprites</Filter>
     </Image>
+    <Image Include="images\chars.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
   </ItemGroup>
 </Project>

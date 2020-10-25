@@ -11,7 +11,6 @@ using namespace std;
 TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
 {
 	TileMap *map = new TileMap(levelFile, minCoords, program);
-	
 	return map;
 }
 
@@ -190,8 +189,9 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, f
 	}
 
 	for (int y = y0; y <= y1; y++)
-	{
-		if (map[y * mapSize.x + x] != 0) {
+	{	
+		int tile = map[y * mapSize.x + x];
+		if (solids[y][x] != 0) {
 			*posX = tileSize * x + tileSize;
 			return true;
 		}
@@ -215,7 +215,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, 
 	
 	for (int y = y0; y <= y1; y++)
 	{
-		if (map[y * mapSize.x + x] != 0) {
+		if (solids[y][x] != 0) {
 			*posX = tileSize * x - tileSize;
 			return true;
 		}
@@ -238,7 +238,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, f
 
 	for(int x=x0; x<=x1; x++)
 	{
-		if(map[y*mapSize.x+x] != 0)
+		if (solids[y][x] != 0)
 		{
 			if( ((*posY + size.y) - (tileSize * y)) >= 0)
 			{
@@ -266,7 +266,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, flo
 
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] != 0)
+		if (solids[y][x] != 0)
 		{
 			if ( (*posY - (tileSize * y + tileSize)) <= 0)
 			{

@@ -7,7 +7,7 @@ void Game::init()
 	modeHist.push(startMenu);
 
 	//playing = false; // REMOVE
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	// Sound Initialization
 	// Should sound go into Scene clases ????? REMOVE
