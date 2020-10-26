@@ -22,8 +22,8 @@ void GameScene::init() {
 
 	this->Scene::init();
 
-	loopsToRender = 1;
-	actLoop = 0;
+	loopsToRender = 5;
+	currLoop = 0;
 	godMode = false;
 
 	map = new Bank("levels/no_path_test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -44,34 +44,37 @@ void GameScene::update(int deltaTime) {
 	this->Scene::update(deltaTime);
 	player->update(deltaTime);
 	ball->update(deltaTime);
-	++actLoop;
+
 
 }
 
 void GameScene::render()
 {
-	if (loopsToRender <= actLoop) {
-		actLoop = 0;
-		
-		glm::mat4 modelview = glm::mat4(1.f);
-		modelview = glm::translate(modelview, glm::vec3(0.f, float(0.f), 0.f));
-		// creo que la solucion es una matriz de traslacion o algo para mirar mas abajo
-		texProgram.use();
-		texProgram.setUniformMatrix4f("projection", projection);
-		texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
-		texProgram.setUniformMatrix4f("modelview", modelview);
-		texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+	glm::mat4 modelview = glm::mat4(1.f);
+	modelview = glm::translate(modelview, glm::vec3(0.f, float(0.f), 0.f));
+	// creo que la solucion es una matriz de traslacion o algo para mirar mas abajo
+	texProgram.use();
+	texProgram.setUniformMatrix4f("projection", projection);
+	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
-		map->render();
-		player->render();
-		ball->render();
-	}
-
-
+	map->render();
+	player->render();
+	ball->render();
 }
 
 void GameScene::toggleGodMode()
 {
 	godMode = !godMode;
 	// possible update ????
+}
+
+bool GameScene::itIsALoopToRender()
+{
+	if (loopsToRender <= currLoop++) {
+		currLoop = 0;
+		return true;
+	}
+	return false;
 }

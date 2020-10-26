@@ -17,6 +17,8 @@ public:
 
     void toggleGodMode();
 
+    bool itIsALoopToRender();
+
     static constexpr float INIT_PLAYER_X_TILES = 10;
     static constexpr float INIT_PLAYER_Y_TILES = 10;
 
@@ -27,6 +29,6 @@ private:
     Ball* ball;
 
     int loopsToRender;
-    int actLoop;
+    int currLoop;
 };
 

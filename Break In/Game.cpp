@@ -70,15 +70,15 @@ bool Game::update(int deltaTime)
 	return currMode() != exitGame;
 }
 
-void Game::render()
-{
+void Game::render() {
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	switch (currMode()) {
 	case startMenu:
 		startMenuScene.render();
 		break;
-
+	
 	case playing:
 		gameScene.render();
 		break;

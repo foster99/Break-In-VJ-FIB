@@ -79,10 +79,6 @@ bool TileMap::loadLevel(const string &levelFile)
 	sstream >> tilesheetSize.x >> tilesheetSize.y;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 	
-	// EDGAR!! ESTAS INTENTANDO CARGAR BIEN LAS TEXTURAS DE LOS TILES. HAS CAMBIADO 
-	// LOS FICHEROS DE LAS TEXTURAS, Y AHORA HAY QUE CARGAR TODAS LAS TEXTURAS
-	// PARA CADA TIPO DE TILE CODIFICADO EN EL TXT
-
 	map = new int[mapSize.x * mapSize.y];
 	for(int j=0; j<mapSize.y; j++)
 	{
@@ -236,20 +232,21 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, f
 		return true;
 	}
 
-	for(int x=x0; x<=x1; x++)
+	for (int x = x0; x <= x1; x++)
 	{
 		if (solids[y][x] != 0)
 		{
-			if( ((*posY + size.y) - (tileSize * y)) >= 0)
+			if (((*posY + size.y) - (tileSize * y)) >= 0)
 			{
 				*posY = tileSize * y - size.y;
 				return true;
 			}
 		}
 	}
-	
+
 	return false;
 }
+
  
 bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed) const
 {
@@ -280,6 +277,10 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, flo
 }
 
 
+bool outOfRangeLeft(int c)	{ return  c < 1; }
+bool outOfRangeRight(int c) { return 23 < c; }
+bool outOfRangeUp(int c)	{ return  c < 1; }
+bool outOfRangeDown(int c)	{ return 23 < c; }
 
 
 
