@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Bank.cpp" />
     <ClCompile Include="CharsTexture.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene.cpp" />
@@ -34,7 +35,7 @@
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="Bank.cpp" />
+    <ClCompile Include="StaticTileMap.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedQuad.cpp" />
     <ClCompile Include="TileMap.cpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="AnimKeyframes.h" />
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Bank.h" />
+    <ClInclude Include="StaticTileMap.h" />
     <ClInclude Include="CharsTexture.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene.h" />
@@ -66,7 +68,7 @@
   <ItemGroup>
     <Text Include="levels\level01.txt" />
     <Text Include="levels\leveltest.txt" />
-    <Text Include="levels\no_path_test.txt" />
+    <Text Include="levels\level_01.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\ball.png" />

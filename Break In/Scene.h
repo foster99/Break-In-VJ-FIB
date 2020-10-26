@@ -3,7 +3,6 @@
 
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
-#include "Bank.h"
 
 class Scene
 {

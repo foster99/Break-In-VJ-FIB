@@ -3,7 +3,8 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
-
+#include "GameScene.h"
+#include "Bank.h"
 
 class Ball
 {
@@ -12,22 +13,30 @@ public:
 	void update(int deltaTime);
 	void render();
 
-	void changeModifierX(float value);
-	void changeModifierY(float value);
-	void setTileMap(TileMap* tileMap);
+	void setBank(Bank* b);
 	void setPosition(const glm::vec2& pos);
 
 private:
-	glm::ivec2 tileMapDispl, direction;
-	glm::vec2 posBall;
+	
 	Texture tex;
 	Sprite* sprite;
 	TileMap* map;
+	Bank* bank;
+	
+	bool collisionMoveDown();
+	bool collisionMoveRight();
+	bool collisionMoveUp();
+	bool collisionMoveLeft();
+
+	int tileSize;
+
+	glm::ivec2 tileMapDispl, direction;
+	glm::vec2 posBall;
 	int sizeBall;
+
 	float speed;
 	float spdModifierX;
 	float spdModifierY;
 };
-
 #endif // _BALL_INCLUDE
 

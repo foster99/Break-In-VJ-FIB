@@ -22,21 +22,25 @@ void GameScene::init() {
 
 	this->Scene::init();
 
-	loopsToRender = 5;
-	currLoop = 0;
 	godMode = false;
+	level = 1;
+	room = 1;
 
-	map = new Bank("levels/no_path_test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	bank = new Bank(level);
+	//bank->setGameScene(this);
+	bank->setStaticMap(new StaticTileMap(bank->getFilePath(), glm::vec2(SCREEN_X, SCREEN_Y), texProgram));
+	//bank->setDynamicMap(new DynamicTileMap(bank->getFilePath(), glm::vec2(SCREEN_X, SCREEN_Y), texProgram));
+	bank->init();
 
 	player = new Player();
+	player->setTileMap(map);
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-	player->setTileMap(map);
 
 	ball = new Ball();
+	ball->setBank(bank);
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-	ball->setTileMap(map);
 }
 
 void GameScene::update(int deltaTime) {
@@ -44,8 +48,6 @@ void GameScene::update(int deltaTime) {
 	this->Scene::update(deltaTime);
 	player->update(deltaTime);
 	ball->update(deltaTime);
-
-
 }
 
 void GameScene::render()
@@ -68,13 +70,4 @@ void GameScene::toggleGodMode()
 {
 	godMode = !godMode;
 	// possible update ????
-}
-
-bool GameScene::itIsALoopToRender()
-{
-	if (loopsToRender <= currLoop++) {
-		currLoop = 0;
-		return true;
-	}
-	return false;
 }

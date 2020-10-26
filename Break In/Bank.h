@@ -1,22 +1,41 @@
-#pragma once
-#include "TileMap.h"
-class Bank :
-    public TileMap
+#ifndef _BANK_INCLUDE
+#define _BANK_INCLUDE
+
+#include "Game.h"
+#include "GameScene.h"
+#include "StaticTileMap.h"
+#include <string>
+
+//#include "DynamicTileMap.h"
+
+class Bank
 {
 
-public:
+	public:
 
-    Bank(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
+	Bank();
+	Bank(int id);
 
-    void render() const;
+	void init();
 
-    bool loadLevel(const string& levelFile);
-    void loadTextures();
-    void prepareArrays(const glm::vec2& minCoords, ShaderProgram& program);
-    bool tileIsSolid(int x, int y);
+	void setGameScene(GameScene* scene);
+	void setStaticMap(StaticTileMap* map);
 
-private:
-    int bankID;
-    Texture static_tiles, plane_colors;
+	StaticTileMap* getStaticMap();
+	std::string getFilePath();
+	//void setDynamicMap(DynamicTileMap* map);
+	bool tileIsSolid(int i, int j);
+
+	private:
+
+	int id, Nrooms;
+	string password, shopName;
+
+	//vector<vector<int>> tileResistance;
+
+	GameScene* gameScene;
+	StaticTileMap* staticMap;
+	//DynamicTileMap* dynamicMap;
+	
 };
-
+#endif

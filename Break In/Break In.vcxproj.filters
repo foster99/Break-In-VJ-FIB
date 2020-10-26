@@ -75,9 +75,6 @@
     <ClCompile Include="CharsTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bank.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Ball.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
@@ -100,6 +97,12 @@
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Slide.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticTileMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bank.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -137,9 +140,6 @@
     <ClInclude Include="StartMenuScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Bank.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Ball.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
@@ -161,6 +161,12 @@
     <ClInclude Include="Slide.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StaticTileMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Media Include="sounds\bell.wav">
@@ -174,7 +180,7 @@
     <Text Include="levels\leveltest.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
-    <Text Include="levels\no_path_test.txt">
+    <Text Include="levels\level_01.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
   </ItemGroup>

@@ -28,14 +28,9 @@ public:
 	void render() const;
 	void free();
 	
-	int getTileSize() const { return tileSize; }
-	int getMapSizeX() const { return mapSize.x;  }
+	int getTileSize() const { return tileSize;  }
+	int getMapSizeX() const { return mapSize.x; }
 	int getMapSizeY() const { return mapSize.y; }
-
-	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speed);
-	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speed);
-	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed);
-	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed);
 
 	bool tileIsSolid(int i, int j);
 
