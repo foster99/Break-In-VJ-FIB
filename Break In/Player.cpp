@@ -19,6 +19,13 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		
 	sprite->changeAnimation(0);
 
+	slideOffset = 6;
+
+	slide = new Slide();
+	slide->init(tileMapPos, shaderProgram, sizePlayer);
+	slide->setPosition(glm::ivec2(posPlayer.x,posPlayer.y- slideOffset));
+
+
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	
@@ -54,11 +61,19 @@ void Player::update(int deltaTime)
 
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	slide->setPosition(glm::ivec2(posPlayer.x, posPlayer.y - slideOffset));
+
 }
 
 void Player::render()
 {
 	sprite->render();
+	slide->render();
+}
+
+int Player::getSize()
+{
+	return sizePlayer;
 }
 
 void Player::setTileMap(TileMap *tileMap)
