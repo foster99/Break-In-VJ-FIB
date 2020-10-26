@@ -4,6 +4,7 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
+#include "Slide.h"
 
 
 // Player is basically a Sprite that represents the player. As such it has
@@ -18,15 +19,17 @@ public:
 	void update(int deltaTime);
 	void render();
 	
+	int getSize();
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	
 private:
 	glm::ivec2 tileMapDispl;
 	glm::vec2 posPlayer;
-	int jumpAngle, startY, sizePlayer, speedX, speedY;
+	int jumpAngle, startY, sizePlayer, speedX, speedY, slideOffset;
 	Texture spritesheet;
 	Sprite *sprite;
+	Slide *slide;
 	TileMap *map;
 };
 
