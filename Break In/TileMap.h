@@ -32,10 +32,12 @@ public:
 	int getMapSizeX() const { return mapSize.x;  }
 	int getMapSizeY() const { return mapSize.y; }
 
-	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speed) const;
-	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speed) const;
-	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed) const;
-	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed) const;
+	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speed);
+	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speed);
+	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed);
+	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed);
+
+	bool tileIsSolid(int i, int j);
 
 private:
 	
@@ -66,7 +68,7 @@ protected:
 	int tileSize, blockSize;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
-	vector<vector<bool>> solids;
+	vector<vector<int>> solids;
 
 	int *map;
 

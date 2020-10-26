@@ -30,7 +30,6 @@ TileMap::~TileMap()
 		delete map;
 }
 
-
 void TileMap::render() const
 {
 	glEnable(GL_TEXTURE_2D);
@@ -171,109 +170,122 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 // Method collisionMoveDown also corrects Y coordinate if the box is
 // already intersecting a tile below.
 
-bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speed) const
+bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speed) 
 {
-	int x, y0, y1;
+	int i0, i1;
 
-	x = (pos.x - speed)/tileSize;
-	y0 = pos.y / tileSize;
-	y1 = (pos.y + size.y - 1) / tileSize;
+	i0 = (pos.y + 2) / tileSize;
+	i1 = (pos.y + size.y - 3) / tileSize;
 
-	if (x < 0) {
-		*posX = tileSize;
-		return true;
-	}
+	//if (j > mapSize.y) {
+	//	*posX = mapSize.y * tileSize - tileSize;
+	//	return true;
+	//}
 
-	for (int y = y0; y <= y1; y++)
-	{	
-		int tile = map[y * mapSize.x + x];
-		if (solids[y][x] != 0) {
-			*posX = tileSize * x + tileSize;
-			return true;
-		}
-	}
-
-	return false;
-}
-
-bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speed) const
-{
-	int x, y0, y1;
-
-	x = (pos.x + size.x + speed) / tileSize;
-	y0 = pos.y / tileSize;
-	y1 = (pos.y + size.y - 1) / tileSize;
-	
-	if (x > mapSize.y) {
-		*posX = mapSize.y * tileSize - tileSize;
-		return true;
-	}
-	
-	for (int y = y0; y <= y1; y++)
-	{
-		if (solids[y][x] != 0) {
-			*posX = tileSize * x - tileSize;
-			return true;
-		}
-	}
-	return false;
-}
-
-bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed) const
-{
-	int x0, x1, y;
-	
-	x0 = pos.x / tileSize;
-	x1 = (pos.x + size.x - 1) / tileSize;
-	y = (pos.y + size.y + speed) / tileSize;
-
-	if (y >= mapSize.y) {
-		*posY = mapSize.y*tileSize - size.y;
-		return true;
-	}
-
-	for (int x = x0; x <= x1; x++)
-	{
-		if (solids[y][x] != 0)
+	for (int s = 1; s <= speed; ++s) {
+		for (int i = i0; i <= i1; i++)
 		{
-			if (((*posY + size.y) - (tileSize * y)) >= 0)
+			if (tileIsSolid(i, (pos.x - s) / tileSize))
 			{
-				*posY = tileSize * y - size.y;
+				*posJ -= s - 1;
 				return true;
 			}
 		}
 	}
+
+	*posJ -= speed;
+
+	return false;
+}
+
+bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speed)
+{
+	int i0, i1;
+
+	i0 = (pos.y + 2) / tileSize;
+	i1 = (pos.y + size.y - 3) / tileSize;
+	
+	//if (j > mapSize.y) {
+	//	*posX = mapSize.y * tileSize - tileSize;
+	//	return true;
+	//}
+	
+	for (int s = 1; s <= speed; ++s) {
+		for (int i = i0; i <= i1; i++)
+		{
+			if (tileIsSolid(i, (pos.x + size.x + s) / tileSize))
+			{
+				*posJ += s - 1;
+				return true;
+			}
+		}
+	}
+
+	*posJ += speed;
+
+	return false;
+}
+
+bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posI, int speed)
+{
+	int j0, j1;
+	
+	j0 = (pos.x + 2) / tileSize;
+	j1 = (pos.x + size.x - 3) / tileSize;
+
+	//if (y >= mapSize.y) {
+	//	*posY = mapSize.y*tileSize - size.y;
+	//	return true;
+	//}
+	for (int s = 1; s <= speed; ++s) {
+		for (int j = j0; j <= j1; j++)
+		{
+			if (tileIsSolid((pos.y + size.y + s) / tileSize, j))
+			{
+				*posI += s - 1;
+				return true;
+			}
+		}
+	}
+
+	*posI += speed;
 
 	return false;
 }
 
  
-bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed) const
+bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posI, int speed)
 {
-	int x0, x1, y;
+	int j0, j1;
 
-	x0 = pos.x / tileSize;
-	x1 = (pos.x + size.x - 1) / tileSize;
-	y = (pos.y - speed) / tileSize;
+	j0 = (pos.x + 2) / tileSize;
+	j1 = (pos.x + size.x - 3) / tileSize;
 
-	if (y < 0) {
-		*posY = tileSize;
-		return true;
-	}
+	//if (y < 0) {
+	//	*posY = tileSize;
+	//	return true;
+	//}
 
-	for (int x = x0; x <= x1; x++)
-	{
-		if (solids[y][x] != 0)
+	for (int s = 1; s <= speed; ++s) {
+
+		for (int j = j0; j <= j1; j++)
 		{
-			if ( (*posY - (tileSize * y + tileSize)) <= 0)
+			if (tileIsSolid((pos.y - s)/tileSize, j))
 			{
-				*posY = tileSize * y + tileSize;
+				*posI -= float(s - 1);
 				return true;
 			}
 		}
 	}
 
+	*posI -= speed;
+
 	return false;
+}
+
+bool TileMap::tileIsSolid(int i, int j)
+{
+	return solids[i + 256][j + 256] != 0;
 }
 
 

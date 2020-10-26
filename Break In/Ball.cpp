@@ -9,8 +9,9 @@
 void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {	
 	sizeBall = 9;
-	speed = 2;
-	spdModifierX = spdModifierY = 1;
+	speed = 5;
+	spdModifierX = 0.5;
+	spdModifierY = 0.7;
 
 	tex.loadFromFile("images/ball.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(sizeBall, sizeBall), glm::vec2(1.f, 1.f), &tex, &shaderProgram);
@@ -20,8 +21,8 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	sprite->changeAnimation(0);
 
-	direction.x = 1;
-	direction.y = -1;
+	direction.x = -1;
+	direction.y = 1;
 
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
@@ -31,19 +32,21 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 void Ball::update(int deltaTime)
 {
 	bool collision = false;
-	if (collision = (direction.y > 0 && map->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, speed)))
+
+	if (collision = (direction.y > 0 && map->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY))))
 		direction.y = -1;
-	else if (collision = (direction.y < 0 && map->collisionMoveUp(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y,speed)))
+	else if (collision = (direction.y < 0 && map->collisionMoveUp(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY))))
 		direction.y = 1;
-	else if (collision = (direction.x > 0 && map->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, speed)))
+
+	if (collision = (direction.x > 0 && map->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, int(speed * spdModifierX))))
 		direction.x = -1;
-	else if (collision = (direction.x < 0 && map->collisionMoveLeft(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, speed)))
+	else if (collision = (direction.x < 0 && map->collisionMoveLeft(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, int(speed * spdModifierX))))
 		direction.x = 1;
 	
-	if (collision) Game::instance().playBallSound();
+	//if (collision) Game::instance().playBallSound();
 
-	posBall.x += speed * spdModifierX * direction.x;
-	posBall.y += speed * spdModifierY * direction.y;
+	//posBall.x += speed * spdModifierX * direction.x;
+	//posBall.y += speed * spdModifierY * direction.y;
 
 
 

@@ -19,8 +19,8 @@ public:
 
     bool itIsALoopToRender();
 
-    static constexpr float INIT_PLAYER_X_TILES = 10;
-    static constexpr float INIT_PLAYER_Y_TILES = 10;
+    static constexpr float INIT_PLAYER_X_TILES = 1;
+    static constexpr float INIT_PLAYER_Y_TILES = 1;
 
 private:
     bool godMode;

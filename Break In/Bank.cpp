@@ -43,7 +43,8 @@ bool Bank::loadLevel(const string& levelFile)
 	sstream.str(line);
 	sstream >> mapSize.x >> mapSize.y;
 	getline(fin, line);
-	solids = vector<vector<bool>> (mapSize.y, vector<bool>(mapSize.x));
+
+	solids = vector<vector<int>> (1024, vector<int>(1024, -1));
 
 	sstream.str(line);
 	sstream >> tileSize >> blockSize;
@@ -76,7 +77,6 @@ bool Bank::loadLevel(const string& levelFile)
 		for (int j = 0; j < mapSize.x; j++)
 		{
 			// Fila i, Columna j
-			solids[i][j] = -1;
 
 			fin.get(tile);
 			
@@ -86,7 +86,7 @@ bool Bank::loadLevel(const string& levelFile)
 				temp = bankID;
 				break;
 			case ' ':
-				solids[i][j] = 0;
+				solids[i + 256][j + 256] = 0;
 				temp = tilesheetSize.x + 2 * (bankID - 1) + ((j+1) % 2) + tilesheetSize.x * ((i+1) % 2);
 				break;
 			case '#':
@@ -118,6 +118,11 @@ bool Bank::loadLevel(const string& levelFile)
 
 void Bank::loadTextures()
 {
+}
+
+bool Bank::tileIsSolid(int i, int j)
+{
+	return solids[i + 256][j + 256] != 0;
 }
 
 void Bank::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)

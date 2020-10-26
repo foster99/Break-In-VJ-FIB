@@ -13,6 +13,7 @@ public:
     bool loadLevel(const string& levelFile);
     void loadTextures();
     void prepareArrays(const glm::vec2& minCoords, ShaderProgram& program);
+    bool tileIsSolid(int x, int y);
 
 private:
     int bankID;
