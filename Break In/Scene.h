@@ -1,7 +1,9 @@
 #ifndef _SCENE_INCLUDE
 #define _SCENE_INCLUDE
 
+#include <cmath>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "ShaderProgram.h"
 #include "StaticTileMap.h"
 

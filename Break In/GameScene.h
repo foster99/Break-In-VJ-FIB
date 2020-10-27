@@ -1,9 +1,13 @@
-#pragma once
+#ifndef _GAMESCENE_INCLUDE
+#define _GAMESCENE_INCLUDE
+
 #include "Scene.h"
 #include "Player.h"
 #include "Ball.h"
+//#include "DynamicTileMap.h"
 
-class GameScene : public Scene
+class GameScene :
+    public Scene
 {
 public:
 
@@ -23,7 +27,7 @@ public:
     static constexpr float INIT_PLAYER_Y_TILES = 1;
 
 private:
-    StaticTileMap* map;
+    StaticTileMap* staticMap;
     Player* player;
     Ball* ball;
 
@@ -35,4 +39,4 @@ private:
     int loopsToRender;
     int currLoop;
 };
-
+#endif

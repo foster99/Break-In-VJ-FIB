@@ -1,9 +1,11 @@
 #ifndef _TILE_MAP_INCLUDE
 #define _TILE_MAP_INCLUDE
 
-
-#include <glm/glm.hpp>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <vector>
+#include <glm/glm.hpp>
 #include "Texture.h"
 #include "ShaderProgram.h"
 

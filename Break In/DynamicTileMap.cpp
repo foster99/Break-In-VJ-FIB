@@ -1,7 +1,6 @@
-#include "StaticTileMap.h"
+#include "DynamicTileMap.h"
 
-
-StaticTileMap::StaticTileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program) 
+DynamicTileMap::DynamicTileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program)
 {
 	loadLevel(levelFile);
 
@@ -10,7 +9,7 @@ StaticTileMap::StaticTileMap(const string& levelFile, const glm::vec2& minCoords
 	prepareArrays(minCoords, program);
 }
 
-void StaticTileMap::render() const
+void DynamicTileMap::render() const
 {
 	glEnable(GL_TEXTURE_2D);
 	tilesheet.use();
@@ -21,7 +20,7 @@ void StaticTileMap::render() const
 	glDisable(GL_TEXTURE_2D);
 }
 
-bool StaticTileMap::loadLevel(const string& levelFile)
+bool DynamicTileMap::loadLevel(const string& levelFile)
 {
 	ifstream fin;
 	string line, tilesheetFile;
@@ -40,7 +39,7 @@ bool StaticTileMap::loadLevel(const string& levelFile)
 	sstream >> mapSize.x >> mapSize.y;
 	getline(fin, line);
 
-	solids = vector<vector<int>> (1024, vector<int>(1024, -1));
+	solids = vector<vector<int>>(1024, vector<int>(1024, -1));
 
 	sstream.str(line);
 	sstream >> tileSize >> blockSize;
@@ -75,15 +74,15 @@ bool StaticTileMap::loadLevel(const string& levelFile)
 			// Fila i, Columna j
 
 			fin.get(tile);
-			
+
 			switch (tile)
 			{
-			case '*':	
+			case '*':
 				temp = bankID;
 				break;
 			case ' ':
 				solids[i + 256][j + 256] = 0;
-				temp = tilesheetSize.x + 2 * (bankID - 1) + ((j+1) % 2) + tilesheetSize.x * ((i+1) % 2);
+				temp = tilesheetSize.x + 2 * (bankID - 1) + ((j + 1) % 2) + tilesheetSize.x * ((i + 1) % 2);
 				break;
 			case '#':
 				temp = 38; // black tile
@@ -99,7 +98,7 @@ bool StaticTileMap::loadLevel(const string& levelFile)
 
 			if ('A' <= tile && tile <= 'Z')			temp = 48 + tile - 'A';
 			else if ('0' <= tile && tile <= '9')	temp = 80 + tile - '0';
-			
+
 			map[i * mapSize.x + j] = temp;
 		}
 		fin.get(tile);
@@ -112,22 +111,22 @@ bool StaticTileMap::loadLevel(const string& levelFile)
 	return true;
 }
 
-void StaticTileMap::loadTextures()
+void DynamicTileMap::loadTextures()
 {
 }
 
-bool StaticTileMap::tileIsSolid(int i, int j)
+bool DynamicTileMap::tileIsSolid(int i, int j)
 {
 	return solids[i + 256][j + 256] != 0;
 }
 
-void StaticTileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
+void DynamicTileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 {
 	int tile, N = tilesheetSize.x, nTiles = 0;
 	glm::vec2 posTile, texCoordTile[2], halfTexel;
 	vector<float> vertices;
 
-	halfTexel = glm::vec2((1.f/float(tileSize))/ tilesheet.width(), (1.f / float(tileSize)) / tilesheet.height());
+	halfTexel = glm::vec2((1.f / float(tileSize)) / tilesheet.width(), (1.f / float(tileSize)) / tilesheet.height());
 	for (int i = 0; i < mapSize.y; i++)
 	{
 		for (int j = 0; j < mapSize.x; j++)
@@ -138,11 +137,11 @@ void StaticTileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& pro
 
 				// Non-empty tile
 				nTiles++;
-				posTile = glm::vec2( minCoords.x + j * tileSize,
-									 minCoords.y + i * tileSize);
+				posTile = glm::vec2(minCoords.x + j * tileSize,
+					minCoords.y + i * tileSize);
 
 				texCoordTile[0] = glm::vec2(float(tile % tilesheetSize.x) / float(tilesheetSize.x),
-											float(tile / tilesheetSize.x) / float(tilesheetSize.y));
+					float(tile / tilesheetSize.x) / float(tilesheetSize.y));
 				//texCoordTile[0] = glm::vec2(1.f/16.f, 0.f/16.f);
 				texCoordTile[1] = texCoordTile[0] + tileTexSize;
 

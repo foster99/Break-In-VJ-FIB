@@ -1,9 +1,5 @@
-#include <cmath>
-#include <iostream>
-#include <GL/glew.h>
-#include <GL/glut.h>
-#include "Game.h"
 #include "Ball.h"
+#include "Game.h"
 
 void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {	

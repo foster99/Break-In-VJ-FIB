@@ -1,7 +1,6 @@
 #ifndef _OPTIONSCENE_INCLUDE
 #define _OPTIONSCENE_INCLUDE
 
-#include <glm/glm.hpp>
 #include "Scene.h"
 #include "TexturedQuad.h"
 

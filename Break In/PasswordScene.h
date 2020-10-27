@@ -1,7 +1,6 @@
 #ifndef _PASSWORDSCENE_INCLUDE
 #define _PASSWORDSCENE_INCLUDE
 
-#include <glm/glm.hpp>
 #include "Scene.h"
 #include "TexturedQuad.h"
 

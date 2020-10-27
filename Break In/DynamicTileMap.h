@@ -1,15 +1,13 @@
-#ifndef _STATIC_TILE_MAP_INCLUDE
-#define _STATIC_TILE_MAP_INCLUDE
+#ifndef _DYNAMIC_TILE_MAP_INCLUDE
+#define _DYNAMIC_TILE_MAP_INCLUDE
 
 #include "TileMap.h"
-
-class StaticTileMap :
+class DynamicTileMap :
     public TileMap
 {
-
 public:
 
-    StaticTileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
+    DynamicTileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
 
     void render() const;
 

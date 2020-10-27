@@ -1,7 +1,6 @@
 #ifndef _MENUSCENE_INCLUDE
 #define _MENUSCENE_INCLUDE
 
-#include <glm/glm.hpp>
 #include "Scene.h"
 #include "TexturedQuad.h"
 

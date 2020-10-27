@@ -1,4 +1,3 @@
-#pragma once
 #include <String>
 #include <irrKlang.h>
 using namespace std;
