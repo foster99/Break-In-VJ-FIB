@@ -48,6 +48,9 @@ private:
 
 protected:
 
+	static constexpr char wall = '*';
+	static constexpr char black = '#';
+
 	static constexpr char brickRed		= 'R';
 	static constexpr char brickGreen	= 'G';
 	static constexpr char brickBlue		= 'B';

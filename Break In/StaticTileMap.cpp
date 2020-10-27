@@ -40,8 +40,6 @@ bool StaticTileMap::loadLevel(const string& levelFile)
 	sstream >> mapSize.x >> mapSize.y;
 	getline(fin, line);
 
-	solids = vector<vector<int>> (1024, vector<int>(1024, -1));
-
 	sstream.str(line);
 	sstream >> tileSize >> blockSize;
 	getline(fin, line);
@@ -63,10 +61,8 @@ bool StaticTileMap::loadLevel(const string& levelFile)
 	tilesheet.setMinFilter(GL_NEAREST);
 	tilesheet.setMagFilter(GL_NEAREST);
 
-	// EDGAR!! ESTAS INTENTANDO CARGAR BIEN LAS TEXTURAS DE LOS TILES. HAS CAMBIADO 
-	// LOS FICHEROS DE LAS TEXTURAS, Y AHORA HAY QUE CARGAR TODAS LAS TEXTURAS
-	// PARA CADA TIPO DE TILE CODIFICADO EN EL TXT
 	int temp;
+	solids = vector<vector<int>>(1024, vector<int>(1024, -1));
 	map = new int[mapSize.x * mapSize.y];
 	for (int i = 0; i < mapSize.y; i++)
 	{
@@ -78,15 +74,11 @@ bool StaticTileMap::loadLevel(const string& levelFile)
 			
 			switch (tile)
 			{
-			case '*':	
+			case wall:
 				temp = bankID;
 				break;
-			case ' ':
-				solids[i + 256][j + 256] = 0;
-				temp = tilesheetSize.x + 2 * (bankID - 1) + ((j+1) % 2) + tilesheetSize.x * ((i+1) % 2);
-				break;
-			case '#':
-				temp = 38; // black tile
+			case black:
+				temp = 38;
 				break;
 			case ':':
 				temp = 75;
@@ -94,12 +86,24 @@ bool StaticTileMap::loadLevel(const string& levelFile)
 			case '.':
 				temp = 74;
 				break;
-			default: temp = 0;	break;
+			default:
+
+				if ('A' <= tile && tile <= 'Z') {	// Char
+					temp = 48 + tile - 'A';
+					break;
+				}
+
+				if ('0' <= tile && tile <= '9') {	// Number
+					temp = 80 + tile - '0';
+					break;
+				}
+				
+				solids[i + 256][j + 256] = 0;		// Background (non-solid)
+				temp = tilesheetSize.x + 2 * (bankID - 1) + ((j + 1) % 2) + tilesheetSize.x * ((i + 1) % 2);
+				break;
+
 			}
 
-			if ('A' <= tile && tile <= 'Z')			temp = 48 + tile - 'A';
-			else if ('0' <= tile && tile <= '9')	temp = 80 + tile - '0';
-			
 			map[i * mapSize.x + j] = temp;
 		}
 		fin.get(tile);
