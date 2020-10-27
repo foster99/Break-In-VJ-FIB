@@ -2,10 +2,10 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include "Bank.h"
+#include "StaticTileMap.h"
 
 
-Bank::Bank(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program) 
+StaticTileMap::StaticTileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program) 
 {
 	loadLevel(levelFile);
 
@@ -14,7 +14,7 @@ Bank::Bank(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& p
 	prepareArrays(minCoords, program);
 }
 
-void Bank::render() const
+void StaticTileMap::render() const
 {
 	glEnable(GL_TEXTURE_2D);
 	tilesheet.use();
@@ -25,7 +25,7 @@ void Bank::render() const
 	glDisable(GL_TEXTURE_2D);
 }
 
-bool Bank::loadLevel(const string& levelFile)
+bool StaticTileMap::loadLevel(const string& levelFile)
 {
 	ifstream fin;
 	string line, tilesheetFile;
@@ -116,16 +116,16 @@ bool Bank::loadLevel(const string& levelFile)
 	return true;
 }
 
-void Bank::loadTextures()
+void StaticTileMap::loadTextures()
 {
 }
 
-bool Bank::tileIsSolid(int i, int j)
+bool StaticTileMap::tileIsSolid(int i, int j)
 {
 	return solids[i + 256][j + 256] != 0;
 }
 
-void Bank::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
+void StaticTileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 {
 	int tile, N = tilesheetSize.x, nTiles = 0;
 	glm::vec2 posTile, texCoordTile[2], halfTexel;

@@ -26,7 +26,7 @@ void GameScene::init() {
 	currLoop = 0;
 	godMode = false;
 
-	map = new Bank("levels/no_path_test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = new StaticTileMap("levels/no_path_test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);

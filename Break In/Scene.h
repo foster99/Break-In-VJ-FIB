@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
-#include "Bank.h"
+#include "StaticTileMap.h"
 
 class Scene
 {

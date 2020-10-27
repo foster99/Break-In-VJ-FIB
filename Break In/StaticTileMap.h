@@ -1,12 +1,11 @@
-#pragma once
 #include "TileMap.h"
-class Bank :
+class StaticTileMap :
     public TileMap
 {
 
 public:
 
-    Bank(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
+    StaticTileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
 
     void render() const;
 

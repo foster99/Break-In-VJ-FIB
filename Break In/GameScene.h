@@ -23,10 +23,14 @@ public:
     static constexpr float INIT_PLAYER_Y_TILES = 1;
 
 private:
-    bool godMode;
-    Bank* map;
+    StaticTileMap* map;
     Player* player;
     Ball* ball;
+
+    bool godMode;
+
+    int points, money, bank, room;
+
 
     int loopsToRender;
     int currLoop;

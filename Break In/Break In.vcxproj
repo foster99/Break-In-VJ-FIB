@@ -34,7 +34,7 @@
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="Bank.cpp" />
+    <ClCompile Include="StaticTileMap.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedQuad.cpp" />
     <ClCompile Include="TileMap.cpp" />
@@ -42,7 +42,7 @@
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
     <ClInclude Include="Ball.h" />
-    <ClInclude Include="Bank.h" />
+    <ClInclude Include="StaticTileMap.h" />
     <ClInclude Include="CharsTexture.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene.h" />
