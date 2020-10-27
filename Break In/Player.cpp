@@ -3,23 +3,38 @@
 
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
-{
-	sizePlayer = 16;
+{	
+	
+	sizePlayer = glm::ivec2(19,16);
 	speedX = 3;
 	speedY = 2;
-	spritesheet.loadFromFile("images/bee.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(sizePlayer, sizePlayer), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(1);
+	spritesheet.loadFromFile("images/eyes.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite = Sprite::createSprite(sizePlayer, glm::vec2(0.33f, 0.25f), &spritesheet, &shaderProgram);
+	sprite->setNumberAnimations(12);
 	
-	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
-		
-	sprite->changeAnimation(0);
+	sprite->addKeyframe(0,	glm::vec2(0.f,		0.f));
+	sprite->addKeyframe(1,	glm::vec2(0.33f,	0.f));
+	sprite->addKeyframe(2,	glm::vec2(0.66f,	0.f));
+	sprite->addKeyframe(3,	glm::vec2(0.f,		0.25f));
+	sprite->addKeyframe(4,	glm::vec2(0.33f,	0.25f));
+	sprite->addKeyframe(5,	glm::vec2(0.66f,	0.25f));
+	sprite->addKeyframe(6,	glm::vec2(0.f,		0.5f));
+	sprite->addKeyframe(7,	glm::vec2(0.33f,	0.5f));
+	sprite->addKeyframe(8,	glm::vec2(0.66f,	0.5f));
+	sprite->addKeyframe(9,	glm::vec2(0.f,		0.75f));
+	sprite->addKeyframe(10, glm::vec2(0.33f,	0.75f));
+	sprite->addKeyframe(11, glm::vec2(0.66f,	0.75f));
 
-	slideOffset = 6;
+
+
+	sprite->changeAnimation(4);
+
+	slideOffsetX = 10;
+	slideOffsetY = 6;
 
 	slide = new Slide();
-	slide->init(tileMapPos, shaderProgram, sizePlayer);
-	slide->setPosition(glm::ivec2(posPlayer.x,posPlayer.y- slideOffset));
+	slide->init(tileMapPos, shaderProgram);
+	slide->setPosition(glm::ivec2(posPlayer.x - slideOffsetX, posPlayer.y- slideOffsetY));
 
 
 	tileMapDispl = tileMapPos;
@@ -29,17 +44,33 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 void Player::update(int deltaTime)
 {
+
+	glm::ivec2 slideLogic = slide->getLogicSize();
+
 	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
 		posPlayer.x += speedX;
-		if ((posPlayer.x + sizePlayer)> ( (map->getMapSizeX() - 9)*map->getTileSize()))
-			posPlayer.x -= speedX;
+		if (slideLogic.x == sizePlayer.x) {
+			if ((posPlayer.x + sizePlayer.x) > ((map->getMapSizeX()) * map->getTileSize() - map->getTileSize()))
+				posPlayer.x -= speedX;
+		}
+		else {
+			if ((posPlayer.x + sizePlayer.x + slideOffsetX) > ((map->getMapSizeX()) * map->getTileSize() - map->getTileSize()))
+				posPlayer.x -= speedX;
+		}
+		
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
 		posPlayer.x -= speedX;
-		if ( posPlayer.x < map->getTileSize() )
-			posPlayer.x += speedX;
+		if (slideLogic.x == sizePlayer.x) {
+			if (posPlayer.x < map->getTileSize())
+				posPlayer.x += speedX;
+		}
+		else {
+			if ((posPlayer.x - slideOffsetX +1) < map->getTileSize())
+				posPlayer.x += speedX;
+		}
 	}
 
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP))
@@ -51,13 +82,13 @@ void Player::update(int deltaTime)
 	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
 	{
 		posPlayer.y += speedY;
-		if ((posPlayer.y + sizePlayer) > ( (map->getMapSizeY()-1)*map->getTileSize()) )
+		if ((posPlayer.y + sizePlayer.x) > ( (map->getMapSizeY()-1)*map->getTileSize()) )
 			posPlayer.y -= speedY;
 	}
 
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-	slide->setPosition(glm::ivec2(posPlayer.x, posPlayer.y - slideOffset));
+	slide->setPosition(glm::ivec2(posPlayer.x-slideOffsetX, posPlayer.y - slideOffsetY));
 
 }
 
@@ -67,7 +98,7 @@ void Player::render()
 	slide->render();
 }
 
-int Player::getSize()
+glm::ivec2 Player::getSize()
 {
 	return sizePlayer;
 }

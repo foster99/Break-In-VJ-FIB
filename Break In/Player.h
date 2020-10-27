@@ -18,14 +18,14 @@ public:
 	void update(int deltaTime);
 	void render();
 	
-	int getSize();
+	glm::ivec2 getSize();
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	
 private:
-	glm::ivec2 tileMapDispl;
+	glm::ivec2 tileMapDispl, sizePlayer;
 	glm::vec2 posPlayer;
-	int jumpAngle, startY, sizePlayer, speedX, speedY, slideOffset;
+	int jumpAngle, startYs, speedX, speedY, slideOffsetY, slideOffsetX;
 	Texture spritesheet;
 	Sprite *sprite;
 	Slide *slide;

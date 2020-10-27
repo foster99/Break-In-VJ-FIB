@@ -6,13 +6,14 @@
 class Slide
 {
 public:
-	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int sizeX);
+	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime);
 	void render();
-
+	
+	glm::ivec2 getLogicSize();
 	void setPosition(const glm::vec2& pos);
 private:
-	glm::ivec2 tileMapDispl, logicSize, quadSize, posSlide;
+	glm::ivec2 tileMapDispl, logicSize, quadSize, posSlide, singleSize;
 	Texture tex;
 	Sprite* sprite;
 };
