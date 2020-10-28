@@ -45,3 +45,17 @@ void Slide::setPosition(const glm::vec2& pos)
 	posSlide = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posSlide.x), float(tileMapDispl.y + posSlide.y)));
 }
+
+
+void Slide::toogleChangeBar() 
+{
+	if (logicSize == quadSize) {
+		logicSize = singleSize;
+		sprite->changeAnimation(2);
+	}		
+	else {
+		logicSize = quadSize;
+		sprite->changeAnimation(4);
+	}
+		
+}

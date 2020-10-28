@@ -21,6 +21,7 @@ public:
     void render();
 
     void toggleGodMode();
+    void toogleChangeBar();
 
     bool itIsALoopToRender();
 

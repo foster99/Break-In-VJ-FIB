@@ -70,6 +70,11 @@ void GameScene::toggleGodMode()
 	// possible update ????
 }
 
+void GameScene::toogleChangeBar() 
+{
+	player->toogleChangeBar();
+}
+
 bool GameScene::itIsALoopToRender()
 {
 	if (loopsToRender <= currLoop++) {

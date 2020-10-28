@@ -12,6 +12,7 @@ public:
 	
 	glm::ivec2 getLogicSize();
 	void setPosition(const glm::vec2& pos);
+	void toogleChangeBar();
 private:
 	glm::ivec2 tileMapDispl, logicSize, quadSize, posSlide, singleSize;
 	Texture tex;
