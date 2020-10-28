@@ -65,10 +65,12 @@ bool StaticTileMap::loadLevel(const string& levelFile)
 	solids = vector<vector<int>>(1024, vector<int>(1024, -1));*/
 	mapita = vector<vector<voxel>>(mapSize.y, vector<voxel>(mapSize.x, empty_tile));
 
-	for (int i = 0; i < mapSize.y; i++) {
-		for (int j = 0; j < mapSize.x; j++) {
+	for (int i = 0; i < mapSize.y; i++)
+	{
+		for (int j = 0; j < mapSize.x; j++)
+		{
 			fin.get(tile);
-			mapita[i][j] = tileInfo(tile, i, j);
+			mapita[i][j] = tileInfo(tile, bankID, i, j);
 		}
 		fin.get(tile);
 #ifndef _WIN32

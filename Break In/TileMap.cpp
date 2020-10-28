@@ -224,7 +224,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, flo
 	return false;
 }
 
-voxel TileMap::tileInfo(char tile, int i, int j)
+voxel TileMap::tileInfo(char tile, int bank, int i, int j)
 {
 	voxel temp;
 
@@ -234,7 +234,7 @@ voxel TileMap::tileInfo(char tile, int i, int j)
 	switch (tile)
 	{
 	case wall:
-		temp.id = bankID;
+		temp.id = bank;
 		break;
 	case black:
 		temp.id = 38;
@@ -291,7 +291,7 @@ voxel TileMap::tileInfo(char tile, int i, int j)
 		break;
 
 	default:
-		temp.id = tilesheetSize.x + 2 * (bankID - 1) + ((j + 1) % 2) + tilesheetSize.x * ((i + 1) % 2);
+		temp.id = tilesheetSize.x + 2 * (bank - 1) + ((j + 1) % 2) + tilesheetSize.x * ((i + 1) % 2);
 		temp.resistance = 0;
 		break;
 

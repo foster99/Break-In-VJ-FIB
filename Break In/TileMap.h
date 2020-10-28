@@ -44,7 +44,7 @@ public:
 	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed);
 
 
-	voxel tileInfo(char tile, int i, int j);
+	voxel tileInfo(char tile, int bank, int i, int j);
 	bool tileIsSolid(int i, int j);
 
 private:
