@@ -6,6 +6,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {	
 	
 	sizePlayer = glm::ivec2(19,16);
+	displ_posPlayer = mod(posPlayer, glm::vec2(24.f));
 	speedX = 3;
 	speedY = 2;
 	spritesheet.loadFromFile("images/eyes.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -38,7 +39,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 
 	tileMapDispl = tileMapPos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + displ_posPlayer.x), float(tileMapDispl.y + displ_posPlayer.y)));
 	
 }
 
@@ -86,9 +87,9 @@ void Player::update(int deltaTime)
 			posPlayer.y -= speedY;
 	}
 
-
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-	slide->setPosition(glm::ivec2(posPlayer.x-slideOffsetX, posPlayer.y - slideOffsetY));
+	displ_posPlayer = mod(posPlayer, glm::vec2(8.f * 24.f));
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + displ_posPlayer.x), float(tileMapDispl.y + displ_posPlayer.y)));
+	slide->setPosition(glm::ivec2(displ_posPlayer.x-slideOffsetX, displ_posPlayer.y - slideOffsetY));
 
 }
 
@@ -111,6 +112,7 @@ void Player::setTileMap(TileMap *tileMap)
 void Player::setPosition(const glm::vec2 &pos)
 {
 	posPlayer = pos;
+	displ_posPlayer = mod(posPlayer, glm::vec2(8.f * 24.f));
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 

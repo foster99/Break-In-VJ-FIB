@@ -45,9 +45,9 @@ void Ball::update(int deltaTime)
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
 }
 
-void Ball::render()
+void Ball::render(glm::mat4& displacement_mat)
 {
-	sprite->render();
+	sprite->render(displacement_mat);
 }
 
 void Ball::changeModifierX(float value)
@@ -69,4 +69,9 @@ void Ball::setPosition(const glm::vec2& pos)
 {
 	posBall = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
+}
+
+glm::vec2 Ball::getPosition()
+{
+	return posBall;
 }

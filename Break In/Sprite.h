@@ -24,6 +24,7 @@ public:
 
 	void update(int deltaTime);
 	void render() const;
+	void render(glm::mat4& displacement_mat);
 	void free();
 
 	void setNumberAnimations(int nAnimations);

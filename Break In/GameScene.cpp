@@ -22,11 +22,11 @@ void GameScene::init() {
 
 	this->Scene::init();
 
-	loopsToRender = 5;
-	currLoop = 0;
+	tiles_displacement = 0;
 	godMode = false;
 
 	staticMap = new StaticTileMap("levels/no_path_test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	menuMap = new StaticTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -45,36 +45,49 @@ void GameScene::update(int deltaTime) {
 	player->update(deltaTime);
 	ball->update(deltaTime);
 
+	// Modify tiles displacement
 
+	if (ball->getPosition().y / 8 > 48) {
+		room = 1;
+		tiles_displacement = -48;
+	}
+	else if (ball->getPosition().y / 8 > 24) {
+		room = 2;
+		tiles_displacement = -24;
+	}
+	else {
+		room = 3;
+		tiles_displacement = 0;
+	}
+
+	displacement_mat = glm::translate(glm::mat4(1.f), glm::vec3(0.f, float(tiles_displacement *8), 0.f));
 }
 
 void GameScene::render()
 {
-	glm::mat4 modelview = glm::mat4(1.f);
-	modelview = glm::translate(modelview, glm::vec3(0.f, float(0.f), 0.f));
-	// creo que la solucion es una matriz de traslacion o algo para mirar mas abajo
+	
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
-	texProgram.setUniformMatrix4f("modelview", modelview);
+	texProgram.setUniformMatrix4f("modelview", displacement_mat);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
 	staticMap->render();
 	player->render();
-	ball->render();
+	ball->render(displacement_mat);
+
+	// Render Lateral Menu
+	glm::mat4 menu_modelview = glm::translate(glm::mat4(1.f), glm::vec3(192.f, 0.f, 0.f));
+	texProgram.use();
+	texProgram.setUniformMatrix4f("projection", projection);
+	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+	texProgram.setUniformMatrix4f("modelview", menu_modelview);
+	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+	menuMap->render();
 }
 
 void GameScene::toggleGodMode()
 {
 	godMode = !godMode;
 	// possible update ????
-}
-
-bool GameScene::itIsALoopToRender()
-{
-	if (loopsToRender <= currLoop++) {
-		currLoop = 0;
-		return true;
-	}
-	return false;
 }

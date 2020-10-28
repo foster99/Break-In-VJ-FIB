@@ -14,6 +14,7 @@ public:
 	void setPosition(const glm::vec2& pos);
 private:
 	glm::ivec2 tileMapDispl, logicSize, quadSize, posSlide, singleSize;
+	glm::vec2 displ_posPlayer;
 	Texture tex;
 	Sprite* sprite;
 };

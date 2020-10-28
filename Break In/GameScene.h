@@ -22,8 +22,6 @@ public:
 
     void toggleGodMode();
 
-    bool itIsALoopToRender();
-
     static constexpr float INIT_PLAYER_X_TILES = 1;
     static constexpr float INIT_PLAYER_Y_TILES = 1;
 
@@ -37,8 +35,9 @@ private:
 
     int points, money, bank, room;
 
-
-    int loopsToRender;
-    int currLoop;
+    int tiles_displacement;
+    glm::mat4 displacement_mat;
+    //int loopsToRender;
+    //int currLoop;
 };
 #endif
