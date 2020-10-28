@@ -21,6 +21,8 @@ public:
 	glm::ivec2 getSize();
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+
+	void toogleChangeBar();
 	
 private:
 	glm::ivec2 tileMapDispl, sizePlayer;

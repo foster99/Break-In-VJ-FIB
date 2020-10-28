@@ -21,6 +21,7 @@ public:
     void render();
 
     void toggleGodMode();
+    void toogleChangeBar();
 
     static constexpr float INIT_PLAYER_X_TILES = 1;
     static constexpr float INIT_PLAYER_Y_TILES = 1;

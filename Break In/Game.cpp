@@ -120,6 +120,7 @@ void Game::keyPressed(int key)
 		switch (key) {
 			case ESC:	setMode(options);	break;
 			case 'g':	toggleGodMode();	break;
+			case 'b':	toogleChangeBar();	break;
 			default:	break;
 		} break;
 
@@ -218,6 +219,11 @@ void Game::rollbackMode()
 void Game::toggleGodMode()
 {
 	gameScene.toggleGodMode();
+}
+
+void Game::toogleChangeBar()
+{
+	gameScene.toogleChangeBar();
 }
 
 

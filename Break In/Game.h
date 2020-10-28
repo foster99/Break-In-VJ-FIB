@@ -70,6 +70,7 @@ private:
 	void setMode(Mode newMode);
 	void rollbackMode();
 	void toggleGodMode();
+	void toogleChangeBar();
 
 	// Application Scenes
 	GameScene gameScene;				// Scene to render when playing
