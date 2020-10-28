@@ -66,6 +66,7 @@
   <ItemGroup>
     <Text Include="levels\level01.txt" />
     <Text Include="levels\leveltest.txt" />
+    <Text Include="levels\menu.txt" />
     <Text Include="levels\no_path_test.txt" />
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,10 @@
 // it builds a single VBO that contains all tiles. As a result the render
 // method draws the whole map independently of what is visible.
 
+typedef struct {
+	int id = 0;
+	int resistance = 0;
+} voxel;
 
 class TileMap
 {
@@ -39,6 +43,8 @@ public:
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed);
 	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed);
 
+
+	voxel tileInfo(char tile, int i, int j);
 	bool tileIsSolid(int i, int j);
 
 private:
@@ -73,9 +79,14 @@ protected:
 	int tileSize, blockSize;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
-	vector<vector<int>> solids;
 
-	int *map;
+	static constexpr voxel empty_tile = { 0,-1 };
+
+	// Bank info
+	int bankID;
+	vector<vector<voxel>> mapita;
+
+	vector<vector<int>> solids;
 
 };
 

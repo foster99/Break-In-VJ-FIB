@@ -14,14 +14,14 @@ TileMap::TileMap() {
 
 TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
 {
+	bankID = 1;
 	loadLevel(levelFile);
 	prepareArrays(minCoords, program);
 }
 
 TileMap::~TileMap()
 {
-	if(map != NULL)
-		delete map;
+
 }
 
 void TileMap::render() const
@@ -42,55 +42,7 @@ void TileMap::free()
 
 bool TileMap::loadLevel(const string &levelFile)
 {
-	ifstream fin;
-	string line, tilesheetFile;
-	stringstream sstream;
-	char tile;
-	
-	fin.open(levelFile.c_str());
-	if(!fin.is_open())
-		return false;
-	getline(fin, line);
-	if(line.compare(0, 7, "TILEMAP") != 0)
-		return false;
-	getline(fin, line);
-	sstream.str(line);
-	sstream >> mapSize.x >> mapSize.y;
-	getline(fin, line);
-	sstream.str(line);
-	sstream >> tileSize >> blockSize;
-	getline(fin, line);
-	sstream.str(line);
-	sstream >> tilesheetFile;
-	tilesheet.loadFromFile(tilesheetFile, TEXTURE_PIXEL_FORMAT_RGBA);
-	tilesheet.setWrapS(GL_CLAMP_TO_EDGE);
-	tilesheet.setWrapT(GL_CLAMP_TO_EDGE);
-	tilesheet.setMinFilter(GL_NEAREST);
-	tilesheet.setMagFilter(GL_NEAREST);
-	getline(fin, line);
-	sstream.str(line);
-	sstream >> tilesheetSize.x >> tilesheetSize.y;
-	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
-	
-	map = new int[mapSize.x * mapSize.y];
-	for(int j=0; j<mapSize.y; j++)
-	{
-		for(int i=0; i<mapSize.x; i++)
-		{
-			fin.get(tile);
-			if(tile == ' ')
-				map[j*mapSize.x+i] = 0;
-			else
-				map[j*mapSize.x+i] = tile - int('0');
-		}
-		fin.get(tile);
-#ifndef _WIN32
-		fin.get(tile);
-#endif
-	}
-	fin.close();
-	
-	return true;
+	return false;
 }
 
 void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
@@ -104,10 +56,10 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 	{
 		for(int i=0; i<mapSize.x; i++)
 		{
-			tile = map[j * mapSize.x + i];
-			if(tile != 0)
-			{
-
+			tile = mapita[i][j].id;
+			
+			if (tile != 0) {
+			
 				// Non-empty tile
 				nTiles++;
 				posTile = glm::vec2(minCoords.x + i * tileSize, minCoords.y + j * tileSize);
@@ -159,10 +111,6 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 	posLocation = program.bindVertexAttribute("position", 2, 4*sizeof(float), 0);
 	texCoordLocation = program.bindVertexAttribute("texCoord", 2, 4*sizeof(float), (void *)(2*sizeof(float)));
 }
-
-// Collision tests for axis aligned bounding boxes.
-// Method collisionMoveDown also corrects Y coordinate if the box is
-// already intersecting a tile below.
 
 bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speed) 
 {
@@ -247,7 +195,6 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, f
 	return false;
 }
 
- 
 bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posI, int speed)
 {
 	int j0, j1;
@@ -277,9 +224,85 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, flo
 	return false;
 }
 
+voxel TileMap::tileInfo(char tile, int i, int j)
+{
+	voxel temp;
+
+	temp.id = 0;
+	temp.resistance = -1;
+
+	switch (tile)
+	{
+	case wall:
+		temp.id = bankID;
+		break;
+	case black:
+		temp.id = 38;
+		break;
+
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+		temp.id = 80 + tile - '0';
+		break;
+
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+		temp.id = 48 + tile - 'A';
+		break;
+
+	case '.':
+		temp.id = 74;
+		break;
+
+	case ':':
+		temp.id = 75;
+		break;
+
+	default:
+		temp.id = tilesheetSize.x + 2 * (bankID - 1) + ((j + 1) % 2) + tilesheetSize.x * ((i + 1) % 2);
+		temp.resistance = 0;
+		break;
+
+	}
+
+	return temp;
+}
+
 bool TileMap::tileIsSolid(int i, int j)
 {
-	return solids[i + 256][j + 256] != 0;
+	return mapita[i][j].resistance != 0;
 }
 
 

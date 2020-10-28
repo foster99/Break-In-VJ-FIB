@@ -66,7 +66,7 @@ bool DynamicTileMap::loadLevel(const string& levelFile)
 	// LOS FICHEROS DE LAS TEXTURAS, Y AHORA HAY QUE CARGAR TODAS LAS TEXTURAS
 	// PARA CADA TIPO DE TILE CODIFICADO EN EL TXT
 	int temp;
-	map = new int[mapSize.x * mapSize.y];
+
 	for (int i = 0; i < mapSize.y; i++)
 	{
 		for (int j = 0; j < mapSize.x; j++)
@@ -74,32 +74,7 @@ bool DynamicTileMap::loadLevel(const string& levelFile)
 			// Fila i, Columna j
 
 			fin.get(tile);
-
-			switch (tile)
-			{
-			case '*':
-				temp = bankID;
-				break;
-			case ' ':
-				solids[i + 256][j + 256] = 0;
-				temp = tilesheetSize.x + 2 * (bankID - 1) + ((j + 1) % 2) + tilesheetSize.x * ((i + 1) % 2);
-				break;
-			case '#':
-				temp = 38; // black tile
-				break;
-			case ':':
-				temp = 75;
-				break;
-			case '.':
-				temp = 74;
-				break;
-			default: temp = 0;	break;
-			}
-
-			if ('A' <= tile && tile <= 'Z')			temp = 48 + tile - 'A';
-			else if ('0' <= tile && tile <= '9')	temp = 80 + tile - '0';
-
-			map[i * mapSize.x + j] = temp;
+			return false;
 		}
 		fin.get(tile);
 #ifndef _WIN32
@@ -131,7 +106,8 @@ void DynamicTileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& pr
 	{
 		for (int j = 0; j < mapSize.x; j++)
 		{
-			tile = map[i * mapSize.x + j];
+			//tile = map[i * mapSize.x + j];
+			tile = 1;
 			if (tile != 0)
 			{
 

@@ -61,50 +61,14 @@ bool StaticTileMap::loadLevel(const string& levelFile)
 	tilesheet.setMinFilter(GL_NEAREST);
 	tilesheet.setMagFilter(GL_NEAREST);
 
-	int temp;
-	solids = vector<vector<int>>(1024, vector<int>(1024, -1));
-	map = new int[mapSize.x * mapSize.y];
-	for (int i = 0; i < mapSize.y; i++)
-	{
-		for (int j = 0; j < mapSize.x; j++)
-		{
-			// Fila i, Columna j
+	/*int temp;
+	solids = vector<vector<int>>(1024, vector<int>(1024, -1));*/
+	mapita = vector<vector<voxel>>(mapSize.y, vector<voxel>(mapSize.x, empty_tile));
 
+	for (int i = 0; i < mapSize.y; i++) {
+		for (int j = 0; j < mapSize.x; j++) {
 			fin.get(tile);
-			
-			switch (tile)
-			{
-			case wall:
-				temp = bankID;
-				break;
-			case black:
-				temp = 38;
-				break;
-			case ':':
-				temp = 75;
-				break;
-			case '.':
-				temp = 74;
-				break;
-			default:
-
-				if ('A' <= tile && tile <= 'Z') {	// Char
-					temp = 48 + tile - 'A';
-					break;
-				}
-
-				if ('0' <= tile && tile <= '9') {	// Number
-					temp = 80 + tile - '0';
-					break;
-				}
-				
-				solids[i + 256][j + 256] = 0;		// Background (non-solid)
-				temp = tilesheetSize.x + 2 * (bankID - 1) + ((j + 1) % 2) + tilesheetSize.x * ((i + 1) % 2);
-				break;
-
-			}
-
-			map[i * mapSize.x + j] = temp;
+			mapita[i][j] = tileInfo(tile, i, j);
 		}
 		fin.get(tile);
 #ifndef _WIN32
@@ -122,7 +86,7 @@ void StaticTileMap::loadTextures()
 
 bool StaticTileMap::tileIsSolid(int i, int j)
 {
-	return solids[i + 256][j + 256] != 0;
+	return mapita[i][j].resistance != 0;
 }
 
 void StaticTileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
@@ -132,14 +96,11 @@ void StaticTileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& pro
 	vector<float> vertices;
 
 	halfTexel = glm::vec2((1.f/float(tileSize))/ tilesheet.width(), (1.f / float(tileSize)) / tilesheet.height());
-	for (int i = 0; i < mapSize.y; i++)
-	{
-		for (int j = 0; j < mapSize.x; j++)
-		{
-			tile = map[i * mapSize.x + j];
-			if (tile != 0)
-			{
 
+	for (int i = 0; i < mapSize.y; i++) {
+		for (int j = 0; j < mapSize.x; j++) {
+			tile = mapita[i][j].id;
+			if (tile != 0) {
 				// Non-empty tile
 				nTiles++;
 				posTile = glm::vec2( minCoords.x + j * tileSize,
@@ -153,14 +114,11 @@ void StaticTileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& pro
 				//texCoordTile[0] += halfTexel;
 				texCoordTile[1] -= halfTexel;
 
-
 				// First triangle
 				vertices.push_back(posTile.x);				vertices.push_back(posTile.y);
 				vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[0].y);
-
 				vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y);
 				vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[0].y);
-
 				vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y + blockSize);
 				vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[1].y);
 
@@ -168,10 +126,8 @@ void StaticTileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& pro
 				// Second triangle
 				vertices.push_back(posTile.x);				vertices.push_back(posTile.y);
 				vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[0].y);
-
 				vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y + blockSize);
 				vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[1].y);
-
 				vertices.push_back(posTile.x);				vertices.push_back(posTile.y + blockSize);
 				vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[1].y);
 			}

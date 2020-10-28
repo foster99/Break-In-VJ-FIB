@@ -201,6 +201,9 @@
     <Text Include="levels\no_path_test.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
+    <Text Include="levels\menu.txt">
+      <Filter>Resource Files\levels</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\ball.png">
