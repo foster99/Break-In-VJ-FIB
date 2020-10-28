@@ -86,6 +86,11 @@ void GameScene::render()
 	menuMap->render();
 }
 
+void GameScene::toogleChangeBar()
+{
+	player->toogleChangeBar();
+}
+
 void GameScene::toggleGodMode()
 {
 	godMode = !godMode;
