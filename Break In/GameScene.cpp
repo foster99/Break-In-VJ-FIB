@@ -25,8 +25,8 @@ void GameScene::init() {
 	tiles_displacement = 0;
 	godMode = false;
 
-	staticMap = new StaticTileMap("levels/no_path_test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	menuMap = new StaticTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	staticMap = new TileMap("levels/no_path_test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	menuMap = new TileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);

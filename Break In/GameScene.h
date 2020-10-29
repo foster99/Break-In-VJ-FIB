@@ -4,8 +4,6 @@
 #include "Scene.h"
 #include "Player.h"
 #include "Ball.h"
-#include "DynamicTileMap.h"
-#include "StaticTileMap.h"
 
 class GameScene :
     public Scene
@@ -27,8 +25,8 @@ public:
     static constexpr float INIT_PLAYER_Y_TILES = 1;
 
 private:
-    StaticTileMap *staticMap, *menuMap;
-    DynamicTileMap *dynamicMap; 
+    TileMap *staticMap, *menuMap;
+    TileMap *dynamicMap;
     Player* player;
     Ball* ball;
 

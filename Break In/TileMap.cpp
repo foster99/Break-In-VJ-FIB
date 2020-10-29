@@ -9,6 +9,7 @@ TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoo
 }
 
 TileMap::TileMap() {
+	bankID = 1;
 
 }
 
@@ -16,7 +17,7 @@ TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProg
 {
 	bankID = 1;
 	loadLevel(levelFile);
-	prepareArrays(minCoords, program);
+	prepareStaticArrays(minCoords, program);
 }
 
 TileMap::~TileMap()
@@ -28,7 +29,7 @@ void TileMap::render() const
 {
 	glEnable(GL_TEXTURE_2D);
 	tilesheet.use();
-	glBindVertexArray(vao);
+	glBindVertexArray(vaoStatic);
 	glEnableVertexAttribArray(posLocation);
 	glEnableVertexAttribArray(texCoordLocation);
 	glDrawArrays(GL_TRIANGLES, 0, 6 * mapSize.x * mapSize.y);
@@ -42,41 +43,92 @@ void TileMap::free()
 
 bool TileMap::loadLevel(const string &levelFile)
 {
-	return false;
+	ifstream fin;
+	string line, tilesheetFile;
+	stringstream sstream;
+	char tile;
+
+	fin.open(levelFile.c_str());
+	if (!fin.is_open())
+		return false;
+	getline(fin, line);
+	if (line.compare(0, 7, "TILEMAP") != 0)
+		return false;
+	getline(fin, line);
+
+	sstream.str(line);
+	sstream >> mapSize.x >> mapSize.y;
+	getline(fin, line);
+
+	sstream.str(line);
+	sstream >> tileSize >> blockSize;
+	getline(fin, line);
+
+	sstream.str(line);
+	sstream >> tilesheetSize.x >> tilesheetSize.y;
+	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
+	getline(fin, line);
+
+	sstream.str(line);
+	sstream >> bankID;
+
+	// READ TEXTURE PATH
+
+	tilesheetFile = "images/static_tiles.png";
+	tilesheet.loadFromFile(tilesheetFile, TEXTURE_PIXEL_FORMAT_RGBA);
+	tilesheet.setWrapS(GL_CLAMP_TO_EDGE);
+	tilesheet.setWrapT(GL_CLAMP_TO_EDGE);
+	tilesheet.setMinFilter(GL_NEAREST);
+	tilesheet.setMagFilter(GL_NEAREST);
+
+	// LEER MAPA ESTATICO
+	mapita = vector<vector<Tile>> (mapSize.y, vector<Tile> (mapSize.x));
+
+	for (int i = 0; i < mapSize.y; i++){
+		for (int j = 0; j < mapSize.x; j++){
+			fin.get(tile);
+			mapita[i][j].loadTile(tile, i, j, bankID, tilesheetSize.x);
+		}
+		fin.get(tile);
+#ifndef _WIN32
+		fin.get(tile);
+#endif
+	}
+	fin.close();
+
+	return true;
 }
 
-void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
+void TileMap::prepareStaticArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 {
-	int tile, nTiles = 0;
+	Tile tile;
+	int nTiles = 0;
 	glm::vec2 posTile, texCoordTile[2], halfTexel;
 	vector<float> vertices;
 	
-	halfTexel = glm::vec2(0.125f / tilesheet.width(), 0.125f / tilesheet.height());
-	for(int j=0; j<mapSize.y; j++)
+	//halfTexel = glm::vec2(0.125f / tilesheet.width(), 0.125f / tilesheet.height());
+	//halfTexel = glm::vec2((1.f / float(tileSize)) / tilesheet.width(), (1.f / float(tileSize)) / tilesheet.height());
+
+	for(int i=0; i<mapSize.y; i++)
 	{
-		for(int i=0; i<mapSize.x; i++)
+		for(int j=0; j<mapSize.x; j++)
 		{
-			tile = mapita[i][j].id;
-			
-			if (tile != 0) {
+			tile = mapita[i][j];
+
+			//if (tile.type == Tile::staticTile || tile.type == Tile::menuTile) {
+			if (tile.id != 0) {
 			
 				// Non-empty tile
 				nTiles++;
-				posTile = glm::vec2(minCoords.x + i * tileSize, minCoords.y + j * tileSize);
+				posTile = glm::vec2(minCoords.x + j * tileSize,
+									minCoords.y + i * tileSize);
 
-				
-				switch (char(tile)) {
-				case brickRed:
-					texCoordTile[0] = glm::vec2(float((tile - 1) % 2) / tilesheetSize.x, float((tile - 1) / 2) / tilesheetSize.y);
-					texCoordTile[1] = texCoordTile[0] + tileTexSize;
-				default:
-					texCoordTile[0] = glm::vec2(float((tile - 1) % 8) / tilesheetSize.x, float((tile - 1) / 8) / tilesheetSize.y);
-					texCoordTile[1] = texCoordTile[0] + tileTexSize;
-					break;
-				}
+				texCoordTile[0] = glm::vec2(float((tile.id) % tilesheetSize.x) / tilesheetSize.x,
+											float((tile.id) / tilesheetSize.x) / tilesheetSize.y);
+				texCoordTile[1] = texCoordTile[0] + tileTexSize;
 
 				//texCoordTile[0] += halfTexel;
-				texCoordTile[1] -= halfTexel;
+				//texCoordTile[1] -= halfTexel;
 				
 				
 				// First triangle
@@ -103,8 +155,8 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 		}
 	}
 
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	glGenVertexArrays(1, &vaoStatic);
+	glBindVertexArray(vaoStatic);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, 24 * nTiles * sizeof(float), &vertices[0], GL_STATIC_DRAW);
@@ -222,82 +274,6 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, flo
 	*posI -= speed;
 
 	return false;
-}
-
-voxel TileMap::tileInfo(char tile, int bank, int i, int j)
-{
-	voxel temp;
-
-	temp.id = 0;
-	temp.resistance = -1;
-
-	switch (tile)
-	{
-	case wall:
-		temp.id = bank;
-		break;
-	case black:
-		temp.id = 38;
-		break;
-
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-		temp.id = 80 + tile - '0';
-		break;
-
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-		temp.id = 48 + tile - 'A';
-		break;
-
-	case '.':
-		temp.id = 74;
-		break;
-
-	case ':':
-		temp.id = 75;
-		break;
-
-	default:
-		temp.id = tilesheetSize.x + 2 * (bank - 1) + ((j + 1) % 2) + tilesheetSize.x * ((i + 1) % 2);
-		temp.resistance = 0;
-		break;
-
-	}
-
-	return temp;
 }
 
 bool TileMap::tileIsSolid(int i, int j)

@@ -108,9 +108,6 @@
     <ClCompile Include="TileMap.cpp">
       <Filter>Source Files\Tiles</Filter>
     </ClCompile>
-    <ClCompile Include="StaticTileMap.cpp">
-      <Filter>Source Files\Tiles</Filter>
-    </ClCompile>
     <ClCompile Include="Slide.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
@@ -123,7 +120,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files\Base</Filter>
     </ClCompile>
-    <ClCompile Include="DynamicTileMap.cpp">
+    <ClCompile Include="Tile.cpp">
       <Filter>Source Files\Tiles</Filter>
     </ClCompile>
   </ItemGroup>
@@ -173,17 +170,14 @@
     <ClInclude Include="Slide.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="StaticTileMap.h">
-      <Filter>Header Files\Tiles</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderProgram.h">
       <Filter>Header Files\Drawing</Filter>
     </ClInclude>
-    <ClInclude Include="DynamicTileMap.h">
-      <Filter>Header Files\Tiles</Filter>
-    </ClInclude>
     <ClInclude Include="StartMenuScene.h">
       <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Header Files\Tiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
