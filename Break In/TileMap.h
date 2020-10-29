@@ -38,13 +38,10 @@ public:
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed);
 	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed);
 
-
-	Tile tileInfo(char tile, int bank, int i, int j);
 	bool tileIsSolid(int i, int j);
-
-private:
-	
 	bool loadLevel(const string &levelFile);
+	void loadTile(char c, int i, int j);
+	void loadTextures();
 	void prepareStaticArrays(const glm::vec2 &minCoords, ShaderProgram &program);
 
 protected:
@@ -72,7 +69,7 @@ protected:
 	// TileMap info
 	glm::ivec2 position, mapSize, tilesheetSize;
 	int tileSize, blockSize;
-	Texture tilesheet;
+	Texture staticTilesheet;
 	glm::vec2 tileTexSize;
 
 	// Bank info

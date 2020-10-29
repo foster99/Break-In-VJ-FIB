@@ -9,14 +9,16 @@ public:
 	Tile();
 	Tile(int id_, int res);
 	void loadTile(char c, int i, int j, int bank, int tileSheetSizeX);
+	void loadMenuTile(char c, int i, int j, int bank);
 
 	int id = 0;
 	int type = staticTile;
 	int resistance = infinity;
 
-	static constexpr int menuTile = 0;
-	static constexpr int staticTile = 1;
-	static constexpr int dynamicTile = 2;
+	static constexpr int none = 0;
+	static constexpr int menuTile = 1;
+	static constexpr int staticTile = 2;
+	static constexpr int dynamicTile = 3;
 	static constexpr int infinity = -1;
 	
 	// Static tiles

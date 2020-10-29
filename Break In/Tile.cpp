@@ -11,17 +11,34 @@ void Tile::loadTile(char tile, int i, int j, int bank, int tileSheetSizeX)
 {
 	switch (tile)
 	{
+		// DYNAMIC TILES
+	case brickRed:
+		id = 0;
+		break;
+		// STATIC TILES
 	case wall:
 		id = bank;
 		resistance = infinity;
 		type = staticTile;
 		break;
+
+	default:
+		id = tileSheetSizeX + 2 * (bank - 1) + ((j + 1) % 2) + tileSheetSizeX * ((i + 1) % 2);
+		resistance = 0;
+		type = staticTile;
+		break;
+	}
+}
+
+void Tile::loadMenuTile(char tile, int i, int j, int bank)
+{
+	switch (tile)
+	{
 	case black:
 		id = 38;
-		resistance = infinity;
-		type = menuTile;
 		break;
-
+	case '.':	id = 74;	break;
+	case ':':	id = 75;	break;
 	case '0':
 	case '1':
 	case '2':
@@ -31,12 +48,8 @@ void Tile::loadTile(char tile, int i, int j, int bank, int tileSheetSizeX)
 	case '6':
 	case '7':
 	case '8':
-	case '9':
-		id = 80 + tile - '0';
-		resistance = infinity;
-		type = menuTile;
-		break;
-
+	case '9':	
+		id = 80 + tile - '0';	break;
 	case 'A':
 	case 'B':
 	case 'C':
@@ -62,30 +75,11 @@ void Tile::loadTile(char tile, int i, int j, int bank, int tileSheetSizeX)
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':
-		id = 48 + tile - 'A';
-		resistance = infinity;
-		type = menuTile;
-		break;
-
-	case '.':
-		id = 74;
-		resistance = infinity;
-		type = menuTile;
-		break;
-
-	case ':':
-		id = 75;
-		resistance = infinity;
-		type = menuTile;
-		break;
-
-	default:
-		id = tileSheetSizeX + 2 * (bank - 1) + ((j + 1) % 2) + tileSheetSizeX * ((i + 1) % 2);
-		resistance = 0;
-		type = staticTile;
-		break;
-
+	case 'Z':	id = 48 + tile - 'A';	break;
+	default:	throw "Caracter en la zona del menu no esperado !!"; break;
 	}
+
+	resistance = infinity;
+	type = menuTile;
 
 }

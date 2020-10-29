@@ -17,6 +17,7 @@ TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProg
 {
 	bankID = 1;
 	loadLevel(levelFile);
+	loadTextures();
 	prepareStaticArrays(minCoords, program);
 }
 
@@ -28,7 +29,7 @@ TileMap::~TileMap()
 void TileMap::render() const
 {
 	glEnable(GL_TEXTURE_2D);
-	tilesheet.use();
+	staticTilesheet.use();
 	glBindVertexArray(vaoStatic);
 	glEnableVertexAttribArray(posLocation);
 	glEnableVertexAttribArray(texCoordLocation);
@@ -44,7 +45,8 @@ void TileMap::free()
 bool TileMap::loadLevel(const string &levelFile)
 {
 	ifstream fin;
-	string line, tilesheetFile;
+	string line;
+	string staticTilesheetFile, dynamicTilesheetFile;
 	stringstream sstream;
 	char tile;
 
@@ -72,22 +74,13 @@ bool TileMap::loadLevel(const string &levelFile)
 	sstream.str(line);
 	sstream >> bankID;
 
-	// READ TEXTURE PATH
-
-	tilesheetFile = "images/static_tiles.png";
-	tilesheet.loadFromFile(tilesheetFile, TEXTURE_PIXEL_FORMAT_RGBA);
-	tilesheet.setWrapS(GL_CLAMP_TO_EDGE);
-	tilesheet.setWrapT(GL_CLAMP_TO_EDGE);
-	tilesheet.setMinFilter(GL_NEAREST);
-	tilesheet.setMagFilter(GL_NEAREST);
-
 	// LEER MAPA ESTATICO
 	mapita = vector<vector<Tile>> (mapSize.y, vector<Tile> (mapSize.x));
 
 	for (int i = 0; i < mapSize.y; i++){
 		for (int j = 0; j < mapSize.x; j++){
 			fin.get(tile);
-			mapita[i][j].loadTile(tile, i, j, bankID, tilesheetSize.x);
+			loadTile(tile, i, j);
 		}
 		fin.get(tile);
 #ifndef _WIN32
@@ -99,24 +92,42 @@ bool TileMap::loadLevel(const string &levelFile)
 	return true;
 }
 
+void TileMap::loadTile(char tile, int i, int j)
+{
+	mapita[i][j].loadTile(tile, i, j, bankID, tilesheetSize.x);
+}
+
+void TileMap::loadTextures()
+{
+	// staticTilesheet File
+	staticTilesheet.loadFromFile("images/static_tiles.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	staticTilesheet.setWrapS(GL_CLAMP_TO_EDGE);
+	staticTilesheet.setWrapT(GL_CLAMP_TO_EDGE);
+	staticTilesheet.setMinFilter(GL_NEAREST);
+	staticTilesheet.setMagFilter(GL_NEAREST);
+
+	// dynamicTilesheet File
+	//dynamicTilesheet.loadFromFile("images/dynamic_tiles.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	//dynamicTilesheet.setWrapS(GL_CLAMP_TO_EDGE);
+	//dynamicTilesheet.setWrapT(GL_CLAMP_TO_EDGE);
+	//dynamicTilesheet.setMinFilter(GL_NEAREST);
+	//dynamicTilesheet.setMagFilter(GL_NEAREST);
+}
+
 void TileMap::prepareStaticArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 {
 	Tile tile;
 	int nTiles = 0;
 	glm::vec2 posTile, texCoordTile[2], halfTexel;
 	vector<float> vertices;
-	
-	//halfTexel = glm::vec2(0.125f / tilesheet.width(), 0.125f / tilesheet.height());
-	//halfTexel = glm::vec2((1.f / float(tileSize)) / tilesheet.width(), (1.f / float(tileSize)) / tilesheet.height());
 
 	for(int i=0; i<mapSize.y; i++)
 	{
-		for(int j=0; j<mapSize.x; j++)
+		for(int j=0; j<(mapSize.x); j++)
 		{
 			tile = mapita[i][j];
 
-			//if (tile.type == Tile::staticTile || tile.type == Tile::menuTile) {
-			if (tile.id != 0) {
+			if (tile.type != Tile::none) {
 			
 				// Non-empty tile
 				nTiles++;

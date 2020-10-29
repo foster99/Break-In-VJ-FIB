@@ -123,6 +123,9 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files\Tiles</Filter>
     </ClCompile>
+    <ClCompile Include="MenuTileMap.cpp">
+      <Filter>Source Files\Tiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h">
@@ -177,6 +180,9 @@
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Tile.h">
+      <Filter>Header Files\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuTileMap.h">
       <Filter>Header Files\Tiles</Filter>
     </ClInclude>
   </ItemGroup>
