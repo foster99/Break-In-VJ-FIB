@@ -1,0 +1,37 @@
+TILEMAP
+8 24 	-- Size of tile map in tiles
+8 8 	-- Tile size & block size
+16 6	-- TileSheet size (x,y)
+1 0 8   -- Money Chars:			Initial Tile (i, j) , Number of tiles (N)
+6 0 8   -- Points Chars:		Initial Tile (i, j) , Number of tiles (N)
+12 6 2  -- Lives Chars:			Initial Tile (i, j) , Number of tiles (N)
+15 6 2  -- Bank Chars:			Initial Tile (i, j) , Number of tiles (N)
+19 0 8  -- Mode Line 1 Chars:   Initial Tile (i, j) , Number of tiles (N)
+20 0 8  -- Mode Line 2 Chars:   Initial Tile (i, j) , Number of tiles (N)
+22 6 2  -- Room Chars:			Initial Tile (i, j) , Number of tiles (N)
+
+##MONEY:
+        
+########
+########
+########
+#POINTS:
+        
+########
+########
+########
+########
+##LIVES:
+######  
+########
+########
+###BANK:
+######  
+########
+########
+        
+        
+########
+###ROOM:
+######  
+

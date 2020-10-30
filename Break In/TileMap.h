@@ -8,13 +8,12 @@
 #include <glm/glm.hpp>
 #include "Texture.h"
 #include "ShaderProgram.h"
-
+#include "Tile.h"
 
 // Class Tilemap is capable of loading a tile map from a text file in a very
 // simple format (see level01.txt for an example). With this information
 // it builds a single VBO that contains all tiles. As a result the render
 // method draws the whole map independently of what is visible.
-
 
 class TileMap
 {
@@ -40,11 +39,11 @@ public:
 	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed);
 
 	bool tileIsSolid(int i, int j);
-
-private:
-	
 	bool loadLevel(const string &levelFile);
-	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
+	void loadTile(char c, int i, int j);
+	void loadTextures();
+	void prepareStaticArrays(const glm::vec2 &minCoords, ShaderProgram &program);
+	void prepareDynamicArrays(const glm::vec2& minCoords, ShaderProgram& program);
 
 protected:
 
@@ -64,18 +63,24 @@ protected:
 	static constexpr char outCard		= 'O';
 	static constexpr char blueSpheres	= 'S';
 	
-	GLuint vao;
+	GLuint vaoStatic;
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
+
+	const glm::vec2 *minCoords;
+	ShaderProgram *program;
 
 	// TileMap info
 	glm::ivec2 position, mapSize, tilesheetSize;
 	int tileSize, blockSize;
-	Texture tilesheet;
+	Texture staticTilesheet;
 	glm::vec2 tileTexSize;
-	vector<vector<int>> solids;
 
-	int *map;
+	// Bank info
+	int bankID;
+	vector<vector<Tile>> mapita;
+
+	vector<vector<int>> solids;
 
 };
 

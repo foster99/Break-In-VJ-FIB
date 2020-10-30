@@ -28,7 +28,7 @@ public:
 	
 private:
 	glm::ivec2 tileMapDispl, sizePlayer;
-	glm::vec2 posPlayer;
+	glm::vec2 posPlayer, displ_posPlayer;
 	int jumpAngle, startYs, speedX, speedY, slideOffsetY, slideOffsetX;
 	Texture spritesheet;
 	Sprite *sprite;

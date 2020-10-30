@@ -9,26 +9,32 @@ TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoo
 }
 
 TileMap::TileMap() {
+	bankID = 1;
 
 }
 
-TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
+TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords_, ShaderProgram &program_)
 {
+	bankID = 1;
 	loadLevel(levelFile);
-	prepareArrays(minCoords, program);
+	loadTextures();
+
+	minCoords = &minCoords_;
+	program = &program_;
+
+	prepareStaticArrays((*minCoords), (*program));
 }
 
 TileMap::~TileMap()
 {
-	if(map != NULL)
-		delete map;
+
 }
 
 void TileMap::render() const
 {
 	glEnable(GL_TEXTURE_2D);
-	tilesheet.use();
-	glBindVertexArray(vao);
+	staticTilesheet.use();
+	glBindVertexArray(vaoStatic);
 	glEnableVertexAttribArray(posLocation);
 	glEnableVertexAttribArray(texCoordLocation);
 	glDrawArrays(GL_TRIANGLES, 0, 6 * mapSize.x * mapSize.y);
@@ -43,45 +49,42 @@ void TileMap::free()
 bool TileMap::loadLevel(const string &levelFile)
 {
 	ifstream fin;
-	string line, tilesheetFile;
+	string line;
+	string staticTilesheetFile, dynamicTilesheetFile;
 	stringstream sstream;
 	char tile;
-	
+
 	fin.open(levelFile.c_str());
-	if(!fin.is_open())
+	if (!fin.is_open())
 		return false;
 	getline(fin, line);
-	if(line.compare(0, 7, "TILEMAP") != 0)
+	if (line.compare(0, 7, "TILEMAP") != 0)
 		return false;
 	getline(fin, line);
+
 	sstream.str(line);
 	sstream >> mapSize.x >> mapSize.y;
 	getline(fin, line);
+
 	sstream.str(line);
 	sstream >> tileSize >> blockSize;
 	getline(fin, line);
-	sstream.str(line);
-	sstream >> tilesheetFile;
-	tilesheet.loadFromFile(tilesheetFile, TEXTURE_PIXEL_FORMAT_RGBA);
-	tilesheet.setWrapS(GL_CLAMP_TO_EDGE);
-	tilesheet.setWrapT(GL_CLAMP_TO_EDGE);
-	tilesheet.setMinFilter(GL_NEAREST);
-	tilesheet.setMagFilter(GL_NEAREST);
-	getline(fin, line);
+
 	sstream.str(line);
 	sstream >> tilesheetSize.x >> tilesheetSize.y;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
-	
-	map = new int[mapSize.x * mapSize.y];
-	for(int j=0; j<mapSize.y; j++)
-	{
-		for(int i=0; i<mapSize.x; i++)
-		{
+	getline(fin, line);
+
+	sstream.str(line);
+	sstream >> bankID;
+
+	// LEER MAPA ESTATICO
+	mapita = vector<vector<Tile>> (mapSize.y, vector<Tile> (mapSize.x));
+
+	for (int i = 0; i < mapSize.y; i++){
+		for (int j = 0; j < mapSize.x; j++){
 			fin.get(tile);
-			if(tile == ' ')
-				map[j*mapSize.x+i] = 0;
-			else
-				map[j*mapSize.x+i] = tile - int('0');
+			loadTile(tile, i, j);
 		}
 		fin.get(tile);
 #ifndef _WIN32
@@ -89,42 +92,58 @@ bool TileMap::loadLevel(const string &levelFile)
 #endif
 	}
 	fin.close();
-	
+
 	return true;
 }
 
-void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
+void TileMap::loadTile(char tile, int i, int j)
 {
-	int tile, nTiles = 0;
+	mapita[i][j].loadTile(tile, i, j, bankID, tilesheetSize.x);
+}
+
+void TileMap::loadTextures()
+{
+	// staticTilesheet File
+	staticTilesheet.loadFromFile("images/static_tiles.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	staticTilesheet.setWrapS(GL_CLAMP_TO_EDGE);
+	staticTilesheet.setWrapT(GL_CLAMP_TO_EDGE);
+	staticTilesheet.setMinFilter(GL_NEAREST);
+	staticTilesheet.setMagFilter(GL_NEAREST);
+
+	// dynamicTilesheet File
+	//dynamicTilesheet.loadFromFile("images/dynamic_tiles.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	//dynamicTilesheet.setWrapS(GL_CLAMP_TO_EDGE);
+	//dynamicTilesheet.setWrapT(GL_CLAMP_TO_EDGE);
+	//dynamicTilesheet.setMinFilter(GL_NEAREST);
+	//dynamicTilesheet.setMagFilter(GL_NEAREST);
+}
+
+void TileMap::prepareStaticArrays(const glm::vec2 &minCoords, ShaderProgram &program)
+{
+	Tile tile;
+	int nTiles = 0;
 	glm::vec2 posTile, texCoordTile[2], halfTexel;
 	vector<float> vertices;
-	
-	halfTexel = glm::vec2(0.125f / tilesheet.width(), 0.125f / tilesheet.height());
-	for(int j=0; j<mapSize.y; j++)
-	{
-		for(int i=0; i<mapSize.x; i++)
-		{
-			tile = map[j * mapSize.x + i];
-			if(tile != 0)
-			{
 
+	for(int i=0; i<mapSize.y; i++)
+	{
+		for(int j=0; j<(mapSize.x); j++)
+		{
+			tile = mapita[i][j];
+
+			if (tile.type != Tile::none) {
+			
 				// Non-empty tile
 				nTiles++;
-				posTile = glm::vec2(minCoords.x + i * tileSize, minCoords.y + j * tileSize);
+				posTile = glm::vec2(minCoords.x + j * tileSize,
+									minCoords.y + i * tileSize);
 
-				
-				switch (char(tile)) {
-				case brickRed:
-					texCoordTile[0] = glm::vec2(float((tile - 1) % 2) / tilesheetSize.x, float((tile - 1) / 2) / tilesheetSize.y);
-					texCoordTile[1] = texCoordTile[0] + tileTexSize;
-				default:
-					texCoordTile[0] = glm::vec2(float((tile - 1) % 8) / tilesheetSize.x, float((tile - 1) / 8) / tilesheetSize.y);
-					texCoordTile[1] = texCoordTile[0] + tileTexSize;
-					break;
-				}
+				texCoordTile[0] = glm::vec2(float((tile.id) % tilesheetSize.x) / tilesheetSize.x,
+											float((tile.id) / tilesheetSize.x) / tilesheetSize.y);
+				texCoordTile[1] = texCoordTile[0] + tileTexSize;
 
 				//texCoordTile[0] += halfTexel;
-				texCoordTile[1] -= halfTexel;
+				//texCoordTile[1] -= halfTexel;
 				
 				
 				// First triangle
@@ -151,8 +170,8 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 		}
 	}
 
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	glGenVertexArrays(1, &vaoStatic);
+	glBindVertexArray(vaoStatic);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, 24 * nTiles * sizeof(float), &vertices[0], GL_STATIC_DRAW);
@@ -160,9 +179,10 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 	texCoordLocation = program.bindVertexAttribute("texCoord", 2, 4*sizeof(float), (void *)(2*sizeof(float)));
 }
 
-// Collision tests for axis aligned bounding boxes.
-// Method collisionMoveDown also corrects Y coordinate if the box is
-// already intersecting a tile below.
+void TileMap::prepareDynamicArrays(const glm::vec2& minCoords, ShaderProgram& program)
+{
+
+}
 
 bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speed) 
 {
@@ -247,7 +267,6 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, f
 	return false;
 }
 
- 
 bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posI, int speed)
 {
 	int j0, j1;
@@ -279,7 +298,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, flo
 
 bool TileMap::tileIsSolid(int i, int j)
 {
-	return solids[i + 256][j + 256] != 0;
+	return mapita[i][j].resistance != 0;
 }
 
 

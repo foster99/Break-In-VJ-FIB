@@ -22,6 +22,7 @@ private:
 	bool onSlide(const glm::ivec2& pos, int sizeX);
 
 	glm::ivec2 tileMapDispl, logicSize, quadSize, posSlide, singleSize, offSet;
+	glm::vec2 displ_posPlayer;
 	Texture tex;
 	Sprite* sprite;
 };

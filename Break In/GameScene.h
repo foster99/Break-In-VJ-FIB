@@ -4,8 +4,7 @@
 #include "Scene.h"
 #include "Player.h"
 #include "Ball.h"
-#include "DynamicTileMap.h"
-#include "StaticTileMap.h"
+#include "MenuTileMap.h"
 
 class GameScene :
     public Scene
@@ -23,14 +22,13 @@ public:
     void toggleGodMode();
     void toogleChangeBar();
 
-    bool itIsALoopToRender();
-
     static constexpr float INIT_PLAYER_X_TILES = 1;
     static constexpr float INIT_PLAYER_Y_TILES = 1;
 
 private:
-    StaticTileMap *staticMap, *menuMap;
-    DynamicTileMap *dynamicMap; 
+    TileMap* staticMap;
+    MenuTileMap* menuMap;
+    TileMap *dynamicMap;
     Player* player;
     Ball* ball;
 
@@ -38,8 +36,9 @@ private:
 
     int points, money, bank, room;
 
-
-    int loopsToRender;
-    int currLoop;
+    int tiles_displacement;
+    glm::mat4 displacement_mat;
+    //int loopsToRender;
+    //int currLoop;
 };
 #endif
