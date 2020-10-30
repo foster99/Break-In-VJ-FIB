@@ -37,6 +37,7 @@ void GameScene::init() {
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES * staticMap->getTileSize(), INIT_PLAYER_Y_TILES * staticMap->getTileSize()));
 	ball->setTileMap(staticMap);
+	ball->setPlayer(player);
 }
 
 void GameScene::update(int deltaTime) {

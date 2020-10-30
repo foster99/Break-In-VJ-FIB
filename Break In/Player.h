@@ -23,6 +23,8 @@ public:
 	void setPosition(const glm::vec2 &pos);
 
 	void toogleChangeBar();
+
+	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed);
 	
 private:
 	glm::ivec2 tileMapDispl, sizePlayer;

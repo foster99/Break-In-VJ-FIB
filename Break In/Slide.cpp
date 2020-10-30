@@ -46,6 +46,11 @@ void Slide::setPosition(const glm::vec2& pos)
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posSlide.x), float(tileMapDispl.y + posSlide.y)));
 }
 
+void Slide::setOffSets(int offX, int offY)
+{
+	offSet = glm::ivec2(offX, offY);
+}
+
 
 void Slide::toogleChangeBar() 
 {
@@ -58,4 +63,45 @@ void Slide::toogleChangeBar()
 		sprite->changeAnimation(4);
 	}
 		
+}
+
+bool Slide::onSlide(const glm::ivec2& pos, int sizeX) {
+	int diff = 0;
+	if (logicSize != quadSize)
+		diff = offSet.x;
+
+	for (int x = 0; x < sizeX; ++x) {
+		if ((pos.x + x) >= (posSlide.x+diff) && (pos.x + x) <= (posSlide.x + logicSize.x + diff))
+			return true;
+	}
+	return false;
+}
+
+bool Slide::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed) 
+{
+	for (int s = 1; s <= speed; ++s) {
+		if ((pos.y + s + size.y) == posSlide.y && onSlide(pos, size.x)) {
+			*posI += s - 1;
+			return true;
+		}
+	}
+	*posI += speed;
+	return false;
+}
+
+bool Slide::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed)
+{
+	for (int s = 1; s <= speed; ++s) {
+		if ((pos.y + s + size.y) == posSlide.y && onSlide(pos, size.x)) {
+			*posJ += s - 1;
+			return true;
+		}
+	}
+	*posJ += speed;
+	return false;
+}
+
+bool Slide::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed)
+{
+	return false;
 }

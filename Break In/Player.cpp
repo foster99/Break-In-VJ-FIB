@@ -35,6 +35,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	slide = new Slide();
 	slide->init(tileMapPos, shaderProgram);
 	slide->setPosition(glm::ivec2(posPlayer.x - slideOffsetX, posPlayer.y- slideOffsetY));
+	slide->setOffSets(slideOffsetX, slideOffsetY);
 
 
 	tileMapDispl = tileMapPos;
@@ -117,4 +118,9 @@ void Player::setPosition(const glm::vec2 &pos)
 void Player::toogleChangeBar() 
 {
 	slide->toogleChangeBar();
+}
+
+bool Player::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed)
+{
+	return slide->collisionMoveDown(pos,size,posI,speed);
 }

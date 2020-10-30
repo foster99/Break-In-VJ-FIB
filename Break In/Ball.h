@@ -3,6 +3,7 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
+#include "player.h"
 
 class Ball
 {
@@ -14,6 +15,7 @@ public:
 	void changeModifierX(float value);
 	void changeModifierY(float value);
 	void setTileMap(TileMap* tileMap);
+	void setPlayer(Player* pla);
 	void setPosition(const glm::vec2& pos);
 
 private:
@@ -22,6 +24,7 @@ private:
 	Texture tex;
 	Sprite* sprite;
 	TileMap* map;
+	Player* player;
 	int sizeBall;
 	float speed;
 	float spdModifierX;
