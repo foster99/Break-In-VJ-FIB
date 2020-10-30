@@ -10,21 +10,21 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	speedX = 3;
 	speedY = 2;
 	spritesheet.loadFromFile("images/eyes.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(sizePlayer, glm::vec2(0.33f, 0.25f), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(sizePlayer, glm::vec2(1.f/3.f, 1.f/4.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(12);
 	
 	sprite->addKeyframe(0,	glm::vec2(0.f,		0.f));
-	sprite->addKeyframe(1,	glm::vec2(0.33f,	0.f));
-	sprite->addKeyframe(2,	glm::vec2(0.66f,	0.f));
-	sprite->addKeyframe(3,	glm::vec2(0.f,		0.25f));
-	sprite->addKeyframe(4,	glm::vec2(0.33f,	0.25f));
-	sprite->addKeyframe(5,	glm::vec2(0.66f,	0.25f));
-	sprite->addKeyframe(6,	glm::vec2(0.f,		0.5f));
-	sprite->addKeyframe(7,	glm::vec2(0.33f,	0.5f));
-	sprite->addKeyframe(8,	glm::vec2(0.66f,	0.5f));
-	sprite->addKeyframe(9,	glm::vec2(0.f,		0.75f));
-	sprite->addKeyframe(10, glm::vec2(0.33f,	0.75f));
-	sprite->addKeyframe(11, glm::vec2(0.66f,	0.75f));
+	sprite->addKeyframe(1,	glm::vec2(1.f/3.f,	0.f));
+	sprite->addKeyframe(2,	glm::vec2(2.f/3.f,	0.f));
+	sprite->addKeyframe(3,	glm::vec2(0.f,		1.f/4.f));
+	sprite->addKeyframe(4,	glm::vec2(1.f/3.f,	1.f/4.f));
+	sprite->addKeyframe(5,	glm::vec2(2.f/3.f,	1.f/4.f));
+	sprite->addKeyframe(6,	glm::vec2(0.f,		1.f/2.f));
+	sprite->addKeyframe(7,	glm::vec2(1.f/3.f,	1.f/2.f));
+	sprite->addKeyframe(8,	glm::vec2(2.f/3.f,	1.f/2.f));
+	sprite->addKeyframe(9,	glm::vec2(0.f,		3.f/4.f));
+	sprite->addKeyframe(10, glm::vec2(1.f/3.f,	3.f/4.f));
+	sprite->addKeyframe(11, glm::vec2(2.f/3.f,	3.f/4.f));
 
 
 

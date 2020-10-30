@@ -14,21 +14,15 @@ MenuTileMap::MenuTileMap()
 
 }
 
-MenuTileMap::MenuTileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program)
+void MenuTileMap::prepareCounters(vector<Sprite*> &quads, glm::ivec3 &coords, const glm::vec2& minCoords, ShaderProgram& program)
 {
-	bankID = 0;
-	digits.loadFromFile("images/digits.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	for (int digit = 0; digit < quads.size(); ++digit) {
 
-	loadLevel(levelFile);
-
-	moneyQuads = vector<Sprite*>(moneyCoords.z, NULL);
-	for (int digit = 0; digit < moneyQuads.size(); ++digit) {
-
-		Sprite* &sprite = moneyQuads[digit];
-		sprite = Sprite::createSprite(glm::ivec2(tileSize), glm::vec2(1.f/10.f, 1.f), &digits, &program);
+		Sprite*& sprite = quads[digit];
+		sprite = Sprite::createSprite(glm::ivec2(tileSize), glm::vec2(1.f / 10.f, 1.f), &digits, &program);
 		sprite->setNumberAnimations(10);
 
-		sprite->addKeyframe(0, glm::vec2(       0.f, 0.f));
+		sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
 		sprite->addKeyframe(1, glm::vec2(1.f / 10.f, 0.f));
 		sprite->addKeyframe(2, glm::vec2(2.f / 10.f, 0.f));
 		sprite->addKeyframe(3, glm::vec2(3.f / 10.f, 0.f));
@@ -39,16 +33,140 @@ MenuTileMap::MenuTileMap(const string& levelFile, const glm::vec2& minCoords, Sh
 		sprite->addKeyframe(8, glm::vec2(8.f / 10.f, 0.f));
 		sprite->addKeyframe(9, glm::vec2(9.f / 10.f, 0.f));
 
-		sprite->changeAnimation(0);
-		
-		sprite->setPosition(glm::vec2(	float(tileSize * 24.f + minCoords.x + (moneyCoords.x + moneyCoords.z - 1 - digit) * tileSize),
-										float(minCoords.y + moneyCoords.y * tileSize)));
+		sprite->changeAnimation(1);
 
-		//sprite->setPosition(glm::vec2(float(minCoords.x + (moneyCoords.x + moneyCoords.z - 1 - digit) * tileSize),
-									  //float(minCoords.y + digit * tileSize)));
+		sprite->setPosition(glm::vec2(float(tileSize * 24.f + minCoords.x + (coords.x + coords.z - 1 - digit) * tileSize),
+			float(minCoords.y + coords.y * tileSize)));
 	}
-		
-		
+
+}
+
+MenuTileMap::MenuTileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program)
+{
+	bankID = 0;
+	digits.loadFromFile("images/digits.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	chars.loadFromFile("images/chars.png", TEXTURE_PIXEL_FORMAT_RGBA);
+
+	loadLevel(levelFile);
+
+	moneyQuads = vector<Sprite*>(moneyCoords.z, NULL);
+	prepareCounters(moneyQuads, moneyCoords, minCoords, program);
+	
+	pointsQuads = vector<Sprite*>(pointsCoords.z, NULL);
+	prepareCounters(pointsQuads, pointsCoords, minCoords, program);
+
+	livesQuads = vector<Sprite*>(livesCoords.z, NULL);
+	prepareCounters(livesQuads, livesCoords, minCoords, program);
+
+	roomQuads = vector<Sprite*>(roomCoords.z, NULL);
+	prepareCounters(roomQuads, roomCoords, minCoords, program);
+	
+	bankQuads = vector<Sprite*>(bankCoords.z, NULL);
+	prepareCounters(bankQuads, bankCoords, minCoords, program);
+	
+	line1Quads = vector<Sprite*>(line1Coords.z, NULL);
+	line2Quads = vector<Sprite*>(line2Coords.z, NULL);
+	for (int digit = 0; digit < line1Quads.size(); ++digit) {
+
+		Sprite*& sprite1 = line1Quads[digit];
+		Sprite*& sprite2 = line2Quads[digit];
+		sprite1 = Sprite::createSprite(glm::ivec2(tileSize), glm::vec2(1.f / 40.f, 1.f), &chars, &program);
+		sprite2 = Sprite::createSprite(glm::ivec2(tileSize), glm::vec2(1.f / 40.f, 1.f), &chars, &program);
+
+		sprite1->setNumberAnimations(40);
+		sprite2->setNumberAnimations(40);
+
+		sprite1->addKeyframe(0, glm::vec2(0.f, 0.f));
+		sprite1->addKeyframe(1, glm::vec2(1.f / 40.f, 0.f));
+		sprite1->addKeyframe(2, glm::vec2(2.f / 40.f, 0.f));
+		sprite1->addKeyframe(3, glm::vec2(3.f / 40.f, 0.f));
+		sprite1->addKeyframe(4, glm::vec2(4.f / 40.f, 0.f));
+		sprite1->addKeyframe(5, glm::vec2(5.f / 40.f, 0.f));
+		sprite1->addKeyframe(6, glm::vec2(6.f / 40.f, 0.f));
+		sprite1->addKeyframe(7, glm::vec2(7.f / 40.f, 0.f));
+		sprite1->addKeyframe(8, glm::vec2(8.f / 40.f, 0.f));
+		sprite1->addKeyframe(9, glm::vec2(9.f / 40.f, 0.f));
+
+		sprite1->addKeyframe(10, glm::vec2(10.f / 40.f, 0.f));
+		sprite1->addKeyframe(11, glm::vec2(11.f / 40.f, 0.f));
+		sprite1->addKeyframe(12, glm::vec2(12.f / 40.f, 0.f));
+		sprite1->addKeyframe(13, glm::vec2(13.f / 40.f, 0.f));
+		sprite1->addKeyframe(14, glm::vec2(14.f / 40.f, 0.f));
+		sprite1->addKeyframe(15, glm::vec2(15.f / 40.f, 0.f));
+		sprite1->addKeyframe(16, glm::vec2(16.f / 40.f, 0.f));
+		sprite1->addKeyframe(17, glm::vec2(17.f / 40.f, 0.f));
+		sprite1->addKeyframe(18, glm::vec2(18.f / 40.f, 0.f));
+		sprite1->addKeyframe(19, glm::vec2(19.f / 40.f, 0.f));
+
+		sprite1->addKeyframe(20, glm::vec2(20.f / 40.f, 0.f));
+		sprite1->addKeyframe(21, glm::vec2(21.f / 40.f, 0.f));
+		sprite1->addKeyframe(22, glm::vec2(22.f / 40.f, 0.f));
+		sprite1->addKeyframe(23, glm::vec2(23.f / 40.f, 0.f));
+		sprite1->addKeyframe(24, glm::vec2(24.f / 40.f, 0.f));
+		sprite1->addKeyframe(25, glm::vec2(25.f / 40.f, 0.f));
+		sprite1->addKeyframe(26, glm::vec2(26.f / 40.f, 0.f));
+		sprite1->addKeyframe(27, glm::vec2(27.f / 40.f, 0.f));
+		sprite1->addKeyframe(28, glm::vec2(28.f / 40.f, 0.f));
+		sprite1->addKeyframe(29, glm::vec2(29.f / 40.f, 0.f));
+
+		sprite1->addKeyframe(30, glm::vec2(30.f / 40.f, 0.f));
+		sprite1->addKeyframe(31, glm::vec2(31.f / 40.f, 0.f));
+		sprite1->addKeyframe(32, glm::vec2(32.f / 40.f, 0.f));
+		sprite1->addKeyframe(33, glm::vec2(33.f / 40.f, 0.f));
+		sprite1->addKeyframe(34, glm::vec2(34.f / 40.f, 0.f));
+		sprite1->addKeyframe(35, glm::vec2(35.f / 40.f, 0.f));
+		sprite1->addKeyframe(36, glm::vec2(36.f / 40.f, 0.f));
+		sprite1->addKeyframe(37, glm::vec2(37.f / 40.f, 0.f));
+		sprite1->addKeyframe(38, glm::vec2(38.f / 40.f, 0.f));
+		sprite1->addKeyframe(39, glm::vec2(39.f / 40.f, 0.f));
+
+		sprite2->addKeyframe(0, glm::vec2(0.f, 0.f));
+		sprite2->addKeyframe(1, glm::vec2(1.f / 40.f, 0.f));
+		sprite2->addKeyframe(2, glm::vec2(2.f / 40.f, 0.f));
+		sprite2->addKeyframe(3, glm::vec2(3.f / 40.f, 0.f));
+		sprite2->addKeyframe(4, glm::vec2(4.f / 40.f, 0.f));
+		sprite2->addKeyframe(5, glm::vec2(5.f / 40.f, 0.f));
+		sprite2->addKeyframe(6, glm::vec2(6.f / 40.f, 0.f));
+		sprite2->addKeyframe(7, glm::vec2(7.f / 40.f, 0.f));
+		sprite2->addKeyframe(8, glm::vec2(8.f / 40.f, 0.f));
+		sprite2->addKeyframe(9, glm::vec2(9.f / 40.f, 0.f));
+
+		sprite2->addKeyframe(10, glm::vec2(10.f / 40.f, 0.f));
+		sprite2->addKeyframe(11, glm::vec2(11.f / 40.f, 0.f));
+		sprite2->addKeyframe(12, glm::vec2(12.f / 40.f, 0.f));
+		sprite2->addKeyframe(13, glm::vec2(13.f / 40.f, 0.f));
+		sprite2->addKeyframe(14, glm::vec2(14.f / 40.f, 0.f));
+		sprite2->addKeyframe(15, glm::vec2(15.f / 40.f, 0.f));
+		sprite2->addKeyframe(16, glm::vec2(16.f / 40.f, 0.f));
+		sprite2->addKeyframe(17, glm::vec2(17.f / 40.f, 0.f));
+		sprite2->addKeyframe(18, glm::vec2(18.f / 40.f, 0.f));
+		sprite2->addKeyframe(19, glm::vec2(19.f / 40.f, 0.f));
+
+		sprite2->addKeyframe(20, glm::vec2(20.f / 40.f, 0.f));
+		sprite2->addKeyframe(21, glm::vec2(21.f / 40.f, 0.f));
+		sprite2->addKeyframe(22, glm::vec2(22.f / 40.f, 0.f));
+		sprite2->addKeyframe(23, glm::vec2(23.f / 40.f, 0.f));
+		sprite2->addKeyframe(24, glm::vec2(24.f / 40.f, 0.f));
+		sprite2->addKeyframe(25, glm::vec2(25.f / 40.f, 0.f));
+		sprite2->addKeyframe(26, glm::vec2(26.f / 40.f, 0.f));
+		sprite2->addKeyframe(27, glm::vec2(27.f / 40.f, 0.f));
+		sprite2->addKeyframe(28, glm::vec2(28.f / 40.f, 0.f));
+		sprite2->addKeyframe(29, glm::vec2(29.f / 40.f, 0.f));
+
+		sprite2->addKeyframe(30, glm::vec2(30.f / 40.f, 0.f));
+		sprite2->addKeyframe(31, glm::vec2(31.f / 40.f, 0.f));
+		sprite2->addKeyframe(32, glm::vec2(32.f / 40.f, 0.f));
+		sprite2->addKeyframe(33, glm::vec2(33.f / 40.f, 0.f));
+		sprite2->addKeyframe(34, glm::vec2(34.f / 40.f, 0.f));
+		sprite2->addKeyframe(35, glm::vec2(35.f / 40.f, 0.f));
+		sprite2->addKeyframe(36, glm::vec2(36.f / 40.f, 0.f));
+		sprite2->addKeyframe(37, glm::vec2(37.f / 40.f, 0.f));
+		sprite2->addKeyframe(38, glm::vec2(38.f / 40.f, 0.f));
+		sprite2->addKeyframe(39, glm::vec2(39.f / 40.f, 0.f));
+	   
+		sprite1->setPosition(glm::vec2(float(tileSize * 24.f + minCoords.x + (line1Coords.x + line1Coords.z - 1 - digit) * tileSize), float(minCoords.y + line1Coords.y * tileSize)));
+		sprite2->setPosition(glm::vec2(float(tileSize * 24.f + minCoords.x + (line2Coords.x + line2Coords.z - 1 - digit) * tileSize), float(minCoords.y + line2Coords.y * tileSize)));
+	}
 
 
 	setMoney(0);
@@ -59,7 +177,7 @@ MenuTileMap::MenuTileMap(const string& levelFile, const glm::vec2& minCoords, Sh
 	setLine("........", "........");
 
 	TileMap::loadTextures();
-	prepareStaticArrays(minCoords, program);
+	prepareArrays(minCoords, program);
 	//renderModifications(minCoords, program);
 }
 
@@ -161,7 +279,7 @@ void MenuTileMap::loadTile(char tile, int i, int j)
 void MenuTileMap::render()
 {
 	this->TileMap::render();
-	renderModifications((*minCoords), (*program));
+	renderModifications();
 }
 
 // Value Modifiers
@@ -222,113 +340,186 @@ int digitToPosInTexCoord(char tile)
 	return 80 + tile - '0';
 }
 
-void MenuTileMap::renderModifications(const glm::vec2& minCoords, ShaderProgram& program)
+void MenuTileMap::renderModifications()
 {
 	if (mod_line) {
-		prepareLineArrays(minCoords, program);
+		updateLine();
 		mod_line = false;
 	}
 	if (mod_money) {
-		updateMoney(minCoords, program);
+		updateMoney();
 		mod_money = false;
 	}
 	if (mod_points) {
-		preparePointsArrays(minCoords, program);
+		updatePoints();
 		mod_points = false;
 	}
 	if (mod_lives) {
-		prepareLivesArrays(minCoords, program);
+		updateLives();
 		mod_lives = false;
 	}
 	if (mod_room) {
-		prepareRoomArrays(minCoords, program);
+		updateRoom();
 		mod_room = false;
 	}
 	if (mod_bank) {
-		prepareBankArrays(minCoords, program);
+		updateBank();
 		mod_bank = false;
 	}
 
 	for (auto& digit : moneyQuads) digit->render();
+	for (auto& digit : pointsQuads) digit->render();
+	for (auto& digit : livesQuads) digit->render();
+	for (auto& digit : roomQuads) digit->render();
+	for (auto& digit : bankQuads) digit->render();
+	for (auto& character : line1Quads) character->render();
+	for (auto& character : line2Quads) character->render();
 }
 
-void MenuTileMap::updateMoney(const glm::vec2& minCoords, ShaderProgram& program)
+void MenuTileMap::updateMoney()
 {
 	for (int digit = 0; digit < moneyQuads.size(); ++digit) {
 
 		Sprite*& sprite = moneyQuads[moneyCoords.z - 1 - digit];
 		sprite->changeAnimation(money[digit] - '0');
 	}
-
-	/* INTENTO DE VERSION CON VAOs y VBOs*/
-
-	//int nDigits = moneyCoords.z;
-	//int digit = moneyCoords.y;
-	//int j = moneyCoords.x + nDigits;
-
-	//glm::vec2 posTile, texCoordTile[2];
-	//vector<float> vertices;
-
-	//for (int digit = 0; digit < nDigits; digit++)
-	//{
-	//	posTile.x = minCoords.x + (j - digit) * tileSize;
-	//	posTile.y = minCoords.y + digit * tileSize;
-
-	//	int tex_pos = digitToPosInTexCoord(money[j - digit]);
-
-	//	texCoordTile[0] = glm::vec2(float((tex_pos) % tilesheetSize.x) / tilesheetSize.x,
-	//								float((tex_pos) / tilesheetSize.x) / tilesheetSize.y);
-	//	texCoordTile[1] = texCoordTile[0] + tileTexSize;
-
-
-	//	// First triangle
-	//	vertices.push_back(posTile.x);				vertices.push_back(posTile.y);
-	//	vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[0].y);
-
-	//	vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y);
-	//	vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[0].y);
-
-	//	vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y + blockSize);
-	//	vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[1].y);
-
-
-	//	// Second triangle
-	//	vertices.push_back(posTile.x);				vertices.push_back(posTile.y);
-	//	vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[0].y);
-
-	//	vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y + blockSize);
-	//	vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[1].y);
-
-	//	vertices.push_back(posTile.x);				vertices.push_back(posTile.y + blockSize);
-	//	vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[1].y);
-
-	//}
-
-	//glGenVertexArrays(1, &vaoMoney);
-	//glBindVertexArray(vboMoney);
-	//glGenBuffers(1, &vboMoney);
-	//glBindBuffer(GL_ARRAY_BUFFER, vboMoney);
-	//glBufferData(GL_ARRAY_BUFFER, 24 * nDigits * sizeof(float), &vertices[0], GL_DYNAMIC_DRAW);
-	//posLocationMoney = program.bindVertexAttribute("position", 2, 4 * sizeof(float), 0);
-	//texCoordLocationMoney = program.bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 }
 
-void MenuTileMap::prepareLineArrays(const glm::vec2& minCoords, ShaderProgram& program)
+void MenuTileMap::updateLine()
 {
+	for (int character = 0; character < line1.size(); ++character) {
+
+		Sprite*& sprite = line1Quads[line1Coords.z - 1 - character];
+		
+		switch (line1[character])
+		{
+		case ' ':	sprite->changeAnimation(39); break;
+		case black:	sprite->changeAnimation(39); break;
+		case '.':	sprite->changeAnimation(('Z' - 'A') + 1);	break;
+		case ':':	sprite->changeAnimation(('Z' - 'A') + 2);	break;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':	sprite->changeAnimation(line1[character] + ('Z' - 'A') + 3 - '0');	break;
+		case 'A':
+		case 'B':
+		case 'C':
+		case 'D':
+		case 'E':
+		case 'F':
+		case 'G':
+		case 'H':
+		case 'I':
+		case 'J':
+		case 'K':
+		case 'L':
+		case 'M':
+		case 'N':
+		case 'O':
+		case 'P':
+		case 'Q':
+		case 'R':
+		case 'S':
+		case 'T':
+		case 'U':
+		case 'V':
+		case 'W':
+		case 'X':
+		case 'Y':
+		case 'Z':	sprite->changeAnimation(line1[character] - 'A');	break;
+		default:	sprite->changeAnimation(('Z' - 'A') + 3);	break; break;
+		}
+	}
+
+	for (int character = 0; character < line2.size(); ++character) {
+
+		Sprite*& sprite = line2Quads[line2Coords.z - 1 - character];
+
+		switch (line2[character])
+		{
+		case ' ':	sprite->changeAnimation(39); break;
+		case black:	sprite->changeAnimation(39); break;
+		case '.':	sprite->changeAnimation(('Z' - 'A') + 1);	break;
+		case ':':	sprite->changeAnimation(('Z' - 'A') + 2);	break;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':	sprite->changeAnimation(line2[character] + ('Z' - 'A') + 3 - '0');	break;
+		case 'A':
+		case 'B':
+		case 'C':
+		case 'D':
+		case 'E':
+		case 'F':
+		case 'G':
+		case 'H':
+		case 'I':
+		case 'J':
+		case 'K':
+		case 'L':
+		case 'M':
+		case 'N':
+		case 'O':
+		case 'P':
+		case 'Q':
+		case 'R':
+		case 'S':
+		case 'T':
+		case 'U':
+		case 'V':
+		case 'W':
+		case 'X':
+		case 'Y':
+		case 'Z':	sprite->changeAnimation(line2[character] - 'A');	break;
+		default:	sprite->changeAnimation(('Z' - 'A') + 3);	break; break;
+		}
+	}
 }
 
-void MenuTileMap::preparePointsArrays(const glm::vec2& minCoords, ShaderProgram& program)
+void MenuTileMap::updatePoints()
 {
+	for (int digit = 0; digit < pointsQuads.size(); ++digit) {
+
+		Sprite*& sprite = pointsQuads[pointsCoords.z - 1 - digit];
+		sprite->changeAnimation(points[digit] - '0');
+	}
 }
 
-void MenuTileMap::prepareLivesArrays(const glm::vec2& minCoords, ShaderProgram& program)
+void MenuTileMap::updateLives()
 {
+	for (int digit = 0; digit < livesQuads.size(); ++digit) {
+
+		Sprite*& sprite = livesQuads[livesCoords.z - 1 - digit];
+		sprite->changeAnimation(lives[digit] - '0');
+	}
 }
 
-void MenuTileMap::prepareRoomArrays(const glm::vec2& minCoords, ShaderProgram& program)
+void MenuTileMap::updateRoom()
 {
+	for (int digit = 0; digit < roomQuads.size(); ++digit) {
+
+		Sprite*& sprite = roomQuads[roomCoords.z - 1 - digit];
+		sprite->changeAnimation(room[digit] - '0');
+	}
 }
 
-void MenuTileMap::prepareBankArrays(const glm::vec2& minCoords, ShaderProgram& program)
+void MenuTileMap::updateBank()
 {
+	for (int digit = 0; digit < bankQuads.size(); ++digit) {
+
+		Sprite*& sprite = bankQuads[bankCoords.z - 1 - digit];
+		sprite->changeAnimation(bank[digit] - '0');
+	}
 }

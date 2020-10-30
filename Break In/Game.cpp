@@ -27,8 +27,8 @@ void Game::init()
 
 void Game::loadSounds()
 {
-	ball_sound = Sound("tueeeeeeeeee.wav", false); // REMOVE
-	//ball_sound = Sound("ball.wav", false); // REMOVE
+	//ball_sound = Sound("tueeeeeeeeee.wav", false); // REMOVE
+	ball_sound = Sound("ball.wav", false); // REMOVE
 }
 
 bool Game::update(int deltaTime)

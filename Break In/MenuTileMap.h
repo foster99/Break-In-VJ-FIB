@@ -16,6 +16,7 @@ public:
 	void render();
 	bool loadLevel(const string& levelFile);
 	void loadTile(char c, int i, int j);
+	void prepareCounters(vector<Sprite*>& quads, glm::ivec3& coords, const glm::vec2& minCoords, ShaderProgram& program);
 
 	void setMoney(int m);
 	void setPoints(int p);
@@ -24,20 +25,20 @@ public:
 	void setBank(int b);
 	void setLine(const string &l1, const string& l2);
 
-	void renderModifications(const glm::vec2& minCoords, ShaderProgram& program);
-	void updateMoney(const glm::vec2& minCoords, ShaderProgram& program);
-	void prepareLineArrays(const glm::vec2& minCoords, ShaderProgram& program);
-	void preparePointsArrays(const glm::vec2& minCoords, ShaderProgram& program);
-	void prepareLivesArrays(const glm::vec2& minCoords, ShaderProgram& program);
-	void prepareRoomArrays(const glm::vec2& minCoords, ShaderProgram& program);
-	void prepareBankArrays(const glm::vec2& minCoords, ShaderProgram& program);
+	void renderModifications();
+	void updateMoney();
+	void updateLine();
+	void updatePoints();
+	void updateLives();
+	void updateRoom();
+	void updateBank();
 
 private:
 
 	string intToStringOfNDigits(int i, int Ndigits);
 
-	Texture digits;
-	vector<Sprite*> moneyQuads;
+	Texture digits, chars;
+	vector<Sprite*> moneyQuads, line1Quads, line2Quads, pointsQuads, livesQuads, roomQuads, bankQuads;
 
 	// Contabilization values
 	string line1, line2, money, points, lives, room, bank;

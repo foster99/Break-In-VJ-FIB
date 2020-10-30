@@ -27,7 +27,16 @@ void GameScene::init() {
 	godMode = false;
 
 	staticMap = TileMap::createTileMap("levels/no_path_test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	
+
 	menuMap = MenuTileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	menuMap->setBank(bank);
+	menuMap->setRoom(room);
+	menuMap->setLives(lives);
+	menuMap->setMoney(money);
+	menuMap->setPoints(points);
+	menuMap->setLine(":CASUAL:", ".PLAYER*");
+
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -47,10 +56,19 @@ void GameScene::update(int deltaTime) {
 	player->update(deltaTime);
 
 	if (ball->update(deltaTime)) {
-		points += 100;
-		menuMap->setMoney(points);
+		money += 100;
+		menuMap->setMoney(money);
+
+		points += 33;
+		menuMap->setPoints(points);
+
+		points += 33;
+		menuMap->setPoints(points);
+
+		if (points > 1000) {
+			menuMap->setLine("AII LMAO", "4POGGERS");
+		}
 	}
-		
 
 
 
@@ -58,14 +76,17 @@ void GameScene::update(int deltaTime) {
 
 	if (ball->getPosition().y / 8 > 48) {
 		room = 1;
+		menuMap->setRoom(room);
 		tiles_displacement = -48;
 	}
 	else if (ball->getPosition().y / 8 > 24) {
 		room = 2;
+		menuMap->setRoom(room);
 		tiles_displacement = -24;
 	}
 	else {
 		room = 3;
+		menuMap->setRoom(room);
 		tiles_displacement = 0;
 	}
 

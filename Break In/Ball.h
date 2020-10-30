@@ -3,7 +3,7 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
-#include "player.h"
+#include "Player.h"
 
 class Ball
 {

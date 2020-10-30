@@ -34,7 +34,7 @@ private:
 
     bool godMode;
 
-    int points, money, bank, room;
+    int points, money, bank, room, lives;
 
     int tiles_displacement;
     glm::mat4 displacement_mat;

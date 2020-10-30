@@ -22,7 +22,7 @@ TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords_, ShaderPro
 	minCoords = &minCoords_;
 	program = &program_;
 
-	prepareStaticArrays((*minCoords), (*program));
+	prepareArrays((*minCoords), (*program));
 }
 
 TileMap::~TileMap()
@@ -118,7 +118,7 @@ void TileMap::loadTextures()
 	//dynamicTilesheet.setMagFilter(GL_NEAREST);
 }
 
-void TileMap::prepareStaticArrays(const glm::vec2 &minCoords, ShaderProgram &program)
+void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 {
 	Tile tile;
 	int nTiles = 0;
@@ -191,11 +191,6 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, f
 	i0 = (pos.y + 2) / tileSize;
 	i1 = (pos.y + size.y - 3) / tileSize;
 
-	//if (j > mapSize.y) {
-	//	*posX = mapSize.y * tileSize - tileSize;
-	//	return true;
-	//}
-
 	for (int s = 1; s <= speed; ++s) {
 		for (int i = i0; i <= i1; i++)
 		{
@@ -218,11 +213,6 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, 
 
 	i0 = (pos.y + 2) / tileSize;
 	i1 = (pos.y + size.y - 3) / tileSize;
-	
-	//if (j > mapSize.y) {
-	//	*posX = mapSize.y * tileSize - tileSize;
-	//	return true;
-	//}
 	
 	for (int s = 1; s <= speed; ++s) {
 		for (int i = i0; i <= i1; i++)
@@ -247,10 +237,6 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, f
 	j0 = (pos.x + 2) / tileSize;
 	j1 = (pos.x + size.x - 3) / tileSize;
 
-	//if (y >= mapSize.y) {
-	//	*posY = mapSize.y*tileSize - size.y;
-	//	return true;
-	//}
 	for (int s = 1; s <= speed; ++s) {
 		for (int j = j0; j <= j1; j++)
 		{
@@ -273,11 +259,6 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, flo
 
 	j0 = (pos.x + 2) / tileSize;
 	j1 = (pos.x + size.x - 3) / tileSize;
-
-	//if (y < 0) {
-	//	*posY = tileSize;
-	//	return true;
-	//}
 
 	for (int s = 1; s <= speed; ++s) {
 

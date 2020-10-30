@@ -48,7 +48,5 @@ private:
 	vector<AnimKeyframes> animations;
 
 };
-
-
 #endif // _SPRITE_INCLUDE
 

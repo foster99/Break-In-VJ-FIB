@@ -42,7 +42,7 @@ public:
 	bool loadLevel(const string &levelFile);
 	void loadTile(char c, int i, int j);
 	void loadTextures();
-	void prepareStaticArrays(const glm::vec2 &minCoords, ShaderProgram &program);
+	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
 	void prepareDynamicArrays(const glm::vec2& minCoords, ShaderProgram& program);
 
 protected:
@@ -80,7 +80,7 @@ protected:
 	int bankID;
 	vector<vector<Tile>> mapita;
 
-	vector<vector<int>> solids;
+	//vector<vector<int>> solids;
 
 };
 
