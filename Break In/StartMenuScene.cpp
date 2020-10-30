@@ -32,7 +32,7 @@ void StartMenuScene::update(int deltaTime)
 
 void StartMenuScene::render()
 {
-	if (glm::mod(currentTime,1000.f) < 700.f)
+	if (glm::mod(currentTime,1500.f) < 750.f)
 		texQuad->render(tex1);
 	else 
 		texQuad->render(tex2);
