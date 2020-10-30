@@ -85,7 +85,6 @@ bool Slide::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, flo
 			return true;
 		}
 	}
-	*posI += speed;
 	return false;
 }
 
