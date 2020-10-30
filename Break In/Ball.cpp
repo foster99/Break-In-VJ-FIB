@@ -24,7 +24,7 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	
 }
 
-void Ball::update(int deltaTime)
+bool Ball::update(int deltaTime)
 {
 	bool collisionY = false;
 	bool collisionX = false;
@@ -43,6 +43,10 @@ void Ball::update(int deltaTime)
 
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
+	
+	// chapuza para contar colisiones, habria que cambiarlo por el retorno de un entero o un identificador
+	// de la tile con la que ha chocado etc.
+	return (collisionX || collisionY);
 }
 
 void Ball::render(glm::mat4& displacement_mat)

@@ -44,7 +44,14 @@ void GameScene::update(int deltaTime) {
 
 	this->Scene::update(deltaTime);
 	player->update(deltaTime);
-	ball->update(deltaTime);
+
+	if (ball->update(deltaTime)) {
+		points += 100;
+		menuMap->setMoney(points);
+	}
+		
+
+
 
 	// Modify tiles displacement
 

@@ -13,12 +13,16 @@ TileMap::TileMap() {
 
 }
 
-TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program)
+TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords_, ShaderProgram &program_)
 {
 	bankID = 1;
 	loadLevel(levelFile);
 	loadTextures();
-	prepareStaticArrays(minCoords, program);
+
+	minCoords = &minCoords_;
+	program = &program_;
+
+	prepareStaticArrays((*minCoords), (*program));
 }
 
 TileMap::~TileMap()
@@ -173,6 +177,11 @@ void TileMap::prepareStaticArrays(const glm::vec2 &minCoords, ShaderProgram &pro
 	glBufferData(GL_ARRAY_BUFFER, 24 * nTiles * sizeof(float), &vertices[0], GL_STATIC_DRAW);
 	posLocation = program.bindVertexAttribute("position", 2, 4*sizeof(float), 0);
 	texCoordLocation = program.bindVertexAttribute("texCoord", 2, 4*sizeof(float), (void *)(2*sizeof(float)));
+}
+
+void TileMap::prepareDynamicArrays(const glm::vec2& minCoords, ShaderProgram& program)
+{
+
 }
 
 bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speed) 

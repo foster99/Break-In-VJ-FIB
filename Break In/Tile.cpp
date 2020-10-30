@@ -34,9 +34,8 @@ void Tile::loadMenuTile(char tile, int i, int j, int bank)
 {
 	switch (tile)
 	{
-	case black:
-		id = 38;
-		break;
+	case ' ':	id =  0;	break;
+	case black:	id = 38;	break;
 	case '.':	id = 74;	break;
 	case ':':	id = 75;	break;
 	case '0':
@@ -48,8 +47,7 @@ void Tile::loadMenuTile(char tile, int i, int j, int bank)
 	case '6':
 	case '7':
 	case '8':
-	case '9':	
-		id = 80 + tile - '0';	break;
+	case '9':	id = 80 + tile - '0';	break;
 	case 'A':
 	case 'B':
 	case 'C':

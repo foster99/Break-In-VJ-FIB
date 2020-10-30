@@ -43,6 +43,7 @@ public:
 	void loadTile(char c, int i, int j);
 	void loadTextures();
 	void prepareStaticArrays(const glm::vec2 &minCoords, ShaderProgram &program);
+	void prepareDynamicArrays(const glm::vec2& minCoords, ShaderProgram& program);
 
 protected:
 
@@ -65,6 +66,9 @@ protected:
 	GLuint vaoStatic;
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
+
+	const glm::vec2 *minCoords;
+	ShaderProgram *program;
 
 	// TileMap info
 	glm::ivec2 position, mapSize, tilesheetSize;
