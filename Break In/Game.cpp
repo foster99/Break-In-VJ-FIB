@@ -27,8 +27,9 @@ void Game::init()
 
 void Game::loadSounds()
 {
-	//ball_sound = Sound("tueeeeeeeeee.wav", false); // REMOVE
-	ball_sound = Sound("ball.wav", false); // REMOVE
+	//ball_sound = Sound("tueeeeeeeeee.wav", false);
+	ball_sound = Sound("ball.wav", false);
+	title_song = Sound("title_song.wav", true);
 }
 
 bool Game::update(int deltaTime)
@@ -40,10 +41,12 @@ bool Game::update(int deltaTime)
 	switch (currMode()) {
 	case startMenu:
 		startMenuScene.update(deltaTime);
+		playTitleSong();
 		break;
 
 	case playing:
 		gameScene.update(deltaTime);
+		stopTitleSong();
 		break;
 
 	case instructions:
@@ -196,6 +199,16 @@ bool Game::getSpecialKey(int key) const
 void Game::playBallSound()
 {
 	ball_sound.play();
+}
+
+void Game::playTitleSong()
+{
+	title_song.play();
+}
+
+void Game::stopTitleSong()
+{
+	title_song.drop();
 }
 
 Mode Game::currMode()

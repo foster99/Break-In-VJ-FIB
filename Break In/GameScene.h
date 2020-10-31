@@ -38,7 +38,6 @@ private:
 
     int tiles_displacement;
     glm::mat4 displacement_mat;
-    //int loopsToRender;
-    //int currLoop;
+
 };
 #endif

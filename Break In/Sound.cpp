@@ -16,6 +16,7 @@ Sound::Sound(string filename, bool loopSound)
 	engine = irrklang::createIrrKlangDevice();
 	this->setFile(filename);
 	this->setMode(loopSound);
+	playing = false;
 }
 
 void Sound::setFile(string filename)
@@ -30,10 +31,17 @@ void Sound::setMode(bool loopSound)
 
 void Sound::play()
 {
-	engine->play2D(path.c_str(), loopSound);
+	if ((loopSound && !playing) || !loopSound) {
+		//if (!engine) engine = irrklang::createIrrKlangDevice();
+		engine->play2D(path.c_str(), loopSound);
+		playing = true;
+	}
 }
 
 void Sound::drop()
 {
-	engine->drop();
+	if (playing) {
+		engine->drop();
+		playing = false;
+	}
 }

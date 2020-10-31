@@ -54,6 +54,8 @@ public:
 	bool getSpecialKey(int key) const;
 
 	void playBallSound();
+	void playTitleSong();
+	void stopTitleSong();
 
 	// Different Modes
 	static constexpr Mode exitGame = Mode(0);
@@ -86,9 +88,9 @@ private:
 	bool keys[256], specialKeys[256];	// Store key states so that we can have access at any time
 	
 										//MenuScene scene;		// EXPERIMENT
-	//bool playing;						// CANVIAR PER HERENCIA? // REMOVE
 
-	Sound ball_sound; // REMOVE
+	Sound ball_sound;
+	Sound title_song;
 
 
 };

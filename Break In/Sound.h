@@ -18,5 +18,6 @@ class Sound {
 		irrklang::ISoundEngine* engine;
 		string path = "";
 		bool loopSound = false;
+		bool playing;
 
 };
