@@ -75,9 +75,12 @@ void Player::update(int deltaTime)
 
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
+		int limit = map->getTileSize() * 2;
 		posPlayer.y -= speedY;
-		if (posPlayer.y < (map->getTileSize()*2))
-			posPlayer.y += speedY;
+		int pos2Check = posPlayer.y - slideOffset.y - slide->getLogicSize().y;
+		int displacement = map->getMapSizeY() * map->getTileSize() * (3 - actRoom);
+		if (pos2Check < (limit + displacement))
+ 			posPlayer.y += speedY;
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
 	{
@@ -121,6 +124,11 @@ void Player::setPosition(const glm::vec2 &pos)
 void Player::setTilesDisplacement(int t)
 {
 	tiles_displacement = t;
+}
+
+void Player::setRoom(int room)
+{
+	actRoom = room;
 }
 
 void Player::toogleChangeBar() 

@@ -1,10 +1,10 @@
 #ifndef _PLAYER_INCLUDE
 #define _PLAYER_INCLUDE
 
-
 #include "Sprite.h"
 #include "TileMap.h"
 #include "Slide.h"
+
 
 // Player is basically a Sprite that represents the player. As such it has
 // all properties it needs to track its movement, jumping, and collisions.
@@ -22,13 +22,13 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2& pos);
 	void setTilesDisplacement(int t);
-
+	void setRoom(int room);
 	void toogleChangeBar();
 
 	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed);
 	
 private:
-	int tiles_displacement;
+	int tiles_displacement, actRoom;
 	glm::ivec2 tileMapDispl, sizePlayer, slideOffset;
 	glm::vec2 posPlayer, displ_posPlayer;
 	int jumpAngle, startYs, speedX, speedY, slideOffsetY, slideOffsetX;

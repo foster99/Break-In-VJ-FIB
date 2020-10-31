@@ -43,6 +43,7 @@ void GameScene::init() {
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * staticMap->getTileSize(), INIT_PLAYER_Y_TILES * staticMap->getTileSize()));
 	player->setTilesDisplacement(0);
+	player->setRoom(room);
 	player->setTileMap(staticMap);
 
 	ball = new Ball();
@@ -92,6 +93,7 @@ void GameScene::update(int deltaTime) {
 		tiles_displacement = 0;
 	}
 
+	player->setRoom(room);
 	player->setTilesDisplacement(tiles_displacement);
 	displacement_mat = glm::translate(glm::mat4(1.f), glm::vec3(0.f, float(tiles_displacement *8), 0.f));
 }
