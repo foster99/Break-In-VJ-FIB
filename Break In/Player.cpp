@@ -30,16 +30,18 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	sprite->changeAnimation(4);
 
-	slideOffset.x = 10;
-	slideOffset.y = 6;
+	slideOffsetX = 10;
+	slideOffsetY = 6;
 
 	slide = new Slide();
 	slide->init(tileMapPos, shaderProgram);
-	slide->setPosition(posPlayer - (glm::vec2) slideOffset);
-	slide->setOffSets(slideOffset.x, slideOffset.y);
+	slide->setPosition(glm::ivec2(posPlayer.x - slideOffsetX, posPlayer.y- slideOffsetY));
+	slide->setOffSets(slideOffsetX, slideOffsetY);
 
 
 	tileMapDispl = tileMapPos;
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + displ_posPlayer.x), float(tileMapDispl.y + displ_posPlayer.y)));
+	
 }
 
 void Player::update(int deltaTime)
@@ -55,7 +57,7 @@ void Player::update(int deltaTime)
 				posPlayer.x -= speedX;
 		}
 		else {
-			if ((posPlayer.x + sizePlayer.x + slideOffset.x) > ((map->getMapSizeX()) * map->getTileSize() - map->getTileSize()))
+			if ((posPlayer.x + sizePlayer.x + slideOffsetX) > ((map->getMapSizeX()) * map->getTileSize() - map->getTileSize()))
 				posPlayer.x -= speedX;
 		}
 		
@@ -68,7 +70,7 @@ void Player::update(int deltaTime)
 				posPlayer.x += speedX;
 		}
 		else {
-			if ((posPlayer.x - slideOffset.x +1) < map->getTileSize())
+			if ((posPlayer.x - slideOffsetX +1) < map->getTileSize())
 				posPlayer.x += speedX;
 		}
 	}
@@ -82,24 +84,20 @@ void Player::update(int deltaTime)
 	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
 	{
 		posPlayer.y += speedY;
-
-		int tilesize	= map->getTileSize();
-		int mapsize		= map->getMapSizeY() * tilesize;
-		int base_pixel	= ((int) posPlayer.y + sizePlayer.y) % mapsize;
-
-		if (base_pixel < tilesize)
+		if ((posPlayer.y + sizePlayer.x) > ( (map->getMapSizeY()-1)*map->getTileSize()) )
 			posPlayer.y -= speedY;
 	}
 
-	posPlayer = glm::mod(posPlayer, glm::vec2(1000.f, 192.f)) - glm::vec2(0.f, float(tiles_displacement) * 8.f);
-	sprite->setPosition((glm::vec2) tileMapDispl + posPlayer);
-	slide->setPosition((glm::vec2) tileMapDispl - (glm::vec2) slideOffset + posPlayer);
+	displ_posPlayer = mod(posPlayer, glm::vec2(8.f * 24.f));
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + displ_posPlayer.x), float(tileMapDispl.y + displ_posPlayer.y)));
+	slide->setPosition(glm::ivec2(displ_posPlayer.x-slideOffsetX, displ_posPlayer.y - slideOffsetY));
+
 }
 
-void Player::render(glm::mat4& displacement_mat)
+void Player::render()
 {
-	slide->render(displacement_mat);
-	sprite->render(displacement_mat);
+	sprite->render();
+	slide->render();
 }
 
 glm::ivec2 Player::getSize()
@@ -114,13 +112,9 @@ void Player::setTileMap(TileMap *tileMap)
 
 void Player::setPosition(const glm::vec2 &pos)
 {
-	posPlayer = glm::mod(pos, glm::vec2(1000.f, 192.f)) - glm::vec2(0.f, float(tiles_displacement) * 8.f);
+	posPlayer = pos;
+	displ_posPlayer = mod(posPlayer, glm::vec2(8.f * 24.f));
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-}
-
-void Player::setTilesDisplacement(int t)
-{
-	tiles_displacement = t;
 }
 
 void Player::toogleChangeBar() 

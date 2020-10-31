@@ -66,8 +66,6 @@ bool TileMap::loadLevel(const string &levelFile)
 	sstream >> mapSize.x >> mapSize.y;
 	getline(fin, line);
 
-	Nrooms = mapSize.y / mapSize.x;
-
 	sstream.str(line);
 	sstream >> tileSize >> blockSize;
 	getline(fin, line);

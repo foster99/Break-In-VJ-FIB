@@ -22,8 +22,8 @@ public:
     void toggleGodMode();
     void toogleChangeBar();
 
-    static constexpr float INIT_PLAYER_X_TILES = 12;
-    static constexpr float INIT_PLAYER_Y_TILES = 70;
+    static constexpr float INIT_PLAYER_X_TILES = 1;
+    static constexpr float INIT_PLAYER_Y_TILES = 1;
 
 private:
     TileMap* staticMap;

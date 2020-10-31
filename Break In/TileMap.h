@@ -31,7 +31,7 @@ public:
 	
 	int getTileSize() const { return tileSize; }
 	int getMapSizeX() const { return mapSize.x;  }
-	int getMapSizeY() const { return mapSize.y / Nrooms; }
+	int getMapSizeY() const { return mapSize.y; }
 
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speed);
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speed);
@@ -77,7 +77,7 @@ protected:
 	glm::vec2 tileTexSize;
 
 	// Bank info
-	int bankID, Nrooms;
+	int bankID;
 	vector<vector<Tile>> mapita;
 
 	//vector<vector<int>> solids;

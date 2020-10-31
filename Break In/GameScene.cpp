@@ -23,7 +23,6 @@ void GameScene::init() {
 
 	this->Scene::init();
 
-	bank = 1;
 	tiles_displacement = 0;
 	godMode = false;
 
@@ -36,13 +35,12 @@ void GameScene::init() {
 	menuMap->setLives(lives);
 	menuMap->setMoney(money);
 	menuMap->setPoints(points);
-	menuMap->setLine(" CASUAL ", " PLAYER ");
+	menuMap->setLine(":CASUAL:", ".PLAYER*");
 
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * staticMap->getTileSize(), INIT_PLAYER_Y_TILES * staticMap->getTileSize()));
-	player->setTilesDisplacement(0);
 	player->setTileMap(staticMap);
 
 	ball = new Ball();
@@ -64,8 +62,8 @@ void GameScene::update(int deltaTime) {
 		points += 33;
 		menuMap->setPoints(points);
 
-		lives += 1;
-		menuMap->setLives(lives);
+		points += 33;
+		menuMap->setPoints(points);
 
 		if (points > 1000) {
 			menuMap->setLine("AII LMAO", "4POGGERS");
@@ -92,7 +90,6 @@ void GameScene::update(int deltaTime) {
 		tiles_displacement = 0;
 	}
 
-	player->setTilesDisplacement(tiles_displacement);
 	displacement_mat = glm::translate(glm::mat4(1.f), glm::vec3(0.f, float(tiles_displacement *8), 0.f));
 }
 
@@ -106,7 +103,7 @@ void GameScene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
 	staticMap->render();
-	player->render(displacement_mat);
+	player->render();
 	ball->render(displacement_mat);
 
 	// Render Lateral Menu
