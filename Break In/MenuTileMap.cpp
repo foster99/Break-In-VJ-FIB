@@ -214,8 +214,8 @@ bool MenuTileMap::loadLevel(const string& levelFile)
 
 	// READ TILESHEET SIZE
 	sstream.str(line);
-	sstream >> tilesheetSize.x >> tilesheetSize.y;
-	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
+	sstream >> staticTilesheetSize.x >> staticTilesheetSize.y;
+	staticTileTexSize = glm::vec2(1.f / staticTilesheetSize.x, 1.f / staticTilesheetSize.y);
 	getline(fin, line);
 
 	// READ MONEY COORDS
@@ -278,7 +278,14 @@ void MenuTileMap::loadTile(char tile, int i, int j)
 
 void MenuTileMap::render()
 {
-	this->TileMap::render();
+	glEnable(GL_TEXTURE_2D);
+	staticTilesheet.use();
+	glBindVertexArray(vaoStatic);
+	glEnableVertexAttribArray(staticPosLocation);
+	glEnableVertexAttribArray(staticTexCoordLocation);
+	glDrawArrays(GL_TRIANGLES, 0, 6 * mapSize.x * mapSize.y);
+	glDisable(GL_TEXTURE_2D);
+
 	renderModifications();
 }
 

@@ -1,7 +1,8 @@
 TILEMAP
 24 72 								-- Size of tile map in tiles
 8 8 							    -- Tile size & block size
-16 6 								-- Number of tiles in tilesheet
+16 6 								-- Number of tiles in static tilesheet
+16 4 								-- Number of tiles in dynamic tilesheet
 1									-- Bank Number
 ************************
 *                      *
@@ -64,7 +65,7 @@ TILEMAP
 *                      *
 *                      *
 *                      *
-*                      *
+*   HHRRHHYYHHBBHHHH   *
 *                      *
 *                      *
 *                      *

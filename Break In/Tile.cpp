@@ -12,9 +12,73 @@ void Tile::loadTile(char tile, int i, int j, int bank, int tileSheetSizeX)
 	switch (tile)
 	{
 		// DYNAMIC TILES
-	case brickRed:
-		id = 0;
+
+	case brickHigh:
+		id = 2 * 0 + (j % 2);
+		resistance = 2;
+		type = dynamicTile;
 		break;
+	case brickLow:
+		id = 2 * 1 + (j % 2);
+		resistance = 1;
+		type = dynamicTile;
+		break;
+	case brickRed:
+		id = 2 * 2 + (j % 2);
+		resistance = 1;
+		type = dynamicTile;
+		break;
+	case brickBlue:
+		id = 2 * 3 + (j % 2);
+		resistance = 1;
+		type = dynamicTile;
+		break;
+	case brickGreen:
+		id = 2 * 4 + (j % 2);
+		resistance = 1;
+		type = dynamicTile;
+		break;
+	case brickYellow:
+		id = 2 * 5 + (j % 2);
+		resistance = 1;
+		type = dynamicTile;
+		break;
+	case door:
+		id = 2 * 6 + (j % 2);
+		resistance = infinity;
+		type = dynamicTile;
+		break;
+	case moneyBag:
+		id = 32 + 2 * 1 + (i % 2) * 16 + (j % 2);
+		resistance = 1;
+		type = dynamicTile;
+		break;
+	case coin:
+		id = 32 + 2 * 2 + (i % 2) * 16 + (j % 2);
+		resistance = 1;
+		type = dynamicTile;
+		break;
+	case alarm:
+		id = 32 + 2 * 3 + (i % 2) * 16 + (j % 2);
+		resistance = infinity;
+		type = dynamicTile;
+		break;
+	case key:
+		id = 32 + 2 * 5 + (i % 2) * 16 + (j % 2);
+		resistance = 1;
+		type = dynamicTile;
+		break;
+	case outCard:
+		id = 32 + 2 * 6 + (i % 2) * 16 + (j % 2);
+		resistance = 1;
+		type = dynamicTile;
+		break;
+	case blueSpheres:
+		id = 32 + 2 * 7 + (i % 2) * 16 + (j % 2);
+		resistance = 1;
+		type = dynamicTile;
+		break;
+
 		// STATIC TILES
 	case wall:
 		id = bank;
@@ -28,6 +92,8 @@ void Tile::loadTile(char tile, int i, int j, int bank, int tileSheetSizeX)
 		type = staticTile;
 		break;
 	}
+
+	symbol = tile;
 }
 
 void Tile::loadMenuTile(char tile, int i, int j, int bank)
@@ -79,5 +145,5 @@ void Tile::loadMenuTile(char tile, int i, int j, int bank)
 
 	resistance = infinity;
 	type = menuTile;
-
+	symbol = tile;
 }

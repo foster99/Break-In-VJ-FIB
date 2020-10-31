@@ -12,6 +12,7 @@ public:
 	void loadMenuTile(char c, int i, int j, int bank);
 
 	int id = 0;
+	char symbol;
 	int type = staticTile;
 	int resistance = infinity;
 
@@ -29,6 +30,7 @@ public:
 	static constexpr char brickRed = 'R';
 	static constexpr char brickGreen = 'G';
 	static constexpr char brickBlue = 'B';
+	static constexpr char brickYellow = 'Y';
 	static constexpr char brickLow = 'L';
 	static constexpr char brickHigh = 'H';
 	static constexpr char door = 'D';

@@ -26,7 +26,7 @@ public:
 	TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program);
 	~TileMap();
 
-	void render() const;
+	void render(); 
 	void free();
 	
 	int getTileSize() const { return tileSize; }
@@ -63,18 +63,18 @@ protected:
 	static constexpr char outCard		= 'O';
 	static constexpr char blueSpheres	= 'S';
 	
-	GLuint vaoStatic;
-	GLuint vbo;
-	GLint posLocation, texCoordLocation;
+	GLuint vaoStatic, vaoDynamic;
+	GLuint vboStatic, vboDynamic;
+	GLint staticPosLocation, staticTexCoordLocation, dynamicPosLocation, dynamicTexCoordLocation;
 
 	const glm::vec2 *minCoords;
 	ShaderProgram *program;
 
 	// TileMap info
-	glm::ivec2 position, mapSize, tilesheetSize;
+	glm::ivec2 position, mapSize, staticTilesheetSize, dynamicTilesheetSize;
 	int tileSize, blockSize;
-	Texture staticTilesheet;
-	glm::vec2 tileTexSize;
+	Texture staticTilesheet, dynamicTilesheet;
+	glm::vec2 staticTileTexSize, dynamicTileTexSize;
 
 	// Bank info
 	int bankID, Nrooms;
