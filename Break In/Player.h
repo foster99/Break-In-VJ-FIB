@@ -28,6 +28,7 @@ public:
 	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed);
 	
 private:
+	bool movingX, movingY;
 	int tiles_displacement, actRoom;
 	glm::ivec2 tileMapDispl, sizePlayer, slideOffset;
 	glm::vec2 posPlayer, displ_posPlayer;

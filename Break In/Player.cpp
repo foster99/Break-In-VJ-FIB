@@ -28,7 +28,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 
 
-	sprite->changeAnimation(4);
+	sprite->changeAnimation(1);
 
 	slideOffset.x = 10;
 	slideOffset.y = 6;
@@ -40,59 +40,83 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 
 	tileMapDispl = tileMapPos;
+	movingX = false;
+	movingY = false;
+}
+
+void setSign(int &value, char sign) {
+	switch (sign) {
+	case '-':	if (value > 0) value = -value; break;
+	case '+':	if (value < 0) value = -value; break;
+	}
 }
 
 void Player::update(int deltaTime)
 {
+	movingX = false;
+	movingY = false;
 
 	glm::ivec2 slideLogic = slide->getLogicSize();
 
 	if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
-		posPlayer.x += speedX;
-		if (slideLogic.x == sizePlayer.x) {
-			if ((posPlayer.x + sizePlayer.x) > ((map->getMapSizeX()) * map->getTileSize() - map->getTileSize()))
-				posPlayer.x -= speedX;
+		movingX = true;
+		setSign(speedX, '+');
+		if ((slideLogic.x == sizePlayer.x) && (posPlayer.x + sizePlayer.x) > ((map->getMapSizeX()) * map->getTileSize() - map->getTileSize())) {
+			movingX = false;
+			setSign(speedX, '-');
 		}
-		else {
-			if ((posPlayer.x + sizePlayer.x + slideOffset.x) > ((map->getMapSizeX()) * map->getTileSize() - map->getTileSize()))
-				posPlayer.x -= speedX;
+		else if ((posPlayer.x + sizePlayer.x + slideOffset.x) > ((map->getMapSizeX()) * map->getTileSize() - map->getTileSize())) {
+			movingX = false;
+			setSign(speedX, '-');
 		}
-		
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
-		posPlayer.x -= speedX;
-		if (slideLogic.x == sizePlayer.x) {
-			if (posPlayer.x < map->getTileSize())
-				posPlayer.x += speedX;
+		movingX = true;
+		setSign(speedX, '-');
+		if ((slideLogic.x == sizePlayer.x) && (posPlayer.x < map->getTileSize())) {
+			movingX = false;
+			setSign(speedX, '+');
 		}
-		else {
-			if ((posPlayer.x - slideOffset.x +1) < map->getTileSize())
-				posPlayer.x += speedX;
+		else if ((posPlayer.x - slideOffset.x +1) < map->getTileSize()) {
+			movingX = false;
+			setSign(speedX, '+');
 		}
+		
 	}
 
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 	{
 		int limit = map->getTileSize() * 2;
-		posPlayer.y -= speedY;
 		int pos2Check = posPlayer.y - slideOffset.y - slide->getLogicSize().y;
 		int displacement = map->getMapSizeY() * map->getTileSize() * (3 - actRoom);
-		if (pos2Check < (limit + displacement))
- 			posPlayer.y += speedY;
+		
+		movingY = true;
+		setSign(speedY, '-');
+
+		if (pos2Check < (limit + displacement)) {
+			setSign(speedY, '+');
+			movingY = false;
+		}
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
 	{
-		posPlayer.y += speedY;
-
 		int tilesize	= map->getTileSize();
 		int mapsize		= map->getMapSizeY() * tilesize;
 		int base_pixel	= ((int) posPlayer.y + sizePlayer.y) % mapsize;
 
-		if (base_pixel < tilesize)
-			posPlayer.y -= speedY;
+		movingY = true;
+		setSign(speedY, '+');
+
+		if (base_pixel < tilesize) {
+			setSign(speedY, '-');
+			movingY = false;
+		}
 	}
+	
+	if (movingX) posPlayer.x += speedX;
+	if (movingY) posPlayer.y += speedY;
 
 	posPlayer = glm::mod(posPlayer, glm::vec2(1000.f, 192.f)) - glm::vec2(0.f, float(tiles_displacement) * 8.f);
 	sprite->setPosition((glm::vec2) tileMapDispl + posPlayer);
@@ -138,5 +162,55 @@ void Player::toogleChangeBar()
 
 bool Player::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed)
 {
-	return slide->collisionMoveDown(pos,size,posI,speed);
+	if (slide->collisionMoveDown(pos, size, posI, speed)) return true;
+
+	bool collision = false;
+	glm::vec2 originalSlidePos((glm::vec2) tileMapDispl - (glm::vec2) slideOffset + posPlayer);
+
+
+	if (movingX && movingY) {
+		
+		int total_speed = std::abs(speedX) + std::abs(speedY);
+		int sx = speedX / std::abs(speedX);
+		int sy = speedY / std::abs(speedY);
+
+		for (int k = 1, x = 0, y = 0; !collision && k < total_speed; ++k) {
+			
+			if (k % 2)	x += sx;
+			else		y += sy;
+
+			slide->setPosition((glm::vec2) tileMapDispl - (glm::vec2) slideOffset + posPlayer + glm::vec2(x,y));
+			collision = slide->collisionMoveDown(pos, size, posI, speed);
+		}
+	}
+	else if (movingX && !movingY) {
+		
+		int total_speed = std::abs(speedX);
+		int sx = speedX / std::abs(speedX);
+		int sy = 0;
+
+		for (int k = 1, i = 0, j = 0; !collision && k < total_speed; ++k) {
+
+			j += sx;
+
+			slide->setPosition((glm::vec2) tileMapDispl - (glm::vec2) slideOffset + posPlayer + glm::vec2(sx*k, 0));
+			collision = slide->collisionMoveDown(pos, size, posI, speed);
+		}
+	}
+	else if (!movingX && movingY) {
+
+		int total_speed = std::abs(speedY);
+		int sx = 0;
+		int sy = speedY / std::abs(speedY);
+
+		for (int k = 1; !collision && k < total_speed; ++k) {
+
+			slide->setPosition((glm::vec2) tileMapDispl - (glm::vec2) slideOffset + posPlayer + glm::vec2(0, sy*k));
+			collision = slide->collisionMoveDown(pos, size, posI, speed);
+		}
+	}
+
+	slide->setPosition(originalSlidePos);
+
+	return collision;
 }

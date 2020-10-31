@@ -32,7 +32,7 @@ void Sound::setMode(bool loopSound)
 void Sound::play()
 {
 	if ((loopSound && !playing) || !loopSound) {
-		//if (!engine) engine = irrklang::createIrrKlangDevice();
+		if (!engine) engine = irrklang::createIrrKlangDevice();
 		engine->play2D(path.c_str(), loopSound);
 		playing = true;
 	}
