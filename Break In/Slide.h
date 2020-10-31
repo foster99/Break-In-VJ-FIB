@@ -21,6 +21,7 @@ public:
 	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed);
 private:
 	bool onSlide(const glm::ivec2& pos, int sizeX);
+	bool onSide(const glm::ivec2& pos, int sizeY);
 
 	glm::ivec2 tileMapDispl, logicSize, quadSize, posSlide, singleSize, offSet;
 	glm::vec2 displ_posPlayer;

@@ -140,3 +140,13 @@ bool Player::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, fl
 {
 	return slide->collisionMoveDown(pos,size,posI,speed);
 }
+
+bool Player::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed)
+{
+	return slide->collisionMoveRight(pos, size, posJ, speed);
+}
+
+bool Player::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed)
+{
+	return slide->collisionMoveLeft(pos, size, posJ, speed);
+}
