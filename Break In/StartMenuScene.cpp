@@ -38,12 +38,6 @@ void StartMenuScene::render()
 		texQuad->render(tex2);
 
 	this->Scene::render();
-	
-	// REMOVE
-	//switch (actTexture) {
-	//	case 0: texQuad->render(tex);		break;
-	//	case 1: texQuad->render(options_tex);	break;
-	//}
 }
 
 void StartMenuScene::changeTex()

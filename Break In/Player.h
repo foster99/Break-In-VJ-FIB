@@ -16,18 +16,20 @@ class Player
 public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
 	void update(int deltaTime);
-	void render();
+	void render(glm::mat4& displacement_mat);
 	
 	glm::ivec2 getSize();
 	void setTileMap(TileMap *tileMap);
-	void setPosition(const glm::vec2 &pos);
+	void setPosition(const glm::vec2& pos);
+	void setTilesDisplacement(int t);
 
 	void toogleChangeBar();
 
 	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed);
 	
 private:
-	glm::ivec2 tileMapDispl, sizePlayer;
+	int tiles_displacement;
+	glm::ivec2 tileMapDispl, sizePlayer, slideOffset;
 	glm::vec2 posPlayer, displ_posPlayer;
 	int jumpAngle, startYs, speedX, speedY, slideOffsetY, slideOffsetX;
 	Texture spritesheet;

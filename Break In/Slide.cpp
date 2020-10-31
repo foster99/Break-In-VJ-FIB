@@ -30,9 +30,10 @@ void Slide::update(int deltaTime)
 {
 }
 
-void Slide::render()
+
+void Slide::render(glm::mat4& displacement_mat)
 {
-	sprite->render();
+	sprite->render(displacement_mat);
 }
 
 glm::ivec2 Slide::getLogicSize()
