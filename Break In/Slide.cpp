@@ -78,6 +78,15 @@ bool Slide::onSlide(const glm::ivec2& pos, int sizeX) {
 	return false;
 }
 
+
+bool Slide::onSide(const glm::ivec2& pos, int sizeY) {
+	for (int y = 0; y <= sizeY; ++y) {
+		if ((pos.y + y) >= posSlide.y && (pos.y + y) <= (posSlide.y + logicSize.y))
+			return true;
+	}
+	return false;
+}
+
 bool Slide::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed) 
 {
 	for (int s = 1; s <= speed; ++s) {
@@ -91,17 +100,34 @@ bool Slide::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, flo
 
 bool Slide::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed)
 {
+	int diff = 0;
+	if (logicSize != quadSize)
+		diff = offSet.x;
+
+	int rightLimit = pos.x + size.x;
+
 	for (int s = 1; s <= speed; ++s) {
-		if ((pos.y + s + size.y) == posSlide.y && onSlide(pos, size.x)) {
+		if ((rightLimit + s) == (posSlide.x + diff) && onSide(pos, size.y)) {
 			*posJ += s - 1;
 			return true;
 		}
 	}
-	*posJ += speed;
 	return false;
 }
 
 bool Slide::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed)
 {
+	int diff = 0;
+	if (logicSize != quadSize)
+		diff = offSet.x;
+
+	int leftLimit = pos.x;
+
+	for (int s = 1; s <= speed; ++s) {
+		if (leftLimit == (posSlide.x + logicSize.x + diff) && onSide(pos, size.y)) {
+			*posJ -= s - 1;
+			return true;
+		}
+	}
 	return false;
 }

@@ -34,6 +34,12 @@ bool Ball::update(int deltaTime)
 	if (collisionPlayer = (direction.y > 0 && player->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
 		direction.y = -1;
 	}
+	if (collisionPlayer = (direction.y > 0 && direction.x > 0 && player->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
+		direction.x = -1;
+	}
+	else if (collisionPlayer = (direction.y > 0 && direction.x < 0 && player->collisionMoveLeft(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
+		direction.x = 1;
+	}
 	
 	if (!collisionPlayer) {
 		if      (collisionY = (direction.y > 0 && map->collisionMoveDown( posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY))))
