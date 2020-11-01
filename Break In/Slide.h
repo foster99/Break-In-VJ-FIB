@@ -16,11 +16,11 @@ public:
 	void setPosition(const glm::vec2& pos);
 	void setOffSets(int offX, int offY);
 	void toogleChangeBar();
-	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed);
+	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float& modifierY, float& modifierX);
 	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed);
 	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed);
 private:
-	bool onSlide(const glm::ivec2& pos, int sizeX);
+	bool onSlide(const glm::ivec2& pos, int sizeX, float& modifierY, float& modifierX);
 	bool onSide(const glm::ivec2& pos, int sizeY);
 
 	glm::ivec2 tileMapDispl, logicSize, quadSize, posSlide, singleSize, offSet;

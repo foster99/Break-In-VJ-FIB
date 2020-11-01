@@ -263,9 +263,11 @@ void TileMap::prepareDynamicArrays()
 	firstDynamic = false;
 }
 
-bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speed) 
+bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speedOg, float& modifierX)
 {
 	int i0, i1;
+
+	int speed = int(speedOg * abs(modifierX));
 
 	i0 = (pos.y + 2) / tileSize;
 	i1 = (pos.y + size.y - 3) / tileSize;
@@ -281,14 +283,16 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, f
 		}
 	}
 
-	*posJ -= speed;
+	*posJ += speedOg * modifierX;
 
 	return false;
 }
 
-bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speed)
+bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speedOg, float& modifierX)
 {
 	int i0, i1;
+
+	int speed = int(speedOg * abs(modifierX));
 
 	i0 = (pos.y + 2) / tileSize;
 	i1 = (pos.y + size.y - 3) / tileSize;
@@ -304,15 +308,16 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, 
 		}
 	}
 
-	*posJ += speed;
+	*posJ += speedOg * modifierX;
 
 	return false;
 }
 
-bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posI, int speed)
+bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posI, int speedOg, float& modifierY)
 {
 	int j0, j1;
-	
+	int speed = int(speedOg * abs(modifierY));
+
 	j0 = (pos.x + 2) / tileSize;
 	j1 = (pos.x + size.x - 3) / tileSize;
 
@@ -327,14 +332,16 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, f
 		}
 	}
 
-	*posI += speed;
+	*posI += (speedOg * modifierY);
 
 	return false;
 }
 
-bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posI, int speed)
+bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posI, int speedOg, float& modifierY)
 {
 	int j0, j1;
+
+	int speed = int(speedOg * abs(modifierY));
 
 	j0 = (pos.x + 2) / tileSize;
 	j1 = (pos.x + size.x - 3) / tileSize;
@@ -351,7 +358,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, flo
 		}
 	}
 
-	*posI -= speed;
+	*posI += (speedOg * modifierY);
 
 	return false;
 }

@@ -17,9 +17,6 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	sprite->changeAnimation(0);
 
-	direction.x = -1;
-	direction.y = 1;
-
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
 	
@@ -31,26 +28,26 @@ bool Ball::update(int deltaTime)
 	bool collisionX = false;
 	bool collisionPlayer = false;
 
-	if (collisionPlayer = (direction.y > 0 && player->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
-		direction.y = -1;
+	if (collisionPlayer = (spdModifierY > 0 && player->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, speed, spdModifierY, spdModifierX))) {
+		spdModifierY *= -1;
 	}
-	else if (collisionPlayer = (direction.y > 0 && direction.x > 0 && player->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
-		direction.x = -1;
+	else if (collisionPlayer = (spdModifierY > 0 && spdModifierX > 0 && player->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
+		spdModifierX *= -1;
 	}
-	else if (collisionPlayer = (direction.y > 0 && direction.x < 0 && player->collisionMoveLeft(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
-		direction.x = 1;
+	else if (collisionPlayer = (spdModifierY > 0 && spdModifierX < 0 && player->collisionMoveLeft(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
+		spdModifierX *= -1;
 	}
 	
 	if (!collisionPlayer) {
-		if      (collisionY = (direction.y > 0 && map->collisionMoveDown( posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY))))
-			direction.y = -1;
-		else if (collisionY = (direction.y < 0 && map->collisionMoveUp(   posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY))))
-			direction.y = 1;
+		if (collisionY = (spdModifierY > 0 && map->collisionMoveDown( posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, speed, spdModifierY)))
+			spdModifierY *= -1;
+		else if (collisionY = (spdModifierY < 0 && map->collisionMoveUp(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, speed, spdModifierY)))
+			spdModifierY *= -1;
 
-		if      (collisionX = (direction.x > 0 && map->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, int(speed * spdModifierX))))
-			direction.x = -1;
-		else if (collisionX = (direction.x < 0 && map->collisionMoveLeft( posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, int(speed * spdModifierX))))
-			direction.x = 1;
+		if (collisionX = (spdModifierX > 0 && map->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, speed, spdModifierX)))
+			spdModifierX *= -1;
+		else if (collisionX = (spdModifierX < 0 && map->collisionMoveLeft( posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, speed, spdModifierX)))
+			spdModifierX *= -1;
 	}
 	
 	if (collisionX || collisionY || collisionPlayer) Game::instance().playBallSound();

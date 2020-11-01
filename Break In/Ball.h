@@ -20,7 +20,7 @@ public:
 	glm::vec2 getPosition();
 
 private:
-	glm::ivec2 tileMapDispl, direction;
+	glm::ivec2 tileMapDispl;
 	glm::vec2 posBall;
 	Texture tex;
 	Sprite* sprite;

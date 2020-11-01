@@ -25,7 +25,7 @@ public:
 	void setRoom(int room);
 	void toogleChangeBar();
 
-	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed);
+	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float &modifierY, float& modifierX);
 	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed);
 	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed);
 

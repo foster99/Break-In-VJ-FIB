@@ -66,14 +66,40 @@ void Slide::toogleChangeBar()
 		
 }
 
-bool Slide::onSlide(const glm::ivec2& pos, int sizeX) {
+void changeMods(int x, float& modifierY, float& modifierX, int size) {
+	if (x < (5 * size)) {
+		modifierY = 1;
+		modifierX = -1.5;
+	}
+	else if (x < (10 * size)) {
+		modifierY = 1;
+		modifierX = -0.5;
+	}
+	else if (x < (15 * size)) {
+		modifierY = 1;
+		modifierX = 0.5;
+	}
+	else {
+		modifierY = 1;
+		modifierX = 1.5;
+	}
+}
+
+bool Slide::onSlide(const glm::ivec2& pos, int sizeX, float& modifierY, float& modifierX) {
 	int diff = 0;
 	if (logicSize != quadSize)
 		diff = offSet.x;
 
 	for (int x = 0; x < sizeX; ++x) {
-		if ((pos.x + x) >= (posSlide.x+diff) && (pos.x + x) <= (posSlide.x + logicSize.x + diff))
+		if ((pos.x + x) >= (posSlide.x + diff) && (pos.x + x) <= (posSlide.x + logicSize.x + diff)) {
+			
+			if (diff == 0)
+				changeMods(x,modifierY, modifierX, 1);
+			else
+				changeMods(x,modifierY, modifierX, 2);
+
 			return true;
+		}
 	}
 	return false;
 }
@@ -87,10 +113,12 @@ bool Slide::onSide(const glm::ivec2& pos, int sizeY) {
 	return false;
 }
 
-bool Slide::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed) 
+bool Slide::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float& modifierY, float& modifierX)
 {
-	for (int s = 1; s <= speed; ++s) {
-		if ((pos.y + s + size.y) == posSlide.y && onSlide(pos, size.x)) {
+	int spd = int(speed + abs(modifierY));
+	
+	for (int s = 1; s <= spd; ++s) {
+		if ((pos.y + s + size.y) == posSlide.y && onSlide(pos, size.x, modifierY, modifierX)) {
 			*posI += s - 1;
 			return true;
 		}

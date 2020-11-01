@@ -159,9 +159,11 @@ void Player::toogleChangeBar()
 	slide->toogleChangeBar();
 }
 
-bool Player::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed)
+bool Player::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float &modifierY, float& modifierX)
 {
-	if (slide->collisionMoveDown(pos, size, posI, speed)) return true;
+
+
+	if (slide->collisionMoveDown(pos, size, posI, speed, modifierY, modifierX)) return true;
 
 	bool collision = false;
 	glm::vec2 originalSlidePos((glm::vec2) tileMapDispl - (glm::vec2) slideOffset + posPlayer);
@@ -179,7 +181,7 @@ bool Player::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, fl
 			else		y += sy;
 
 			slide->setPosition((glm::vec2) tileMapDispl - (glm::vec2) slideOffset + posPlayer + glm::vec2(x,y));
-			collision = slide->collisionMoveDown(pos, size, posI, speed);
+			collision = slide->collisionMoveDown(pos, size, posI, speed, modifierY, modifierX);
 		}
 	}
 	else if (movingX && !movingY) {
@@ -193,7 +195,7 @@ bool Player::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, fl
 			j += sx;
 
 			slide->setPosition((glm::vec2) tileMapDispl - (glm::vec2) slideOffset + posPlayer + glm::vec2(sx*k, 0));
-			collision = slide->collisionMoveDown(pos, size, posI, speed);
+			collision = slide->collisionMoveDown(pos, size, posI, speed, modifierY, modifierX);
 		}
 	}
 	else if (!movingX && movingY) {
@@ -205,7 +207,7 @@ bool Player::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, fl
 		for (int k = 1; !collision && k < total_speed; ++k) {
 
 			slide->setPosition((glm::vec2) tileMapDispl - (glm::vec2) slideOffset + posPlayer + glm::vec2(0, sy*k));
-			collision = slide->collisionMoveDown(pos, size, posI, speed);
+			collision = slide->collisionMoveDown(pos, size, posI, speed, modifierY, modifierX);
 		}
 	}
 

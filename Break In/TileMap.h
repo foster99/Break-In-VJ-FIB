@@ -33,10 +33,10 @@ public:
 	int getMapSizeX() const { return mapSize.x;  }
 	int getMapSizeY() const { return mapSize.y / Nrooms; }
 
-	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speed);
-	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speed);
-	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed);
-	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speed);
+	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speedOg, float& modifierX);
+	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speedOg, float& modifierX);
+	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speedOg, float& modifierY);
+	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speedOg, float& modifierY);
 
 	bool tileIsSolid(int i, int j);
 	bool loadLevel(const string &levelFile);

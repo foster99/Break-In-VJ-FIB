@@ -57,7 +57,8 @@ void GameScene::update(int deltaTime) {
 
 	this->Scene::update(deltaTime);
 	player->update(deltaTime);
-
+	
+	// PILOTA REOTRNA POS EN TILES D'ON IMPACTE glm::ivec2 collisionIn(i,j)
 	if (ball->update(deltaTime)) {
 		money += 100;
 		menuMap->setMoney(money);
