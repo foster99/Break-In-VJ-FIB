@@ -62,26 +62,27 @@ void Player::update(int deltaTime)
 	{
 		movingX = true;
 		setSign(speedX, '+');
-		if ((slideLogic.x == sizePlayer.x) && (posPlayer.x + sizePlayer.x) > ((map->getMapSizeX()) * map->getTileSize() - map->getTileSize())) {
-			movingX = false;
-			setSign(speedX, '-');
+		if ((slideLogic.x == sizePlayer.x)){
+			if ((posPlayer.x + sizePlayer.x + speedX) > (map->getMapSizeX() * map->getTileSize() - map->getTileSize())) {
+				movingX = false;
+			}
 		}
-		else if ((posPlayer.x + sizePlayer.x + slideOffset.x) > ((map->getMapSizeX()) * map->getTileSize() - map->getTileSize())) {
+		else if ((posPlayer.x + sizePlayer.x + slideOffset.x + speedX) > ((map->getMapSizeX()) * map->getTileSize() - map->getTileSize())) {
 			movingX = false;
-			setSign(speedX, '-');
 		}
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
 		movingX = true;
 		setSign(speedX, '-');
-		if ((slideLogic.x == sizePlayer.x) && (posPlayer.x < map->getTileSize())) {
-			movingX = false;
-			setSign(speedX, '+');
+
+		if ((slideLogic.x == sizePlayer.x)) {
+			if ((posPlayer.x + speedX) < map->getTileSize()) {
+				movingX = false;
+			}
 		}
-		else if ((posPlayer.x - slideOffset.x +1) < map->getTileSize()) {
+		else if ((posPlayer.x - slideOffset.x +speedX) < map->getTileSize()) {
 			movingX = false;
-			setSign(speedX, '+');
 		}
 		
 	}
@@ -96,7 +97,6 @@ void Player::update(int deltaTime)
 		setSign(speedY, '-');
 
 		if (pos2Check < (limit + displacement)) {
-			setSign(speedY, '+');
 			movingY = false;
 		}
 	}
@@ -110,7 +110,6 @@ void Player::update(int deltaTime)
 		setSign(speedY, '+');
 
 		if (base_pixel < tilesize) {
-			setSign(speedY, '-');
 			movingY = false;
 		}
 	}
