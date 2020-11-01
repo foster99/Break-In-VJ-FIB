@@ -75,12 +75,12 @@ private:
 	void toogleChangeBar();
 
 	// Application Scenes
-	GameScene gameScene;				// Scene to render when playing
-	StartMenuScene startMenuScene;		// Scene to render when showing the StartMenu
-	OptionsScene optionsScene;			// Scene to render when showing the Options
-	OptionsScene creditsScene;			// Scene to render when showing the Credits
-	OptionsScene instructionsScene;		// Scene to render when showing the Instructions
-	PasswordScene passwordScene;		// Scene to render when showing the Passwords Menu.
+	GameScene gameScene;				// Scene to renderDynamicTiles when playing
+	StartMenuScene startMenuScene;		// Scene to renderDynamicTiles when showing the StartMenu
+	OptionsScene optionsScene;			// Scene to renderDynamicTiles when showing the Options
+	OptionsScene creditsScene;			// Scene to renderDynamicTiles when showing the Credits
+	OptionsScene instructionsScene;		// Scene to renderDynamicTiles when showing the Instructions
+	PasswordScene passwordScene;		// Scene to renderDynamicTiles when showing the Passwords Menu.
 
 	
 	stack<Mode> modeHist;				// Defines the mode history (startmenu, playing, credits, ...)

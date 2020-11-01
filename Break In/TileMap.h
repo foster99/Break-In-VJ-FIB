@@ -9,10 +9,11 @@
 #include "Texture.h"
 #include "ShaderProgram.h"
 #include "Tile.h"
+#include "Sprite.h"
 
 // Class Tilemap is capable of loading a tile map from a text file in a very
 // simple format (see level01.txt for an example). With this information
-// it builds a single VBO that contains all tiles. As a result the render
+// it builds a single VBO that contains all tiles. As a result the renderDynamicTiles
 // method draws the whole map independently of what is visible.
 
 class TileMap
@@ -26,7 +27,9 @@ public:
 	TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program);
 	~TileMap();
 
-	void render(); 
+	void render();
+	void renderDynamicTiles(glm::mat4 &t);
+
 	void free();
 	
 	int getTileSize() const { return tileSize; }
@@ -43,7 +46,6 @@ public:
 	void loadTile(char c, int i, int j);
 	void loadTextures();
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
-	void prepareDynamicArrays(const glm::vec2& minCoords, ShaderProgram& program);
 
 protected:
 
@@ -63,12 +65,14 @@ protected:
 	static constexpr char outCard		= 'O';
 	static constexpr char blueSpheres	= 'S';
 	
-	GLuint vaoStatic, vaoDynamic;
-	GLuint vboStatic, vboDynamic;
-	GLint staticPosLocation, staticTexCoordLocation, dynamicPosLocation, dynamicTexCoordLocation;
+	GLuint vaoStatic, vboStatic;
+	GLint staticPosLocation, staticTexCoordLocation;
+	bool dynamicLoaded;
 
-	const glm::vec2 *minCoords;
-	ShaderProgram *program;
+	vector<vector<Sprite*>> dynamicTiles;
+
+	glm::vec2 minCoords;
+	ShaderProgram program;
 
 	// TileMap info
 	glm::ivec2 position, mapSize, staticTilesheetSize, dynamicTilesheetSize;

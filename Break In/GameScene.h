@@ -26,7 +26,7 @@ public:
     static constexpr float INIT_PLAYER_Y_TILES = 70;
 
 private:
-    TileMap* staticMap;
+    TileMap* map;
     MenuTileMap* menuMap;
     TileMap *dynamicMap;
     Player* player;

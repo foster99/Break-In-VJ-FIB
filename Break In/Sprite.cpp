@@ -62,7 +62,7 @@ void Sprite::render() const
 	glDisable(GL_TEXTURE_2D);
 }
 
-void Sprite::render(glm::mat4& displacement_mat)
+void Sprite::render(const glm::mat4& displacement_mat)
 {
 	glm::mat4 modelview = displacement_mat * glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.f));
 	shaderProgram->setUniformMatrix4f("modelview", modelview);

@@ -63,7 +63,7 @@ bool Ball::update(int deltaTime)
 	return (collisionPlayer);
 }
 
-void Ball::render(glm::mat4& displacement_mat)
+void Ball::render(const glm::mat4& displacement_mat)
 {
 	sprite->render(displacement_mat);
 }

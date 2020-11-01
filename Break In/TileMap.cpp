@@ -18,13 +18,12 @@ TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords_, ShaderPro
 	bankID = 1;
 	loadLevel(levelFile);
 	loadTextures();
+	dynamicLoaded = false;
 
-	minCoords = &minCoords_;
-	program = &program_;
+	minCoords = minCoords_;
+	program = program_;
 
-	prepareArrays((*minCoords), (*program));
-
-	prepareDynamicArrays((*minCoords), (*program));
+	prepareArrays(minCoords, program);
 }
 
 TileMap::~TileMap()
@@ -41,22 +40,11 @@ void TileMap::render()
 	glEnableVertexAttribArray(staticTexCoordLocation);
 	glDrawArrays(GL_TRIANGLES, 0, 6 * mapSize.x * mapSize.y);
 	glDisable(GL_TEXTURE_2D);
-
-
-	prepareDynamicArrays((*minCoords), (*program));
-	glEnable(GL_TEXTURE_2D);
-	dynamicTilesheet.use();
-	glBindVertexArray(vaoDynamic);
-	glEnableVertexAttribArray(dynamicPosLocation);
-	glEnableVertexAttribArray(dynamicTexCoordLocation);
-	glDrawArrays(GL_TRIANGLES, 0, 6 * mapSize.x * mapSize.y);
-	glDisable(GL_TEXTURE_2D);
 }
 
 void TileMap::free()
 {
 	glDeleteBuffers(1, &vboStatic);
-	glDeleteBuffers(1, &vboDynamic);
 }
 
 bool TileMap::loadLevel(const string &levelFile)
@@ -199,62 +187,42 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 	staticTexCoordLocation = program.bindVertexAttribute("texCoord", 2, 4*sizeof(float), (void *)(2*sizeof(float)));
 }
 
-void TileMap::prepareDynamicArrays(const glm::vec2& minCoords, ShaderProgram& program)
+void TileMap::renderDynamicTiles(glm::mat4 &transmat)
 {
 	Tile tile;
-	int nTiles = 0;
-	glm::vec2 posTile, texCoordTile[2];
-	vector<float> vertices;
 
-	for (int i = 0; i < mapSize.y; i++)
-	{
-		for (int j = 0; j < mapSize.x; j++)
-		{
-			tile = mapita[i][j];
+	// CREATE SPRITES (IF NOT CREATED)
+	if (true) {
 
-			if (tile.type == Tile::dynamicTile) {
+		dynamicTiles = vector<vector<Sprite*>>(mapSize.y, vector<Sprite*>(mapSize.x));
 
-				// Non-empty tile
-				nTiles++;
-				posTile = glm::vec2(minCoords.x + j * tileSize,
-									minCoords.y + i * tileSize);
+		for (int i = 0; i < mapSize.y; i++) {
+			for (int j = 0; j < mapSize.x; j++) {
+				if (mapita[i][j].type == Tile::dynamicTile) {
+					dynamicTiles[i][j] = Sprite::createSprite(glm::vec2(tileSize), glm::vec2(1.f / dynamicTilesheetSize.x, 1.f / dynamicTilesheetSize.y), &dynamicTilesheet, &program);
+					dynamicTiles[i][j]->setNumberAnimations(64);
+					for (int i_ = 0; i_ < 4; ++i_)
+						for (int j_ = 0; j_ < 16; ++j_)
+							dynamicTiles[i][j]->addKeyframe(16 * i_ + j_, glm::vec2(float(j_) / float(dynamicTilesheetSize.x), float(i_) / float(dynamicTilesheetSize.y)));
 
-
-				texCoordTile[0] = glm::vec2(float((tile.id) % dynamicTilesheetSize.x) / dynamicTilesheetSize.x,
-					float((tile.id) / dynamicTilesheetSize.x) / dynamicTilesheetSize.y);
-				texCoordTile[1] = texCoordTile[0] + dynamicTileTexSize;
-
-				// First triangle
-				vertices.push_back(posTile.x);				vertices.push_back(posTile.y);
-				vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[0].y);
-
-				vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y);
-				vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[0].y);
-
-				vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y + blockSize);
-				vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[1].y);
-
-
-				// Second triangle
-				vertices.push_back(posTile.x);				vertices.push_back(posTile.y);
-				vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[0].y);
-
-				vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y + blockSize);
-				vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[1].y);
-
-				vertices.push_back(posTile.x);				vertices.push_back(posTile.y + blockSize);
-				vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[1].y);
+					dynamicTiles[i][j]->changeAnimation(mapita[i][j].id);
+					dynamicTiles[i][j]->setPosition(glm::vec2(float(int(minCoords.x) + tileSize * j), float(int(minCoords.y) + tileSize * i)));
+				}
+			}
+		}
+		dynamicLoaded = true;
+	}
+	
+	// UPDATE AND RENDER
+	for (int i = 0; i < mapSize.y; i++) {
+		for (int j = 0; j < mapSize.x; j++) {
+			if (mapita[i][j].type == Tile::dynamicTile) {
+				//dynamicTiles[i][j]->changeAnimation(mapita[i][j].id);
+				dynamicTiles[i][j]->render(transmat);
 			}
 		}
 	}
 
-	glGenVertexArrays(1, &vaoDynamic);
-	glBindVertexArray(vaoDynamic);
-	glGenBuffers(1, &vboDynamic);
-	glBindBuffer(GL_ARRAY_BUFFER, vboDynamic);
-	glBufferData(GL_ARRAY_BUFFER, 24 * nTiles * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-	dynamicPosLocation = program.bindVertexAttribute("position", 2, 4 * sizeof(float), 0);
-	dynamicTexCoordLocation = program.bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 }
 
 bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speed) 

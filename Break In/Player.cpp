@@ -123,7 +123,7 @@ void Player::update(int deltaTime)
 	slide->setPosition((glm::vec2) tileMapDispl - (glm::vec2) slideOffset + posPlayer);
 }
 
-void Player::render(glm::mat4& displacement_mat)
+void Player::render(const glm::mat4& displacement_mat)
 {
 	slide->render(displacement_mat);
 	sprite->render(displacement_mat);

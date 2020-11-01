@@ -9,7 +9,7 @@ public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime);
 
-	void render(glm::mat4& displacement_mat);
+	void render(const glm::mat4& displacement_mat);
 	
 	glm::ivec2 getLogicSize();
 

@@ -31,7 +31,7 @@ void Slide::update(int deltaTime)
 }
 
 
-void Slide::render(glm::mat4& displacement_mat)
+void Slide::render(const glm::mat4& displacement_mat)
 {
 	sprite->render(displacement_mat);
 }

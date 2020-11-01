@@ -27,7 +27,7 @@ void GameScene::init() {
 	tiles_displacement = 0;
 	godMode = false;
 
-	staticMap = TileMap::createTileMap("levels/no_path_test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap("levels/no_path_test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	
 
 	menuMap = MenuTileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -41,15 +41,15 @@ void GameScene::init() {
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * staticMap->getTileSize(), INIT_PLAYER_Y_TILES * staticMap->getTileSize()));
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTilesDisplacement(0);
 	player->setRoom(room);
-	player->setTileMap(staticMap);
+	player->setTileMap(map);
 
 	ball = new Ball();
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES * staticMap->getTileSize(), INIT_PLAYER_Y_TILES * staticMap->getTileSize()));
-	ball->setTileMap(staticMap);
+	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	ball->setTileMap(map);
 	ball->setPlayer(player);
 }
 
@@ -95,21 +95,20 @@ void GameScene::update(int deltaTime) {
 
 	player->setRoom(room);
 	player->setTilesDisplacement(tiles_displacement);
+
 	displacement_mat = glm::translate(glm::mat4(1.f), glm::vec3(0.f, float(tiles_displacement *8), 0.f));
 }
 
 void GameScene::render()
 {
-	
+	// renderDynamicTiles Static
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	texProgram.setUniformMatrix4f("modelview", displacement_mat);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+	map->render();					
 
-	staticMap->render();
-	player->render(displacement_mat);
-	ball->render(displacement_mat);
 
 	// Render Lateral Menu
 	glm::mat4 menu_modelview = glm::translate(glm::mat4(1.f), glm::vec3(192.f, 0.f, 0.f));
@@ -119,6 +118,11 @@ void GameScene::render()
 	texProgram.setUniformMatrix4f("modelview", menu_modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	menuMap->render();
+
+	// sprites
+	map->renderDynamicTiles(displacement_mat);	// renderDynamicTiles Dynamic
+	player->render(displacement_mat);
+	ball->render(displacement_mat);
 }
 
 void GameScene::toogleChangeBar()
