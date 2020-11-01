@@ -19,12 +19,12 @@ TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords_, ShaderPro
 	loadLevel(levelFile);
 	loadTextures();
 
-	minCoords = &minCoords_;
-	program = &program_;
+	minCoords = minCoords_;
+	program = program_;
 
-	prepareArrays((*minCoords), (*program));
-
-	prepareDynamicArrays((*minCoords), (*program));
+	prepareArrays(minCoords, program);
+	firstDynamic = true;
+	prepareDynamicArrays();
 }
 
 TileMap::~TileMap()
@@ -43,7 +43,6 @@ void TileMap::render()
 	glDisable(GL_TEXTURE_2D);
 
 
-	prepareDynamicArrays((*minCoords), (*program));
 	glEnable(GL_TEXTURE_2D);
 	dynamicTilesheet.use();
 	glBindVertexArray(vaoDynamic);
@@ -190,6 +189,7 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 		}
 	}
 
+	
 	glGenVertexArrays(1, &vaoStatic);
 	glBindVertexArray(vaoStatic);
 	glGenBuffers(1, &vboStatic);
@@ -199,7 +199,7 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 	staticTexCoordLocation = program.bindVertexAttribute("texCoord", 2, 4*sizeof(float), (void *)(2*sizeof(float)));
 }
 
-void TileMap::prepareDynamicArrays(const glm::vec2& minCoords, ShaderProgram& program)
+void TileMap::prepareDynamicArrays()
 {
 	Tile tile;
 	int nTiles = 0;
@@ -247,14 +247,20 @@ void TileMap::prepareDynamicArrays(const glm::vec2& minCoords, ShaderProgram& pr
 			}
 		}
 	}
-
-	glGenVertexArrays(1, &vaoDynamic);
+	if (firstDynamic)
+		glGenVertexArrays(1, &vaoDynamic);
+	
 	glBindVertexArray(vaoDynamic);
-	glGenBuffers(1, &vboDynamic);
+	
+	if (firstDynamic)
+		glGenBuffers(1, &vboDynamic);
 	glBindBuffer(GL_ARRAY_BUFFER, vboDynamic);
 	glBufferData(GL_ARRAY_BUFFER, 24 * nTiles * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-	dynamicPosLocation = program.bindVertexAttribute("position", 2, 4 * sizeof(float), 0);
-	dynamicTexCoordLocation = program.bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	if (firstDynamic) {
+		dynamicPosLocation = program.bindVertexAttribute("position", 2, 4 * sizeof(float), 0);
+		dynamicTexCoordLocation = program.bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	}	
+	firstDynamic = false;
 }
 
 bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speed) 

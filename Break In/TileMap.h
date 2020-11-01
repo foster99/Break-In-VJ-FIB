@@ -43,7 +43,7 @@ public:
 	void loadTile(char c, int i, int j);
 	void loadTextures();
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
-	void prepareDynamicArrays(const glm::vec2& minCoords, ShaderProgram& program);
+	void prepareDynamicArrays();
 
 protected:
 
@@ -67,15 +67,15 @@ protected:
 	GLuint vboStatic, vboDynamic;
 	GLint staticPosLocation, staticTexCoordLocation, dynamicPosLocation, dynamicTexCoordLocation;
 
-	const glm::vec2 *minCoords;
-	ShaderProgram *program;
+	glm::vec2 minCoords;
+	ShaderProgram program;
 
 	// TileMap info
 	glm::ivec2 position, mapSize, staticTilesheetSize, dynamicTilesheetSize;
 	int tileSize, blockSize;
 	Texture staticTilesheet, dynamicTilesheet;
 	glm::vec2 staticTileTexSize, dynamicTileTexSize;
-
+	bool firstDynamic;
 	// Bank info
 	int bankID, Nrooms;
 	vector<vector<Tile>> mapita;

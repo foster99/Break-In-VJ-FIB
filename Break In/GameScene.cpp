@@ -71,9 +71,9 @@ void GameScene::update(int deltaTime) {
 		if (points > 1000) {
 			menuMap->setLine("AII LMAO", "4POGGERS");
 		}
+
+		staticMap->prepareDynamicArrays();
 	}
-
-
 
 	// Modify tiles displacement
 
@@ -106,7 +106,7 @@ void GameScene::render()
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	texProgram.setUniformMatrix4f("modelview", displacement_mat);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-
+	
 	staticMap->render();
 	player->render(displacement_mat);
 	ball->render(displacement_mat);

@@ -298,8 +298,8 @@ string MenuTileMap::intToStringOfNDigits(int i, int Ndigits)
 	ss << std::setw(Ndigits) << std::setfill('0') << i;
 	string s = ss.str();
 
-	if (s.length() > unsigned int(Ndigits))
-		throw "EL NUMERO TIENE MAS DIGITOS DE LOS SOLICITADOS!!";
+	/*if (s.length() > unsigned int(Ndigits))
+		throw "EL NUMERO TIENE MAS DIGITOS DE LOS SOLICITADOS!!";*/
 
 	return s;
 }
