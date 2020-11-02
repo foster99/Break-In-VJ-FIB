@@ -20,7 +20,7 @@ void Game::init()
 	instructionsScene.init(); 
 
 	// Set options scene textures
-	creditsScene.setTexture("images/bricks.png");
+	creditsScene.setTexture("images/credits_screen.png");
 	instructionsScene.setTexture("images/bank_items.png");
 	optionsScene.setTexture("images/options_screen.png");
 }
