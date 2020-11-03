@@ -204,10 +204,16 @@
     <Text Include="levels\leveltest.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
-    <Text Include="levels\no_path_test.txt">
+    <Text Include="levels\menu.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
-    <Text Include="levels\menu.txt">
+    <Text Include="levels\BANK_01.txt">
+      <Filter>Resource Files\levels</Filter>
+    </Text>
+    <Text Include="levels\BANK_02.txt">
+      <Filter>Resource Files\levels</Filter>
+    </Text>
+    <Text Include="levels\BANK_01_test.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
   </ItemGroup>

@@ -66,10 +66,12 @@
     <Media Include="sounds\tueeeeeeeeee.wav" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="levels\BANK_01_test.txt" />
+    <Text Include="levels\BANK_02.txt" />
     <Text Include="levels\level01.txt" />
     <Text Include="levels\leveltest.txt" />
     <Text Include="levels\menu.txt" />
-    <Text Include="levels\no_path_test.txt" />
+    <Text Include="levels\BANK_01.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\ball.png" />
