@@ -1,5 +1,7 @@
 #include "Game.h"
 
+Game::Game() {}
+
 void Game::init()
 {
 	modeHist.push(startMenu);
@@ -27,9 +29,19 @@ void Game::init()
 
 void Game::loadSounds()
 {
+	title_song = Sound("title_song.wav", true);
+
+
+	brick_sound = Sound("brick_collision.wav", false);
+	slide_sound = Sound("player_collision.wav", false);
+	doubleSlide_sound = Sound("double_slide.wav", false);
+	bonus_sound = Sound("bonus.wav", false);
+	loseLife_sound = Sound("lose_live.wav", false);
+	blast_sound = Sound("blast.wav", false);
+
+
 	//ball_sound = Sound("tueeeeeeeeee.wav", false);
 	ball_sound = Sound("ball.wav", false);
-	title_song = Sound("title_song.wav", true);
 }
 
 bool Game::update(int deltaTime)
@@ -199,6 +211,36 @@ bool Game::getSpecialKey(int key) const
 void Game::playBallSound()
 {
 	ball_sound.play();
+}
+
+void Game::playBrickSound()
+{
+	brick_sound.play();
+}
+
+void Game::playBonusSound()
+{
+	bonus_sound.play();
+}
+
+void Game::playPlayerSound()
+{
+	slide_sound.play();
+}
+
+void Game::playDoubleSlideSound()
+{
+	doubleSlide_sound.play();
+}
+
+void Game::playLoseLiveSound()
+{
+	loseLife_sound.play();
+}
+
+void Game::playBlastSound()
+{
+	blast_sound.play();
 }
 
 void Game::playTitleSong()

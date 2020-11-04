@@ -85,6 +85,11 @@ void Tile::loadTile(char tile, int i, int j, int bank, int tileSheetSizeX)
 		resistance = infinity;
 		type = staticTile;
 		break;
+	case death:
+		id = -1;
+		resistance = 0;
+		type = staticTile;
+		break;
 
 	default:
 		id = tileSheetSizeX + 2 * (bank - 1) + ((j + 1) % 2) + tileSheetSizeX * ((i + 1) % 2);
@@ -93,11 +98,17 @@ void Tile::loadTile(char tile, int i, int j, int bank, int tileSheetSizeX)
 		break;
 	}
 
+	background_id = tileSheetSizeX + 2 * (bank - 1) + ((j + 1) % 2) + tileSheetSizeX * ((i + 1) % 2);
 	symbol = tile;
 }
 
 void Tile::loadMenuTile(char tile, int i, int j, int bank)
 {
+	background_id = 0;
+	resistance = infinity;
+	type = menuTile;
+	symbol = tile;
+
 	switch (tile)
 	{
 	case ' ':	id =  0;	break;
@@ -143,7 +154,4 @@ void Tile::loadMenuTile(char tile, int i, int j, int bank)
 	default:	throw "Caracter en la zona del menu no esperado !!"; break;
 	}
 
-	resistance = infinity;
-	type = menuTile;
-	symbol = tile;
 }

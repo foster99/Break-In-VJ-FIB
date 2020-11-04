@@ -18,6 +18,10 @@ public:
 	void setPlayer(Player* pla);
 	void setPosition(const glm::vec2& pos);
 	glm::vec2 getPosition();
+	glm::ivec2 getPositionInTiles();
+	glm::ivec2 getBasePositionInTiles();
+
+	int getBallSize();
 
 private:
 	glm::ivec2 tileMapDispl;

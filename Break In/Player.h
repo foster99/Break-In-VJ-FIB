@@ -22,6 +22,7 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2& pos);
 	void setTilesDisplacement(int t);
+	void setDeathAnimation(bool b);
 	void setRoom(int room);
 	void toogleChangeBar();
 
@@ -31,8 +32,8 @@ public:
 
 	
 private:
-	bool movingX, movingY;
-	int tiles_displacement, actRoom;
+	bool movingX, movingY, deathAnimation;
+	int tiles_displacement, actRoom, animation;
 	glm::ivec2 tileMapDispl, sizePlayer, slideOffset;
 	glm::vec2 posPlayer, displ_posPlayer;
 	int jumpAngle, startYs, speedX, speedY, slideOffsetY, slideOffsetX;

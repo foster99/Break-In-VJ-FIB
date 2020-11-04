@@ -22,20 +22,22 @@ public:
     void toggleGodMode();
     void toogleChangeBar();
 
-    bool playerLosesLife();
+    void playerLosesLife();
+    void gameOver();
     bool ballOnDoor();
+    bool lastBallisDead();
 
     static constexpr float INIT_PLAYER_X_TILES = 12;
     static constexpr float INIT_PLAYER_Y_TILES = 60;
 
 private:
-    TileMap* staticMap;
+    TileMap* map;
     MenuTileMap* menuMap;
     TileMap *dynamicMap;
     Player* player;
     Ball* ball;
 
-    bool godMode, scroll;
+    bool godMode, scrolling, alive;
     int stride, end;
 
     int points, money, bank, room, room_old, lives;

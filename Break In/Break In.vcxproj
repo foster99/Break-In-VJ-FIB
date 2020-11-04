@@ -62,6 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Media Include="sounds\bell.wav" />
+    <Media Include="sounds\blast.wav" />
+    <Media Include="sounds\bonus.wav" />
+    <Media Include="sounds\brick_collision.wav" />
+    <Media Include="sounds\double_slide.wav" />
+    <Media Include="sounds\lose_live.wav" />
+    <Media Include="sounds\player_collision.wav" />
     <Media Include="sounds\title_song.wav" />
     <Media Include="sounds\tueeeeeeeeee.wav" />
   </ItemGroup>

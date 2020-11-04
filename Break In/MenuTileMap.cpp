@@ -11,12 +11,16 @@ MenuTileMap* MenuTileMap::createTileMap(const string& levelFile, const glm::vec2
 
 MenuTileMap::MenuTileMap()
 {
+	// INITIALIZATIONS
+	line1 = line2 = money = points = lives = room = bank = "";
+	mod_line = mod_money = mod_points = mod_lives = mod_room = mod_bank = false;
+	moneyCoords = pointsCoords = livesCoords = bankCoords = line1Coords = line2Coords = roomCoords = glm::ivec3(0);
 
 }
 
 void MenuTileMap::prepareCounters(vector<Sprite*> &quads, glm::ivec3 &coords, const glm::vec2& minCoords, ShaderProgram& program)
 {
-	for (int digit = 0; digit < quads.size(); ++digit) {
+	for (int digit = 0; (unsigned int) digit < quads.size(); ++digit) {
 
 		Sprite*& sprite = quads[digit];
 		sprite = Sprite::createSprite(glm::ivec2(tileSize), glm::vec2(1.f / 10.f, 1.f), &digits, &program);
@@ -41,11 +45,14 @@ void MenuTileMap::prepareCounters(vector<Sprite*> &quads, glm::ivec3 &coords, co
 
 }
 
-MenuTileMap::MenuTileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program)
+MenuTileMap::MenuTileMap(const string& levelFile, const glm::vec2& minCoords_, ShaderProgram& program_)
 {
 	bankID = 0;
 	digits.loadFromFile("images/digits.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	chars.loadFromFile("images/chars.png", TEXTURE_PIXEL_FORMAT_RGBA);
+
+	minCoords = minCoords_;
+	program = program_;
 
 	loadLevel(levelFile);
 
@@ -66,7 +73,7 @@ MenuTileMap::MenuTileMap(const string& levelFile, const glm::vec2& minCoords, Sh
 	
 	line1Quads = vector<Sprite*>(line1Coords.z, NULL);
 	line2Quads = vector<Sprite*>(line2Coords.z, NULL);
-	for (int digit = 0; digit < line1Quads.size(); ++digit) {
+	for (int digit = 0; (unsigned int) digit < line1Quads.size(); ++digit) {
 
 		Sprite*& sprite1 = line1Quads[digit];
 		Sprite*& sprite2 = line2Quads[digit];
@@ -177,8 +184,8 @@ MenuTileMap::MenuTileMap(const string& levelFile, const glm::vec2& minCoords, Sh
 	setLine("........", "........");
 
 	TileMap::loadTextures();
-	prepareArrays(minCoords, program);
-	//renderModifications(minCoords, program);
+	prepareStaticArrays();
+	renderModifications();
 }
 
 MenuTileMap::~MenuTileMap()
@@ -385,7 +392,7 @@ void MenuTileMap::renderModifications()
 
 void MenuTileMap::updateMoney()
 {
-	for (int digit = 0; digit < moneyQuads.size(); ++digit) {
+	for (int digit = 0; (unsigned int) digit < moneyQuads.size(); ++digit) {
 
 		Sprite*& sprite = moneyQuads[moneyCoords.z - 1 - digit];
 		sprite->changeAnimation(money[digit] - '0');
@@ -394,7 +401,7 @@ void MenuTileMap::updateMoney()
 
 void MenuTileMap::updateLine()
 {
-	for (int character = 0; character < line1.size(); ++character) {
+	for (int character = 0; (unsigned int) character < line1.size(); ++character) {
 
 		Sprite*& sprite = line1Quads[line1Coords.z - 1 - character];
 		
@@ -444,7 +451,7 @@ void MenuTileMap::updateLine()
 		}
 	}
 
-	for (int character = 0; character < line2.size(); ++character) {
+	for (int character = 0; (unsigned int) character < line2.size(); ++character) {
 
 		Sprite*& sprite = line2Quads[line2Coords.z - 1 - character];
 
@@ -497,7 +504,7 @@ void MenuTileMap::updateLine()
 
 void MenuTileMap::updatePoints()
 {
-	for (int digit = 0; digit < pointsQuads.size(); ++digit) {
+	for (int digit = 0; (unsigned int) digit < pointsQuads.size(); ++digit) {
 
 		Sprite*& sprite = pointsQuads[pointsCoords.z - 1 - digit];
 		sprite->changeAnimation(points[digit] - '0');
@@ -506,7 +513,7 @@ void MenuTileMap::updatePoints()
 
 void MenuTileMap::updateLives()
 {
-	for (int digit = 0; digit < livesQuads.size(); ++digit) {
+	for (int digit = 0; (unsigned int) digit < livesQuads.size(); ++digit) {
 
 		Sprite*& sprite = livesQuads[livesCoords.z - 1 - digit];
 		sprite->changeAnimation(lives[digit] - '0');
@@ -515,7 +522,7 @@ void MenuTileMap::updateLives()
 
 void MenuTileMap::updateRoom()
 {
-	for (int digit = 0; digit < roomQuads.size(); ++digit) {
+	for (int digit = 0; (unsigned int) digit < roomQuads.size(); ++digit) {
 
 		Sprite*& sprite = roomQuads[roomCoords.z - 1 - digit];
 		sprite->changeAnimation(room[digit] - '0');
@@ -524,7 +531,7 @@ void MenuTileMap::updateRoom()
 
 void MenuTileMap::updateBank()
 {
-	for (int digit = 0; digit < bankQuads.size(); ++digit) {
+	for (int digit = 0; (unsigned int) digit < bankQuads.size(); ++digit) {
 
 		Sprite*& sprite = bankQuads[bankCoords.z - 1 - digit];
 		sprite->changeAnimation(bank[digit] - '0');

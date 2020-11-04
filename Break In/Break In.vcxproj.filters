@@ -196,6 +196,24 @@
     <Media Include="sounds\tueeeeeeeeee.wav">
       <Filter>Resource Files\sound</Filter>
     </Media>
+    <Media Include="sounds\blast.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\bonus.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\brick_collision.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\double_slide.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\lose_live.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\player_collision.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <Text Include="levels\level01.txt">

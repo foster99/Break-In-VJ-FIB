@@ -12,6 +12,7 @@ public:
 	void loadMenuTile(char c, int i, int j, int bank);
 
 	int id = 0;
+	int background_id;
 	char symbol;
 	int type = staticTile;
 	int resistance = infinity;
@@ -25,6 +26,7 @@ public:
 	// Static tiles
 	static constexpr char wall = '*';
 	static constexpr char black = '#';
+	static constexpr char death = 'X';
 
 	// Dynamic Tiles
 	static constexpr char brickRed = 'R';

@@ -22,7 +22,7 @@ TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords_, ShaderPro
 	minCoords = minCoords_;
 	program = program_;
 
-	prepareArrays(minCoords, program);
+	prepareStaticArrays();
 	firstDynamic = true;
 	prepareDynamicArrays();
 }
@@ -98,7 +98,7 @@ bool TileMap::loadLevel(const string &levelFile)
 	sstream >> bankID;
 
 	// LEER MAPA
-	mapita = vector<vector<Tile>> (mapSize.y, vector<Tile> (mapSize.x));
+	mapita = vector<vector<Tile>> (mapSize.y + 1, vector<Tile> (mapSize.x));
 
 	for (int i = 0; i < mapSize.y; i++){
 		for (int j = 0; j < mapSize.x; j++){
@@ -112,6 +112,9 @@ bool TileMap::loadLevel(const string &levelFile)
 	}
 	fin.close();
 
+	for (int i = mapSize.y, j = 0; j < mapSize.x; j++) 
+		loadTile(Tile::death, i, j);
+	
 	return true;
 }
 
@@ -137,9 +140,9 @@ void TileMap::loadTextures()
 	dynamicTilesheet.setMagFilter(GL_NEAREST);
 }
 
-void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
+void TileMap::prepareStaticArrays()
 {
-	Tile tile;
+	int id;
 	int nTiles = 0;
 	glm::vec2 posTile, texCoordTile[2], halfTexel;
 	vector<float> vertices;
@@ -148,44 +151,50 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 	{
 		for(int j=0; j<(mapSize.x); j++)
 		{
-			tile = mapita[i][j];
-
-			if (tile.type == Tile::staticTile || tile.type == Tile::menuTile) {
-			
-				// Non-empty tile
-				nTiles++;
-				posTile = glm::vec2(minCoords.x + j * tileSize,
-									minCoords.y + i * tileSize);
-
-				texCoordTile[0] = glm::vec2(float((tile.id) % staticTilesheetSize.x) / staticTilesheetSize.x,
-											float((tile.id) / staticTilesheetSize.x) / staticTilesheetSize.y);
-				texCoordTile[1] = texCoordTile[0] + staticTileTexSize;
-
-				//texCoordTile[0] += halfTexel;
-				//texCoordTile[1] -= halfTexel;
-				
-
-				// First triangle
-				vertices.push_back(posTile.x);				vertices.push_back(posTile.y);
-				vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[0].y);
-
-				vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y);
-				vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[0].y);
-
-				vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y + blockSize);
-				vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[1].y);
-				
-				
-				// Second triangle
-				vertices.push_back(posTile.x);				vertices.push_back(posTile.y);
-				vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[0].y);
-
-				vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y + blockSize);
-				vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[1].y);
-
-				vertices.push_back(posTile.x);				vertices.push_back(posTile.y + blockSize);
-				vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[1].y);
+			id = -1;
+			switch (mapita[i][j].type) {
+				case Tile::staticTile:	
+				case Tile::menuTile:	id = mapita[i][j].id; break;
+				case Tile::dynamicTile: id = mapita[i][j].background_id; break;
+				case Tile::none:		break;
 			}
+
+			if (id < 0)
+				continue;
+			
+			// Non-empty tile
+			nTiles++;
+			posTile = glm::vec2(minCoords.x + j * tileSize,
+				minCoords.y + i * tileSize);
+
+			texCoordTile[0] = glm::vec2(float((id) % staticTilesheetSize.x) / staticTilesheetSize.x,
+				float((id) / staticTilesheetSize.x) / staticTilesheetSize.y);
+			texCoordTile[1] = texCoordTile[0] + staticTileTexSize;
+
+			//texCoordTile[0] += halfTexel;
+			//texCoordTile[1] -= halfTexel;
+
+
+			// First triangle
+			vertices.push_back(posTile.x);				vertices.push_back(posTile.y);
+			vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[0].y);
+
+			vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y);
+			vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[0].y);
+
+			vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y + blockSize);
+			vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[1].y);
+
+
+			// Second triangle
+			vertices.push_back(posTile.x);				vertices.push_back(posTile.y);
+			vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[0].y);
+
+			vertices.push_back(posTile.x + blockSize);	vertices.push_back(posTile.y + blockSize);
+			vertices.push_back(texCoordTile[1].x);		vertices.push_back(texCoordTile[1].y);
+
+			vertices.push_back(posTile.x);				vertices.push_back(posTile.y + blockSize);
+			vertices.push_back(texCoordTile[0].x);		vertices.push_back(texCoordTile[1].y);
 		}
 	}
 
@@ -368,16 +377,54 @@ bool TileMap::tileIsSolid(int i, int j)
 	return mapita[i][j].resistance != 0;
 }
 
+bool TileMap::tileIsKey(int i, int j) {
 
-bool outOfRangeLeft(int c)	{ return  c < 1; }
-bool outOfRangeRight(int c) { return 23 < c; }
-bool outOfRangeUp(int c)	{ return  c < 1; }
-bool outOfRangeDown(int c)	{ return 23 < c; }
+	return (mapita[i][j].symbol == Tile::key);
+}
 
+bool TileMap::tileIsDeath(int i, int j)
+{
 
+	return (mapita[i][j].symbol == Tile::death);
+}
 
+void TileMap::deleteKey(int i, int j) {
 
+	Tile& me		= mapita[  i  ][  j  ];
+	Tile& up		= mapita[i - 1][  j  ];
+	Tile& down		= mapita[i + 1][  j  ];
+	Tile& left		= mapita[  i  ][j - 1];
+	Tile& right		= mapita[  i  ][j + 1];
+	Tile& top_left	= mapita[i - 1][j - 1];
+	Tile& top_right	= mapita[i - 1][j + 1];
+	Tile& bot_left	= mapita[i + 1][j - 1];
+	Tile& bot_right	= mapita[i + 1][j + 1];
 
+	if (top_left.symbol == Tile::key) {
+		top_left.loadTile(' ', i - 1, j - 1, bankID, dynamicTilesheetSize.x);
+		      up.loadTile(' ', i - 1,     j, bankID, dynamicTilesheetSize.x);
+		    left.loadTile(' ',     i, j - 1, bankID, dynamicTilesheetSize.x);
+			  me.loadTile(' ',     i,     j, bankID, dynamicTilesheetSize.x);
+	}
+	else if (top_right.symbol == Tile::key) {
+		top_right.loadTile(' ', i - 1, j + 1, bankID, dynamicTilesheetSize.x);
+		       up.loadTile(' ', i - 1,     j, bankID, dynamicTilesheetSize.x);
+		    right.loadTile(' ',     i, j + 1, bankID, dynamicTilesheetSize.x);
+		       me.loadTile(' ',     i,     j, bankID, dynamicTilesheetSize.x);
+	}
+	else if (bot_left.symbol == Tile::key) {
+		 bot_left.loadTile(' ', i + 1, j - 1, bankID, dynamicTilesheetSize.x);
+		     down.loadTile(' ', i + 1,     j, bankID, dynamicTilesheetSize.x);
+		     left.loadTile(' ',     i, j - 1, bankID, dynamicTilesheetSize.x);
+		       me.loadTile(' ',     i,     j, bankID, dynamicTilesheetSize.x);
+	}
+	else if (bot_right.symbol == Tile::key) {
+		bot_right.loadTile(' ', i + 1, j + 1, bankID, dynamicTilesheetSize.x);
+		     down.loadTile(' ', i + 1,     j, bankID, dynamicTilesheetSize.x);
+		    right.loadTile(' ',     i, j + 1, bankID, dynamicTilesheetSize.x);
+		       me.loadTile(' ',     i,     j, bankID, dynamicTilesheetSize.x);
+	}
+}
 
 
 

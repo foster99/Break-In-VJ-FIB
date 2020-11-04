@@ -39,10 +39,15 @@ public:
 	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speedOg, float& modifierY);
 
 	bool tileIsSolid(int i, int j);
+	bool tileIsKey(int i, int j);
+	bool tileIsDeath(int i, int j);
+
+	void deleteKey(int i, int j);
+
 	bool loadLevel(const string &levelFile);
 	void loadTile(char c, int i, int j);
 	void loadTextures();
-	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
+	void prepareStaticArrays();
 	void prepareDynamicArrays();
 
 protected:

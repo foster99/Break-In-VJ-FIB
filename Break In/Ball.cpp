@@ -28,7 +28,7 @@ bool Ball::update(int deltaTime)
 	bool collisionX = false;
 	bool collisionPlayer = false;
 
-	if (collisionPlayer = (spdModifierY > 0 && player->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, speed, spdModifierY, spdModifierX))) {
+	if (collisionPlayer = (spdModifierY > 0 && player->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int) speed, spdModifierY, spdModifierX))) {
 		spdModifierY *= -1;
 	}
 	else if (collisionPlayer = (spdModifierY > 0 && spdModifierX > 0 && player->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
@@ -38,19 +38,24 @@ bool Ball::update(int deltaTime)
 		spdModifierX *= -1;
 	}
 	
-	if (!collisionPlayer) {
-		if (collisionY = (spdModifierY > 0 && map->collisionMoveDown( posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, speed, spdModifierY)))
+	if (!collisionPlayer)
+	{
+		if (collisionY = (spdModifierY > 0 && map->collisionMoveDown( posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int) speed, spdModifierY)))
 			spdModifierY *= -1;
-		else if (collisionY = (spdModifierY < 0 && map->collisionMoveUp(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, speed, spdModifierY)))
+		else if (collisionY = (spdModifierY < 0 && map->collisionMoveUp(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int) speed, spdModifierY)))
 			spdModifierY *= -1;
 
-		if (collisionX = (spdModifierX > 0 && map->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, speed, spdModifierX)))
+		if (collisionX = (spdModifierX > 0 && map->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, (int) speed, spdModifierX)))
 			spdModifierX *= -1;
-		else if (collisionX = (spdModifierX < 0 && map->collisionMoveLeft( posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, speed, spdModifierX)))
+		else if (collisionX = (spdModifierX < 0 && map->collisionMoveLeft( posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, (int) speed, spdModifierX)))
 			spdModifierX *= -1;
 	}
 	
-	if (collisionX || collisionY || collisionPlayer) Game::instance().playBallSound();
+	// SOUNDS
+	if (collisionX || collisionY)
+		Game::instance().playBrickSound();
+	else if (collisionPlayer)
+		Game::instance().playPlayerSound();
 
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
@@ -95,4 +100,19 @@ void Ball::setPosition(const glm::vec2& pos)
 glm::vec2 Ball::getPosition()
 {
 	return posBall;
+}
+
+glm::ivec2 Ball::getPositionInTiles()
+{
+	return glm::ivec2(posBall.x/map->getTileSize(), posBall.y / map->getTileSize());
+}
+
+glm::ivec2 Ball::getBasePositionInTiles()
+{
+	return glm::ivec2((posBall.x + sizeBall) / map->getTileSize(), (posBall.y + sizeBall) / map->getTileSize());
+}
+
+int Ball::getBallSize()
+{
+	return sizeBall;
 }

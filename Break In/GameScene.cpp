@@ -23,16 +23,18 @@ void GameScene::init() {
 
 	this->Scene::init();
 
+	// Initializations
 	room = 1;
 	room_old = 1;
-	scroll = false;
+	lives = 3;
+	scrolling = false;
 	bank = 1;
 	tiles_displacement = -48;
 	stride = 0;
 	end = 0;
 	godMode = false;
-
-	staticMap = TileMap::createTileMap("levels/BANK_01_test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	alive = true;
+	map = TileMap::createTileMap("levels/BANK_01_test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	
 
 	menuMap = MenuTileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -46,15 +48,15 @@ void GameScene::init() {
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * staticMap->getTileSize(), INIT_PLAYER_Y_TILES * staticMap->getTileSize()));
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTilesDisplacement(0);
 	player->setRoom(room);
-	player->setTileMap(staticMap);
+	player->setTileMap(map);
 
 	ball = new Ball();
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES * staticMap->getTileSize(), INIT_PLAYER_Y_TILES * staticMap->getTileSize()));
-	ball->setTileMap(staticMap);
+	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	ball->setTileMap(map);
 	ball->setPlayer(player);
 }
 
@@ -62,27 +64,42 @@ void GameScene::update(int deltaTime) {
 
 	this->Scene::update(deltaTime);
 
-	if (scroll) {
-		tiles_displacement += stride;
-		scroll = tiles_displacement != end;
+	if (!alive) {
+		auxTime += deltaTime;
+		if (auxTime > 175.f) {
+			auxTime = 0;
+			player->update(deltaTime);
+		}
+		return;
 	}
-	else if (ballOnDoor()) {
-
+	else if (scrolling)
+	{
+		tiles_displacement += stride;
+		scrolling = tiles_displacement != end;
+	}
+	else if (ballOnDoor())
+	{
 		if (room_old < room)		stride = +1;
 		else /*(room_old > room)*/	stride = -1;
 
 		switch (room) {
-		case 1: end = -48; break;
-		case 2: end = -24; break;
-		case 3: end = 0; break;
+		case 1: end = -48;	break;
+		case 2: end = -24;	break;
+		case 3: end = 0;	break;
 		}
 	}
-	else {
-
+	else if (lastBallisDead())
+	{
+		playerLosesLife();
+		player->update(deltaTime);
+	}
+	else
+	{
 		player->update(deltaTime);
 
 		// PILOTA REOTRNA POS EN TILES D'ON IMPACTE glm::ivec2 collisionIn(i,j)
-		if (ball->update(deltaTime)) {
+		if (ball->update(deltaTime))
+		{
 			money += 100;
 			menuMap->setMoney(money);
 
@@ -96,26 +113,41 @@ void GameScene::update(int deltaTime) {
 				menuMap->setLine("AII LMAO", "4POGGERS"); // CAMBIA CON EL BONUS
 			}
 
-			staticMap->prepareDynamicArrays();
+			map->prepareDynamicArrays();
+			//map->prepareStaticArrays();
+		}
+
+		// Test del borrado de llaves
+		glm::ivec2 last_collision_coords = glm::ivec2(0);
+		if (godMode)
+		{
+
+			map->deleteKey(60, 2);
+			godMode = false;
+
+			// SOLO DESAPARESE LA LLAVE CUANDO SE UPDATEA LA PARTE DINAMICA
+			// LA PARTE DINAMICA SE UPDATEA CUANDO LA PELOTA COLISIONA
+
+
 		}
 
 		player->setRoom(room);
 		player->setTilesDisplacement(tiles_displacement);
 	}
+
 	displacement_mat = glm::translate(glm::mat4(1.f), glm::vec3(0.f, float(tiles_displacement *8), 0.f));
 }
 
 void GameScene::render()
 {
-	
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	texProgram.setUniformMatrix4f("modelview", displacement_mat);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	
-	staticMap->render();
-	if (!scroll) player->render(displacement_mat);
+	map->render();
+	if (!scrolling) player->render(displacement_mat);
 	ball->render(displacement_mat);
 
 	// Render Lateral Menu
@@ -133,9 +165,21 @@ void GameScene::toogleChangeBar()
 	player->toogleChangeBar();
 }
 
-bool GameScene::playerLosesLife()
+void GameScene::playerLosesLife()
 {
-	return false;
+	lives -= 1;
+	alive = false;
+
+	if (lives < 0) gameOver();
+	else {
+		menuMap->setLives(lives);
+		player->setDeathAnimation(true);
+		Game::instance().playLoseLiveSound();
+	}
+}
+
+void GameScene::gameOver()
+{
 }
 
 bool GameScene::ballOnDoor()
@@ -155,9 +199,14 @@ bool GameScene::ballOnDoor()
 		menuMap->setRoom(room);
 	}
 
-	scroll = room != room_old;
+	scrolling = room != room_old;
 
-	return scroll;
+	return scrolling;
+}
+
+bool GameScene::lastBallisDead()
+{
+	return map->tileIsDeath((ball->getBasePositionInTiles()).y, (ball->getBasePositionInTiles()).x);
 }
 
 void GameScene::toggleGodMode()

@@ -28,24 +28,24 @@ TILEMAP
 *                      *
 *                      *
 ********        ********
-********DDDDDDDD********
+********        ********
 *                      *
 *                      *
 *                      *
-* GGBBBBGGBBBBGGBBBBGG *
+* GGBB            BBGG *
 *                      *
-* BB    BB    BB    BB *
-*   GGGG        GGGG   *
-* GGRRRR  GGGG  RRRR   *
-* GGKKRR  BBBB  RRYYGG *
-*   KKRR  YYYY  RRYYGG *
-*   YYYY        YYYY   *
-*   BBBB        BBBB   *
-*     GG          GG   *
-*                      *
+* BB                BB *
+*   GG            GG   *
+* GGRR            RR   *
+* GGKK            YYGG *
+*   KK            YYGG *
+*   YY            YY   *
+*   BB            BB   *
 *                      *
 *                      *
-*       ********       *
+*                      *
+*                      *
+*                      *
 *                      *
 *                      *
 *                      *
@@ -64,8 +64,8 @@ TILEMAP
 * GGGG              GG *
 * YYYY              YY *
 * YY                YY *
-*                      *
-*                      *
+* KK                   *
+* KK                   *
 *                      *
 *                      *
 *                      *
@@ -75,5 +75,5 @@ TILEMAP
 * YYYY            YYYY *
 *                      *
 *                      *
-************************
+********        ********
 
