@@ -153,7 +153,11 @@ void GameScene::playerLosesLife()
 	lives -= 1;
 	alive = false;
 
-	if (lives < 0) gameIsOver();
+	if (lives < 0) {
+		player->setDeathAnimation(true);
+		Game::instance().playLoseLiveSound();
+		gameIsOver();
+	}
 	else {
 		menuMap->setLives(lives);
 		player->setDeathAnimation(true);
@@ -243,7 +247,7 @@ void GameScene::restartPlayerBall()
 
 bool GameScene::getGameOver()
 {
-	return gameOver;
+	return !player->getDeathAnimation() && gameOver;
 }
 
 bool GameScene::getWin()
