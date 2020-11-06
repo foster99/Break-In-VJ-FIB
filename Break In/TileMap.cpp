@@ -9,22 +9,23 @@ TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoo
 }
 
 TileMap::TileMap() {
-	bankID = 1;
+	currBank = 1;
 
 }
 
 TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords_, ShaderProgram &program_)
 {
-	bankID = 1;
+	currBank = 1;
 	loadLevel(levelFile);
 	loadTextures();
 
 	minCoords = minCoords_;
 	program = program_;
 
+	first_time_we_prepare_Arrays = true;
 	prepareStaticArrays();
-	firstDynamic = true;
 	prepareDynamicArrays();
+	first_time_we_prepare_Arrays = false;
 }
 
 TileMap::~TileMap()
@@ -95,7 +96,7 @@ bool TileMap::loadLevel(const string &levelFile)
 	getline(fin, line);
 
 	sstream.str(line);
-	sstream >> bankID;
+	sstream >> currBank;
 
 	// LEER MAPA
 	mapita = vector<vector<Tile>> (mapSize.y + 1, vector<Tile> (mapSize.x));
@@ -120,7 +121,7 @@ bool TileMap::loadLevel(const string &levelFile)
 
 void TileMap::loadTile(char tile, int i, int j)
 {
-	mapita[i][j].loadTile(tile, i, j, bankID, staticTilesheetSize.x);
+	mapita[i][j].loadTile(tile, i, j, currBank, staticTilesheetSize.x);
 }
 
 void TileMap::loadTextures()
@@ -142,7 +143,7 @@ void TileMap::loadTextures()
 
 void TileMap::prepareStaticArrays()
 {
-	int id;
+	int id_1;
 	int nTiles = 0;
 	glm::vec2 posTile, texCoordTile[2], halfTexel;
 	vector<float> vertices;
@@ -151,15 +152,15 @@ void TileMap::prepareStaticArrays()
 	{
 		for(int j=0; j<(mapSize.x); j++)
 		{
-			id = -1;
+			id_1 = -1;
 			switch (mapita[i][j].type) {
 				case Tile::staticTile:	
-				case Tile::menuTile:	id = mapita[i][j].id; break;
-				case Tile::dynamicTile: id = mapita[i][j].background_id; break;
+				case Tile::menuTile:	id_1 = mapita[i][j].id_1; break;
+				case Tile::dynamicTile: id_1 = mapita[i][j].id_2; break;
 				case Tile::none:		break;
 			}
 
-			if (id < 0)
+			if (id_1 < 0)
 				continue;
 			
 			// Non-empty tile
@@ -167,8 +168,8 @@ void TileMap::prepareStaticArrays()
 			posTile = glm::vec2(minCoords.x + j * tileSize,
 				minCoords.y + i * tileSize);
 
-			texCoordTile[0] = glm::vec2(float((id) % staticTilesheetSize.x) / staticTilesheetSize.x,
-				float((id) / staticTilesheetSize.x) / staticTilesheetSize.y);
+			texCoordTile[0] = glm::vec2(float((id_1) % staticTilesheetSize.x) / staticTilesheetSize.x,
+				float((id_1) / staticTilesheetSize.x) / staticTilesheetSize.y);
 			texCoordTile[1] = texCoordTile[0] + staticTileTexSize;
 
 			//texCoordTile[0] += halfTexel;
@@ -229,8 +230,8 @@ void TileMap::prepareDynamicArrays()
 									minCoords.y + i * tileSize);
 
 
-				texCoordTile[0] = glm::vec2(float((tile.id) % dynamicTilesheetSize.x) / dynamicTilesheetSize.x,
-					float((tile.id) / dynamicTilesheetSize.x) / dynamicTilesheetSize.y);
+				texCoordTile[0] = glm::vec2(float((tile.id_1) % dynamicTilesheetSize.x) / dynamicTilesheetSize.x,
+											float((tile.id_1) / dynamicTilesheetSize.x) / dynamicTilesheetSize.y);
 				texCoordTile[1] = texCoordTile[0] + dynamicTileTexSize;
 
 				// First triangle
@@ -256,20 +257,21 @@ void TileMap::prepareDynamicArrays()
 			}
 		}
 	}
-	if (firstDynamic)
-		glGenVertexArrays(1, &vaoDynamic);
+
+	// OpenGL Stuff
+	if (first_time_we_prepare_Arrays)	glGenVertexArrays(1, &vaoDynamic);
 	
 	glBindVertexArray(vaoDynamic);
 	
-	if (firstDynamic)
-		glGenBuffers(1, &vboDynamic);
+	if (first_time_we_prepare_Arrays)	glGenBuffers(1, &vboDynamic);
+
 	glBindBuffer(GL_ARRAY_BUFFER, vboDynamic);
 	glBufferData(GL_ARRAY_BUFFER, 24 * nTiles * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-	if (firstDynamic) {
+
+	if (first_time_we_prepare_Arrays) {
 		dynamicPosLocation = program.bindVertexAttribute("position", 2, 4 * sizeof(float), 0);
 		dynamicTexCoordLocation = program.bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 	}	
-	firstDynamic = false;
 }
 
 bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speedOg, float& modifierX)
@@ -377,19 +379,18 @@ bool TileMap::tileIsSolid(int i, int j)
 	return mapita[i][j].resistance != 0;
 }
 
-bool TileMap::tileIsKey(int i, int j) {
-
+bool TileMap::tileIsKey(int i, int j)
+{
 	return (mapita[i][j].symbol == Tile::key);
 }
 
 bool TileMap::tileIsDeath(int i, int j)
 {
-
 	return (mapita[i][j].symbol == Tile::death);
 }
 
-void TileMap::deleteKey(int i, int j) {
-
+void TileMap::deleteKey(int i, int j)
+{
 	Tile& me		= mapita[  i  ][  j  ];
 	Tile& up		= mapita[i - 1][  j  ];
 	Tile& down		= mapita[i + 1][  j  ];
@@ -400,29 +401,41 @@ void TileMap::deleteKey(int i, int j) {
 	Tile& bot_left	= mapita[i + 1][j - 1];
 	Tile& bot_right	= mapita[i + 1][j + 1];
 
-	if (top_left.symbol == Tile::key) {
-		top_left.loadTile(' ', i - 1, j - 1, bankID, dynamicTilesheetSize.x);
-		      up.loadTile(' ', i - 1,     j, bankID, dynamicTilesheetSize.x);
-		    left.loadTile(' ',     i, j - 1, bankID, dynamicTilesheetSize.x);
-			  me.loadTile(' ',     i,     j, bankID, dynamicTilesheetSize.x);
+	if (top_left.symbol == Tile::key)
+	{
+		top_left.loadTile(' ', i - 1, j - 1, currBank, dynamicTilesheetSize.x);
+		      up.loadTile(' ', i - 1,     j, currBank, dynamicTilesheetSize.x);
+		    left.loadTile(' ',     i, j - 1, currBank, dynamicTilesheetSize.x);
+			  me.loadTile(' ',     i,     j, currBank, dynamicTilesheetSize.x);
 	}
-	else if (top_right.symbol == Tile::key) {
-		top_right.loadTile(' ', i - 1, j + 1, bankID, dynamicTilesheetSize.x);
-		       up.loadTile(' ', i - 1,     j, bankID, dynamicTilesheetSize.x);
-		    right.loadTile(' ',     i, j + 1, bankID, dynamicTilesheetSize.x);
-		       me.loadTile(' ',     i,     j, bankID, dynamicTilesheetSize.x);
+	else if (top_right.symbol == Tile::key)
+	{
+		top_right.loadTile(' ', i - 1, j + 1, currBank, dynamicTilesheetSize.x);
+		       up.loadTile(' ', i - 1,     j, currBank, dynamicTilesheetSize.x);
+		    right.loadTile(' ',     i, j + 1, currBank, dynamicTilesheetSize.x);
+		       me.loadTile(' ',     i,     j, currBank, dynamicTilesheetSize.x);
 	}
-	else if (bot_left.symbol == Tile::key) {
-		 bot_left.loadTile(' ', i + 1, j - 1, bankID, dynamicTilesheetSize.x);
-		     down.loadTile(' ', i + 1,     j, bankID, dynamicTilesheetSize.x);
-		     left.loadTile(' ',     i, j - 1, bankID, dynamicTilesheetSize.x);
-		       me.loadTile(' ',     i,     j, bankID, dynamicTilesheetSize.x);
+	else if (bot_left.symbol == Tile::key)
+	{
+		 bot_left.loadTile(' ', i + 1, j - 1, currBank, dynamicTilesheetSize.x);
+		     down.loadTile(' ', i + 1,     j, currBank, dynamicTilesheetSize.x);
+		     left.loadTile(' ',     i, j - 1, currBank, dynamicTilesheetSize.x);
+		       me.loadTile(' ',     i,     j, currBank, dynamicTilesheetSize.x);
 	}
-	else if (bot_right.symbol == Tile::key) {
-		bot_right.loadTile(' ', i + 1, j + 1, bankID, dynamicTilesheetSize.x);
-		     down.loadTile(' ', i + 1,     j, bankID, dynamicTilesheetSize.x);
-		    right.loadTile(' ',     i, j + 1, bankID, dynamicTilesheetSize.x);
-		       me.loadTile(' ',     i,     j, bankID, dynamicTilesheetSize.x);
+	else if (bot_right.symbol == Tile::key)
+	{
+		bot_right.loadTile(' ', i + 1, j + 1, currBank, dynamicTilesheetSize.x);
+		     down.loadTile(' ', i + 1,     j, currBank, dynamicTilesheetSize.x);
+		    right.loadTile(' ',     i, j + 1, currBank, dynamicTilesheetSize.x);
+		       me.loadTile(' ',     i,     j, currBank, dynamicTilesheetSize.x);
+	}
+
+	for (int i = mapSize.y - (currRoom * mapSize.x), offset = 8, j = offset; j < mapSize.x - offset; ++j)
+	{
+		mapita[i][j].loadTile('D', i, j, currBank, dynamicTilesheetSize.x);
+		mapita[i][j].type = Tile::dynamicTile;
+		mapita[i][j].id_1 = mapita[i][j].id_2;
+		mapita[i][j].resistance = 0;
 	}
 }
 

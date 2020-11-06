@@ -23,8 +23,10 @@ public:
 	void setPosition(const glm::vec2& pos);
 	void setTilesDisplacement(int t);
 	void setDeathAnimation(bool b);
+	bool getDeathAnimation();
 	void setRoom(int room);
 	void toogleChangeBar();
+	void setBonus(int b);
 
 	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float &modifierY, float& modifierX);
 	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed);
@@ -33,7 +35,7 @@ public:
 	
 private:
 	bool movingX, movingY, deathAnimation;
-	int tiles_displacement, actRoom, animation;
+	int tiles_displacement, actRoom, animation, bonus;
 	glm::ivec2 tileMapDispl, sizePlayer, slideOffset;
 	glm::vec2 posPlayer, displ_posPlayer;
 	int jumpAngle, startYs, speedX, speedY, slideOffsetY, slideOffsetX;

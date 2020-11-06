@@ -38,6 +38,8 @@ public:
 	
 	void init();
 	void loadSounds();
+	void loadPoints();
+	void restartGameScene();
 	bool update(int deltaTime);
 	void render();
 	
@@ -52,7 +54,7 @@ public:
 	
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
-
+	void setMaxPoints(int p);
 	void playBallSound();
 
 	void playBrickSound();
@@ -76,6 +78,8 @@ public:
 
 private:
 
+	int max_points;
+
 	Mode currMode();
 	void setMode(Mode newMode);
 	void rollbackMode();
@@ -89,7 +93,6 @@ private:
 	OptionsScene creditsScene;			// Scene to render when showing the Credits
 	OptionsScene instructionsScene;		// Scene to render when showing the Instructions
 	PasswordScene passwordScene;		// Scene to render when showing the Passwords Menu.
-
 	
 	stack<Mode> modeHist;				// Defines the mode history (startmenu, playing, credits, ...)
 
@@ -107,7 +110,8 @@ private:
 	Sound loseLife_sound;
 	Sound blast_sound;
 
-
+	// GameScene Info
+	int bank;
 
 };
 

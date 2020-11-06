@@ -5,26 +5,33 @@ Game::Game() {}
 void Game::init()
 {
 	modeHist.push(startMenu);
-
+	
 	//playing = false; // REMOVE
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	// Sound Initialization
-	// Should sound go into Scene clases ????? REMOVE
+	// Loads
 	loadSounds();
+	loadPoints();
 
-	// Scene initialization
+	// Scenes initialization
 	startMenuScene.init();
-	gameScene.init();
 	passwordScene.init();
 	optionsScene.init(); 
 	creditsScene.init(); 
 	instructionsScene.init(); 
 
+	// GameScene initialization
+	restartGameScene();
+
+	// OptionsScene textures to select next screen
+	optionsScene.setNTextures(3);
+	optionsScene.setTexture(0, "images/options_screen_credits.png");
+	optionsScene.setTexture(1, "images/options_screen_instructions.png");
+	optionsScene.setTexture(2, "images/options_screen_exit.png");
+
 	// Set options scene textures
-	creditsScene.setTexture("images/credits_screen.png");
-	instructionsScene.setTexture("images/bank_items.png");
-	optionsScene.setTexture("images/options_screen.png");
+	creditsScene.setTexture(0, "images/credits_screen.png");
+	instructionsScene.setTexture(0, "images/instructions_screen.png");
 }
 
 void Game::loadSounds()
@@ -44,20 +51,57 @@ void Game::loadSounds()
 	ball_sound = Sound("ball.wav", false);
 }
 
+void Game::loadPoints()
+{
+
+	ifstream fin;
+	string line;
+	stringstream sstream;
+	int p;
+
+	fin.open("levels/maxpoints.txt");
+	if (!fin.is_open())
+		return;
+	
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> p;
+	getline(fin, line);
+
+	setMaxPoints(p);
+}
+
+void Game::restartGameScene()
+{
+	gameScene.init();
+	gameScene.setBank(1);
+	gameScene.setRoom(1);
+	gameScene.setMoney(0);
+	gameScene.setPoints(0);
+	gameScene.setLives(5);
+	gameScene.startBank();
+	setMode(startMenu);
+}
+
 bool Game::update(int deltaTime)
 {
-	//if(!playing)
-	//	Mscene.update(deltaTime);
-	//else
-
 	switch (currMode()) {
 	case startMenu:
+		startMenuScene.setPoints(max_points);
 		startMenuScene.update(deltaTime);
 		playTitleSong();
 		break;
 
 	case playing:
-		gameScene.update(deltaTime);
+		if (!gameScene.getGameOver()) {
+			gameScene.update(deltaTime);
+		}
+		else {
+			if (gameScene.getPoints() > max_points)
+				setMaxPoints(gameScene.getPoints());
+
+			restartGameScene();
+		}
 		stopTitleSong();
 		break;
 
@@ -119,6 +163,7 @@ void Game::render() {
 void Game::keyPressed(int key)
 {
 	static constexpr int ESC = 27;
+	static constexpr int ENTER = 13;
 
 	switch (currMode()) {
 	case startMenu:
@@ -128,7 +173,7 @@ void Game::keyPressed(int key)
 			case 'p':	setMode(password);	break;
 			case 'e':	setMode(exitGame);	break;
 			case ' ':	setMode(playing);	break;
-			default:	break;
+			default:						break;
 		} break;
 
 	case playing:
@@ -136,15 +181,22 @@ void Game::keyPressed(int key)
 			case ESC:	setMode(options);	break;
 			case 'g':	toggleGodMode();	break;
 			case 'b':	toogleChangeBar();	break;
-			default:	break;
+			default:						break;
 		} break;
 
 	case options:
 		switch (key) {
 			case ESC:	rollbackMode();			break;
-			case 'i':	setMode(instructions);	break;
-			case 'c':	setMode(credits);		break;
-			case 'e':	setMode(startMenu);		break;
+			case ENTER:	
+				switch (optionsScene.getCurrTex())
+				{
+				case 0:	setMode(credits);		break;
+				case 1:	setMode(instructions);	break;
+				case 2:	setMode(startMenu);		break;
+				default:						break;
+				}
+				playPlayerSound();
+				break;
 			default:	break;
 		} break;
 
@@ -183,6 +235,46 @@ void Game::specialKeyPressed(int key)
 
 void Game::specialKeyReleased(int key)
 {
+	switch (currMode()) {
+	case startMenu:
+		switch (key) {
+		default:	break;
+		} break;
+
+	case playing:
+		switch (key) {
+		default:	break;
+		} break;
+
+	case options:
+		switch (key) {
+		case GLUT_KEY_UP:	
+			playBrickSound();
+			optionsScene.prevTexture();
+			break;
+		case GLUT_KEY_DOWN:
+			playBrickSound();
+			optionsScene.nextTexture();
+			break;
+		default:	break;
+		} break;
+
+	case instructions:
+		switch (key) {
+		default:	break;
+		} break;
+
+	case credits:
+		switch (key) {
+		default:	break;
+		} break;
+
+	case password:
+		switch (key) {
+		default:	break;
+		} break;
+	}
+
 	specialKeys[key] = false;
 }
 
@@ -206,6 +298,12 @@ bool Game::getKey(int key) const
 bool Game::getSpecialKey(int key) const
 {
 	return specialKeys[key];
+}
+
+void Game::setMaxPoints(int p)
+{
+	if (p > max_points) max_points = p;
+	startMenuScene.setPoints(max_points);
 }
 
 void Game::playBallSound()
@@ -260,6 +358,9 @@ Mode Game::currMode()
 
 void Game::setMode(Mode newMode)
 {
+	if (currMode() == startMenu && newMode == playing)
+		restartGameScene();
+	
 	if (newMode == startMenu)
 		modeHist = {};
 
@@ -268,6 +369,7 @@ void Game::setMode(Mode newMode)
 
 void Game::rollbackMode()
 {
+	playBonusSound();
 	if (!modeHist.empty()) modeHist.pop();
 }
 

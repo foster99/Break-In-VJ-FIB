@@ -17,7 +17,7 @@ void PasswordScene::init()
 	this->Scene::init();
 	
 	//actTexture = 0; // REMOVE
-	tex.loadFromFile("images/plane_colors.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	tex.loadFromFile("images/password_screen.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	glm::vec2 geom[2] = { glm::vec2(0.f,0.f),glm::vec2(Game::SCREEN_WIDTH,Game::SCREEN_HEIGHT) };
 	glm::vec2 texCoords[2] = { glm::vec2(0.f,0.f), glm::vec2(1.f,1.f) };
 	texQuad = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);

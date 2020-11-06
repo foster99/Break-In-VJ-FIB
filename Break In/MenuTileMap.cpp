@@ -47,7 +47,7 @@ void MenuTileMap::prepareCounters(vector<Sprite*> &quads, glm::ivec3 &coords, co
 
 MenuTileMap::MenuTileMap(const string& levelFile, const glm::vec2& minCoords_, ShaderProgram& program_)
 {
-	bankID = 0;
+	currBank = 0;
 	digits.loadFromFile("images/digits.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	chars.loadFromFile("images/chars.png", TEXTURE_PIXEL_FORMAT_RGBA);
 
@@ -280,7 +280,7 @@ bool MenuTileMap::loadLevel(const string& levelFile)
 
 void MenuTileMap::loadTile(char tile, int i, int j)
 {
-	mapita[i][j].loadMenuTile(tile, i, j, bankID);
+	mapita[i][j].loadMenuTile(tile, i, j, currBank);
 }
 
 void MenuTileMap::render()

@@ -9,11 +9,15 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	spdModifierX = 1;
 	spdModifierY = 1;
 
-	tex.loadFromFile("images/ball.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(sizeBall, sizeBall), glm::vec2(1.f, 1.f), &tex, &shaderProgram);
-	sprite->setNumberAnimations(1);
+	tex.loadFromFile("images/balls.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite = Sprite::createSprite(glm::ivec2(sizeBall, sizeBall), glm::vec2(1.f / 5.f, 1.f), &tex, &shaderProgram);
+	sprite->setNumberAnimations(5);
 
 	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
+	sprite->addKeyframe(1, glm::vec2(1.f / 5.f, 0.f));
+	sprite->addKeyframe(2, glm::vec2(2.f / 5.f, 0.f));
+	sprite->addKeyframe(3, glm::vec2(3.f / 5.f, 0.f));
+	sprite->addKeyframe(4, glm::vec2(4.f / 5.f, 0.f));
 
 	sprite->changeAnimation(0);
 
@@ -28,27 +32,39 @@ bool Ball::update(int deltaTime)
 	bool collisionX = false;
 	bool collisionPlayer = false;
 
-	if (collisionPlayer = (spdModifierY > 0 && player->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int) speed, spdModifierY, spdModifierX))) {
+	sprite->changeAnimation(0);
+
+	if (collisionPlayer = (spdModifierY > 0 && player->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int)speed, spdModifierY, spdModifierX))) {
 		spdModifierY *= -1;
+		sprite->changeAnimation(4);
 	}
 	else if (collisionPlayer = (spdModifierY > 0 && spdModifierX > 0 && player->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
 		spdModifierX *= -1;
+		sprite->changeAnimation(1);
 	}
 	else if (collisionPlayer = (spdModifierY > 0 && spdModifierX < 0 && player->collisionMoveLeft(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
 		spdModifierX *= -1;
+		sprite->changeAnimation(2);
 	}
-	
+
 	if (!collisionPlayer)
 	{
-		if (collisionY = (spdModifierY > 0 && map->collisionMoveDown( posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int) speed, spdModifierY)))
+		if (collisionY = (spdModifierY > 0 && map->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int)speed, spdModifierY))) {
+			sprite->changeAnimation(4);
 			spdModifierY *= -1;
-		else if (collisionY = (spdModifierY < 0 && map->collisionMoveUp(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int) speed, spdModifierY)))
+		}
+		else if (collisionY = (spdModifierY < 0 && map->collisionMoveUp(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int)speed, spdModifierY))){
+			sprite->changeAnimation(3);
 			spdModifierY *= -1;
-
-		if (collisionX = (spdModifierX > 0 && map->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, (int) speed, spdModifierX)))
+		}
+		if (collisionX = (spdModifierX > 0 && map->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, (int)speed, spdModifierX))){
+			sprite->changeAnimation(1);
 			spdModifierX *= -1;
-		else if (collisionX = (spdModifierX < 0 && map->collisionMoveLeft( posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, (int) speed, spdModifierX)))
+		}
+		else if (collisionX = (spdModifierX < 0 && map->collisionMoveLeft( posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, (int) speed, spdModifierX))){
+			sprite->changeAnimation(2);
 			spdModifierX *= -1;
+		}
 	}
 	
 	// SOUNDS

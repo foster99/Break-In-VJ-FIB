@@ -34,53 +34,40 @@ void GameScene::init() {
 	end = 0;
 	godMode = false;
 	alive = true;
-	map = TileMap::createTileMap("levels/BANK_01_test.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	
-
-	menuMap = MenuTileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	menuMap->setBank(bank);
-	menuMap->setRoom(room);
-	menuMap->setLives(lives);
-	menuMap->setMoney(money);
-	menuMap->setPoints(points);
-	menuMap->setLine(" CASUAL ", " PLAYER ");
-
-
-	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-	player->setTilesDisplacement(0);
-	player->setRoom(room);
-	player->setTileMap(map);
-
-	ball = new Ball();
-	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	ball->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-	ball->setTileMap(map);
-	ball->setPlayer(player);
+	gameOver = false;
+	win = false;
 }
 
 void GameScene::update(int deltaTime) {
 
 	this->Scene::update(deltaTime);
 
-	if (!alive) {
+	if (!alive) {									// ESTAMOS MUERTOS
 		auxTime += deltaTime;
 		if (auxTime > 175.f) {
 			auxTime = 0;
 			player->update(deltaTime);
 		}
-		return;
+		alive = !(player->getDeathAnimation());
+
+		if (alive) restartPlayerBall();
+		else       return;
 	}
-	else if (scrolling)
+	else if (lastBallisDead())						// COMPROBAR SI HEMOS MUERTO 
+	{
+		playerLosesLife();
+		player->update(deltaTime);
+	}
+	else if (scrolling)								// ESTAMOS REALIZANDO SCROLL ENTRE ROOMS
 	{
 		tiles_displacement += stride;
 		scrolling = tiles_displacement != end;
+		bonus->restartTime();
 	}
-	else if (ballOnDoor())
+	else if (ballOnDoor())							// COMPROBAR SI HAY QUE CAMBIAR DE ROOM
 	{
 		if (room_old < room)		stride = +1;
-		else /*(room_old > room)*/	stride = -1;
+		else /*(room_old > currRoom)*/	stride = -1;
 
 		switch (room) {
 		case 1: end = -48;	break;
@@ -88,17 +75,12 @@ void GameScene::update(int deltaTime) {
 		case 3: end = 0;	break;
 		}
 	}
-	else if (lastBallisDead())
-	{
-		playerLosesLife();
-		player->update(deltaTime);
-	}
-	else
-	{
-		player->update(deltaTime);
-
+	else {
+	
+		bool ballCollided = ball->update(deltaTime);
 		// PILOTA REOTRNA POS EN TILES D'ON IMPACTE glm::ivec2 collisionIn(i,j)
-		if (ball->update(deltaTime))
+		
+		if (ballCollided)
 		{
 			money += 100;
 			menuMap->setMoney(money);
@@ -106,18 +88,12 @@ void GameScene::update(int deltaTime) {
 			points += 33;
 			menuMap->setPoints(points);
 
-			lives += 1;
-			menuMap->setLives(lives);
-
 			if (points > 1000) {
 				menuMap->setLine("AII LMAO", "4POGGERS"); // CAMBIA CON EL BONUS
 			}
-
-			map->prepareDynamicArrays();
-			//map->prepareStaticArrays();
 		}
 
-		// Test del borrado de llaves
+		// He col
 		glm::ivec2 last_collision_coords = glm::ivec2(0);
 		if (godMode)
 		{
@@ -126,16 +102,20 @@ void GameScene::update(int deltaTime) {
 			godMode = false;
 
 			// SOLO DESAPARESE LA LLAVE CUANDO SE UPDATEA LA PARTE DINAMICA
-			// LA PARTE DINAMICA SE UPDATEA CUANDO LA PELOTA COLISIONA
-
-
+			// LA PARTE DINAMICA SE UPDATEA CUANDO LA PELOTA 
 		}
 
+		map->setRoom(room);
 		player->setRoom(room);
 		player->setTilesDisplacement(tiles_displacement);
 	}
 
-	displacement_mat = glm::translate(glm::mat4(1.f), glm::vec3(0.f, float(tiles_displacement *8), 0.f));
+	if (bonus->update(deltaTime))
+		player->setBonus(bonus->getActiveBonus());
+
+	player->update(deltaTime);
+	map->prepareDynamicArrays();
+	displacement_mat = glm::translate(glm::mat4(1.f), glm::vec3(0.f, float(tiles_displacement * 8), 0.f));
 }
 
 void GameScene::render()
@@ -147,7 +127,9 @@ void GameScene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	
 	map->render();
-	if (!scrolling) player->render(displacement_mat);
+	if (!scrolling)		player->render(displacement_mat);
+	
+	bonus->render(displacement_mat);
 	ball->render(displacement_mat);
 
 	// Render Lateral Menu
@@ -170,7 +152,7 @@ void GameScene::playerLosesLife()
 	lives -= 1;
 	alive = false;
 
-	if (lives < 0) gameOver();
+	if (lives < 0) gameIsOver();
 	else {
 		menuMap->setLives(lives);
 		player->setDeathAnimation(true);
@@ -178,8 +160,12 @@ void GameScene::playerLosesLife()
 	}
 }
 
-void GameScene::gameOver()
+void GameScene::gameIsOver()
 {
+	gameOver = true;
+	// print GameOver Quad
+	// Set history points
+	// return to Menu Scene
 }
 
 bool GameScene::ballOnDoor()
@@ -207,6 +193,124 @@ bool GameScene::ballOnDoor()
 bool GameScene::lastBallisDead()
 {
 	return map->tileIsDeath((ball->getBasePositionInTiles()).y, (ball->getBasePositionInTiles()).x);
+}
+
+void GameScene::startBank()
+{
+	string path;
+	if (bank < 10)	path = "levels/BANK_0" + to_string(bank) +"_test.txt";
+	else			path = "levels/BANK_" + to_string(bank) + "_test.txt";
+	
+	map = TileMap::createTileMap(path.c_str(), glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map->setBank(bank);
+	map->setRoom(room);
+
+	menuMap = MenuTileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	menuMap->setBank(bank);
+	menuMap->setRoom(room);
+	menuMap->setLives(lives);
+	menuMap->setMoney(money);
+	menuMap->setPoints(points);
+	menuMap->setLine(" CASUAL ", " PLAYER ");
+
+	restartPlayerBall();
+}
+
+void GameScene::restartPlayerBall()
+{
+	player = new Player();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	player->setTilesDisplacement(tiles_displacement);
+	player->setRoom(room);
+	player->setTileMap(map);
+
+	ball = new Ball();
+	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	ball->setPosition(glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
+	ball->setTileMap(map);
+	ball->setPlayer(player);
+
+	bonus = new Bonus();
+	bonus->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	bonus->setTileMap(map);
+	bonus->setPosition(glm::vec2(INIT_BONUS_X_TILES * map->getTileSize(), INIT_BONUS_Y_TILES * map->getTileSize()));
+	bonus->setPlayer(player);
+}
+
+bool GameScene::getGameOver()
+{
+	return gameOver;
+}
+
+bool GameScene::getWin()
+{
+	return win;
+}
+
+int GameScene::getBank()
+{
+	return bank;
+}
+
+int GameScene::getRoom()
+{
+	return room;
+}
+
+int GameScene::getLives()
+{
+	return lives;
+}
+
+int GameScene::getMoney()
+{
+	return money;
+}
+
+int GameScene::getPoints()
+{
+	return points;
+}
+
+void GameScene::nextBank()
+{
+	// standart initializations
+	room = 1;
+	room_old = 1;
+	tiles_displacement = -48;
+
+	// next bank modifications
+	++bank;
+	alive = true;
+	lives += 1;
+
+	startBank();
+}
+
+void GameScene::setBank(int b)
+{
+	bank = b;
+}
+
+void GameScene::setRoom(int r)
+{
+	room = r;
+}
+
+void GameScene::setLives(int l)
+{
+	lives = l;
+}
+
+void GameScene::setMoney(int m)
+{
+	money = m;
+}
+
+void GameScene::setPoints(int p)
+{
+	points = p;
 }
 
 void GameScene::toggleGodMode()

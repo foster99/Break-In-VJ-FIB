@@ -126,6 +126,9 @@
     <ClCompile Include="MenuTileMap.cpp">
       <Filter>Source Files\Tiles</Filter>
     </ClCompile>
+    <ClCompile Include="Bonus.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h">
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="MenuTileMap.h">
       <Filter>Header Files\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Bonus.h">
+      <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -253,6 +259,36 @@
     </Image>
     <Image Include="images\chars.png">
       <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\credits_screen.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\instructions_screen.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\options_screen_credits.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\options_screen_exit.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\options_screen_instructions.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\password_screen.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\title_screen_01.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\title_screen_02.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\balls.png">
+      <Filter>Resource Files\images\sprites</Filter>
+    </Image>
+    <Image Include="images\bonus.png">
+      <Filter>Resource Files\images\sprites</Filter>
     </Image>
   </ItemGroup>
 </Project>

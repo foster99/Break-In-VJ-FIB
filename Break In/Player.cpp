@@ -170,6 +170,11 @@ void Player::setDeathAnimation(bool b)
 	deathAnimation = b;
 }
 
+bool Player::getDeathAnimation()
+{
+	return deathAnimation;
+}
+
 void Player::setRoom(int room)
 {
 	actRoom = room;
@@ -178,6 +183,11 @@ void Player::setRoom(int room)
 void Player::toogleChangeBar() 
 {
 	slide->toogleChangeBar();
+}
+
+void Player::setBonus(int b)
+{
+	bonus = b;
 }
 
 bool Player::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float &modifierY, float& modifierX)
