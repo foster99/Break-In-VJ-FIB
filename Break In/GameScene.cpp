@@ -108,6 +108,7 @@ void GameScene::update(int deltaTime) {
 		map->setRoom(room);
 		player->setRoom(room);
 		player->setTilesDisplacement(tiles_displacement);
+		player->setPosMainBall(ball->getPosition());
 	}
 
 	if (bonus->update(deltaTime))
@@ -230,6 +231,8 @@ void GameScene::restartPlayerBall()
 	ball->setPosition(glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
 	ball->setTileMap(map);
 	ball->setPlayer(player);
+
+	player->setPosMainBall(ball->getPosition());
 
 	bonus = new Bonus();
 	bonus->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);

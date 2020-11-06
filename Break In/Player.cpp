@@ -4,7 +4,6 @@
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {	
-	
 	sizePlayer = glm::ivec2(19,16);
 	displ_posPlayer = mod(posPlayer, glm::vec2(24.f));
 	speedX = 3;
@@ -132,6 +131,8 @@ void Player::update(int deltaTime)
 		if (movingY) posPlayer.y += speedY;
 	}
 
+	updateEyesAnimation();
+
 	posPlayer = glm::mod(posPlayer, glm::vec2(1000.f, 192.f)) - glm::vec2(0.f, float(tiles_displacement) * 8.f);
 	sprite->changeAnimation(animation);
 	sprite->setPosition((glm::vec2) tileMapDispl + posPlayer);
@@ -180,7 +181,35 @@ void Player::setRoom(int room)
 	actRoom = room;
 }
 
-void Player::toogleChangeBar() 
+void Player::updateEyesAnimation()
+{
+	if (deathAnimation) return;
+
+	if (bonus == Bonus::twix) {
+		animation = 0;
+		return;
+	}
+
+	if (posMainBall.y + 48 < posPlayer.y) {
+		animation = 2;
+		return;
+	}
+
+	if (posMainBall.x + 10 < posPlayer.x) {
+		animation = 3;
+		return;
+	}
+
+	if (posMainBall.x - 10 > posPlayer.x + sizePlayer.x) {
+		animation = 4;
+		return;
+	}
+
+	animation = 1;
+
+}
+
+void Player::toogleChangeBar()
 {
 	slide->toogleChangeBar();
 }
@@ -188,6 +217,11 @@ void Player::toogleChangeBar()
 void Player::setBonus(int b)
 {
 	bonus = b;
+}
+
+void Player::setPosMainBall(glm::vec2 pos)
+{
+	posMainBall = pos;
 }
 
 bool Player::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float &modifierY, float& modifierX)
