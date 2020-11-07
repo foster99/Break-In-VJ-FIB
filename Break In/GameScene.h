@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Ball.h"
 #include "Bonus.h"
+#include "Guardian.h"
 #include "MenuTileMap.h"
 
 class GameScene :
@@ -65,6 +66,7 @@ private:
     Player* player;
     Ball* ball;
     Bonus* bonus;
+    Guardian* guardian;
 
     // Control variables
     bool godMode;

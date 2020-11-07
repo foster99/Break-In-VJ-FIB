@@ -1,56 +1,56 @@
-#ifndef _BONUS_INCLUDE
-#define _BONUS_INCLUDE
+#ifndef _GUARDIAN_INCLUDE
+#define _GUARDIAN_INCLUDE
 
 #include "Sprite.h"
 #include "TileMap.h"
+#include "Player.h"
 
-class Bonus
+class Guardian
 {
 public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	bool update(int deltaTime);
 	void render(glm::mat4& displacement_mat);
 
+	void alarmOn();
+	void nextAnimation();
 	void changeModifierX(float value);
 	void changeModifierY(float value);
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
+	void setPlayer(Player* p);
 	void restartTime();
-	bool isTimeToRender();
-	int getActiveBonus();
+	bool isAwake();
 	glm::vec2 getPosition();
 	glm::ivec2 getPositionInTiles();
 
-	// BONUS TYPES
-	static constexpr int multipleBall	= 0;
-	static constexpr int blaster		= 1;
-	static constexpr int doubleSlide	= 2;
-	static constexpr int magnet			= 3;
-	static constexpr int twix			= 4;
+	// Guadian Modes
+	static constexpr int sleep		= 0;
+	static constexpr int tracking	= 1;
+	static constexpr int moving		= 2;
 
-	static constexpr float bonusAliveTime = 15000.f;
+	static constexpr float trackingTime = 5000.f;
 
 private:
 	glm::ivec2 tileMapDispl;
 	Texture tex;
 	Sprite* sprite;
 	TileMap* map;
+	Player* player;
+	int animation, count, dir;
 	
 	// Entity Props
-	glm::vec2 posBonus;
-	int sizeBonus;
-	int activeBonus;
-	
+	glm::vec2 posGuardian;
+	glm::ivec2 sizeGuardian;
+
 	// Time Control
-	float bonusTime;
-	float bonusTypeTime;
-	bool timeToRender;
+	int guardianMode;
+	float guardianTime;
 
 	// Speed Control
 	float speed;
-	int spdModifierX;
-	int spdModifierY;
+	int speedModifierX;
+	int speedModifierY;
 };
-
-#endif // _BONUS_INCLUDE
+#endif // _GUARDIAN_INCLUDE
 

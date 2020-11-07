@@ -2,27 +2,27 @@
 
 void Bonus::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
+	// INITIALIZATIONS
 	sizeBonus = 13;
+	posBonus = glm::vec2(0.f);
 	speed = 0.3;
 	spdModifierX = 1;
 	spdModifierY = 1;
 	activeBonus = blaster; 
+	bonusTime = 0.f;
+	tileMapDispl = tileMapPos;
 
+	// SPRITE AND TEXTURE SET-UP
 	tex.loadFromFile("images/bonus.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(sizeBonus, sizeBonus), glm::vec2(1.f / 5.f, 1.f), &tex, &shaderProgram);
 	sprite->setNumberAnimations(5);
-
 	sprite->addKeyframe(multipleBall,	glm::vec2(0.f, 0.f));
 	sprite->addKeyframe(blaster,		glm::vec2(1.f / 5.f, 0.f));
 	sprite->addKeyframe(doubleSlide,	glm::vec2(2.f / 5.f, 0.f));
 	sprite->addKeyframe(magnet,			glm::vec2(3.f / 5.f, 0.f));
 	sprite->addKeyframe(twix,			glm::vec2(4.f / 5.f, 0.f));
-
 	sprite->changeAnimation(doubleSlide);
-
-	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBonus.x), float(tileMapDispl.y + posBonus.y)));
-
 }
 
 bool Bonus::update(int deltaTime)
@@ -55,7 +55,8 @@ bool Bonus::update(int deltaTime)
 	posBonus.x += speed * spdModifierX;
 	posBonus.y += speed * spdModifierY;
 
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBonus.x), float(tileMapDispl.y + posBonus.y)));
+	sprite->setPosition(glm::vec2(	float(tileMapDispl.x + posBonus.x),
+									float(tileMapDispl.y + posBonus.y)));
 	
 	bool collision_player = false;
 
@@ -79,11 +80,6 @@ void Bonus::changeModifierX(float value)
 void Bonus::changeModifierY(float value)
 {
 	spdModifierY = value;
-}
-
-void Bonus::setPlayer(Player* pla)
-{
-	player = pla;
 }
 
 void Bonus::setTileMap(TileMap* tileMap)

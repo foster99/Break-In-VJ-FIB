@@ -23,6 +23,7 @@
     <ClCompile Include="Bonus.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Guardian.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MenuTileMap.cpp" />
     <ClCompile Include="OptionsScene.cpp" />
@@ -46,6 +47,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Bonus.h" />
+    <ClInclude Include="Guardian.h" />
     <ClInclude Include="MenuTileMap.h" />
     <ClInclude Include="OptionsScene.h" />
     <ClInclude Include="PasswordScene.h" />
