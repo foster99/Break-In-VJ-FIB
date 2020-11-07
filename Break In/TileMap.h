@@ -36,10 +36,10 @@ public:
 	void setRoom(int room_) { currRoom = room_; };
 	void setBank(int bank_) { currBank = bank_; };
 
-	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speedOg, float& modifierX);
-	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speedOg, float& modifierX);
-	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speedOg, float& modifierY);
-	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speedOg, float& modifierY);
+	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speedOg, float& modifierX, glm::ivec2 &lastCollision);
+	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speedOg, float& modifierX, glm::ivec2 &lastCollision);
+	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speedOg, float& modifierY, glm::ivec2 &lastCollision);
+	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speedOg, float& modifierY, glm::ivec2 &lastCollision);
 
 	bool tileIsSolid(int i, int j);
 	bool tileIsKey(int i, int j);

@@ -22,9 +22,10 @@ public:
 	glm::ivec2 getBasePositionInTiles();
 
 	int getBallSize();
+	glm::ivec2 getLastCollision();
 
 private:
-	glm::ivec2 tileMapDispl;
+	glm::ivec2 tileMapDispl, lastCollision;
 	glm::vec2 posBall;
 	Texture tex;
 	Sprite* sprite;

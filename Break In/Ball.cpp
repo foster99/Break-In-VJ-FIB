@@ -49,19 +49,19 @@ bool Ball::update(int deltaTime)
 
 	if (!collisionPlayer)
 	{
-		if (collisionY = (spdModifierY > 0 && map->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int)speed, spdModifierY))) {
+		if (collisionY = (spdModifierY > 0 && map->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int)speed, spdModifierY, lastCollision))) {
 			sprite->changeAnimation(4);
 			spdModifierY *= -1;
 		}
-		else if (collisionY = (spdModifierY < 0 && map->collisionMoveUp(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int)speed, spdModifierY))){
+		else if (collisionY = (spdModifierY < 0 && map->collisionMoveUp(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int)speed, spdModifierY, lastCollision))){
 			sprite->changeAnimation(3);
 			spdModifierY *= -1;
 		}
-		if (collisionX = (spdModifierX > 0 && map->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, (int)speed, spdModifierX))){
+		if (collisionX = (spdModifierX > 0 && map->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, (int)speed, spdModifierX, lastCollision))){
 			sprite->changeAnimation(1);
 			spdModifierX *= -1;
 		}
-		else if (collisionX = (spdModifierX < 0 && map->collisionMoveLeft( posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, (int) speed, spdModifierX))){
+		else if (collisionX = (spdModifierX < 0 && map->collisionMoveLeft( posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, (int) speed, spdModifierX, lastCollision))){
 			sprite->changeAnimation(2);
 			spdModifierX *= -1;
 		}
@@ -131,4 +131,9 @@ glm::ivec2 Ball::getBasePositionInTiles()
 int Ball::getBallSize()
 {
 	return sizeBall;
+}
+
+glm::ivec2 Ball::getLastCollision()
+{
+	return lastCollision;
 }

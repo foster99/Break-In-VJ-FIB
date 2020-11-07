@@ -274,7 +274,7 @@ void TileMap::prepareDynamicArrays()
 	}	
 }
 
-bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speedOg, float& modifierX)
+bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speedOg, float& modifierX, glm::ivec2& lastCollision)
 {
 	int i0, i1;
 
@@ -288,6 +288,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, f
 		{
 			if (tileIsSolid(i, (pos.x - s) / tileSize))
 			{
+				lastCollision = glm::ivec2(i,(pos.x-s) / tileSize);
 				*posJ -= s - 1;
 				return true;
 			}
@@ -299,7 +300,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, f
 	return false;
 }
 
-bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speedOg, float& modifierX)
+bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posJ, int speedOg, float& modifierX, glm::ivec2& lastCollision)
 {
 	int i0, i1;
 
@@ -313,6 +314,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, 
 		{
 			if (tileIsSolid(i, (pos.x + size.x + s) / tileSize))
 			{
+				lastCollision = glm::ivec2(i, (pos.x + size.x + s)/tileSize);
 				*posJ += s - 1;
 				return true;
 			}
@@ -324,7 +326,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, 
 	return false;
 }
 
-bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posI, int speedOg, float& modifierY)
+bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posI, int speedOg, float& modifierY, glm::ivec2& lastCollision)
 {
 	int j0, j1;
 	int speed = int(speedOg * abs(modifierY));
@@ -337,6 +339,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, f
 		{
 			if (tileIsSolid((pos.y + size.y + s) / tileSize, j))
 			{
+				lastCollision = glm::ivec2((pos.y + size.y + s) / tileSize, j);
 				*posI += s - 1;
 				return true;
 			}
@@ -348,7 +351,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, f
 	return false;
 }
 
-bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posI, int speedOg, float& modifierY)
+bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posI, int speedOg, float& modifierY, glm::ivec2& lastCollision)
 {
 	int j0, j1;
 
@@ -363,6 +366,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, flo
 		{
 			if (tileIsSolid((pos.y - s)/tileSize, j))
 			{
+				lastCollision = glm::ivec2((pos.y - s) / tileSize, j);
 				*posI -= float(s - 1);
 				return true;
 			}
