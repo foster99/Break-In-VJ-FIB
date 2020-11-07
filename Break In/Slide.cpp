@@ -66,22 +66,42 @@ void Slide::toogleChangeBar()
 		
 }
 
-void changeMods(int x, float& modifierY, float& modifierX, int size) {
-	if (x < (5 * size)) {
-		modifierY = 1;
-		modifierX = -1.5;
-	}
-	else if (x < (10 * size)) {
-		modifierY = 1;
-		modifierX = -0.5;
-	}
-	else if (x < (15 * size)) {
-		modifierY = 1;
-		modifierX = 0.5;
+void changeMods(int x, float& modifierY, float& modifierX, bool big) {
+	if (! big) {
+		if (x < 5) {
+			modifierY = 1;
+			modifierX = -1.2;
+		}
+		else if (x < 10) {
+			modifierY = 1;
+			modifierX = -0.5;
+		}
+		else if (x < 15) {
+			modifierY = 1;
+			modifierX = 0.5;
+		}
+		else {
+			modifierY = 1;
+			modifierX = 1.2;
+		}
 	}
 	else {
-		modifierY = 1;
-		modifierX = 1.5;
+		if (x < 5) {
+			modifierY = 1;
+			modifierX = -1.2;
+		}
+		else if (x < 20) {
+			modifierY = 1;
+			modifierX = -0.5;
+		}
+		else if (x < 35) {
+			modifierY = 1;
+			modifierX = 0.5;
+		}
+		else {
+			modifierY = 1;
+			modifierX = 1.2;
+		}
 	}
 }
 
@@ -94,9 +114,9 @@ bool Slide::onSlide(const glm::ivec2& pos, int sizeX, float& modifierY, float& m
 		if ((pos.x + x) >= (posSlide.x + diff) && (pos.x + x) <= (posSlide.x + logicSize.x + diff)) {
 			
 			if (diff == 0)
-				changeMods(x,modifierY, modifierX, 1);
+				changeMods(abs(posSlide.x - (pos.x + sizeX/2)),modifierY, modifierX, true);
 			else
-				changeMods(x,modifierY, modifierX, 2);
+				changeMods(abs(posSlide.x - (pos.x + sizeX/2) + diff),modifierY, modifierX, false);
 
 			return true;
 		}
