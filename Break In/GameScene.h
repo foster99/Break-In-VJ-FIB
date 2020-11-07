@@ -46,7 +46,7 @@ public:
     void toggleGodMode();
     void toogleChangeBar();
 
-    bool ballOnDoor();
+    bool changeOfRoom();
     bool lastBallisDead();
 
     static constexpr float INIT_PLAYER_X_TILES = 12;

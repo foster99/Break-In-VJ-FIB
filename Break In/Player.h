@@ -27,8 +27,9 @@ public:
 	void setPosMainBall(glm::vec2 pos);
 	
 	glm::ivec2 getSize();
+	glm::vec2 getPosition();
+	int getCurrentRoom();
 	bool getDeathAnimation();
-	
 	void updateEyesAnimation();
 	void toogleChangeBar();
 
@@ -39,7 +40,7 @@ public:
 	
 private:
 	bool movingX, movingY, deathAnimation;
-	int tiles_displacement, actRoom, animation, bonus;
+	int tiles_displacement, currRoom, animation, bonus;
 	glm::ivec2 tileMapDispl, sizePlayer, slideOffset;
 	glm::vec2 posPlayer, displ_posPlayer;
 	int jumpAngle, startYs, speedX, speedY, slideOffsetY, slideOffsetX;

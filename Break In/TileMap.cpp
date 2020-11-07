@@ -59,6 +59,11 @@ void TileMap::free()
 	glDeleteBuffers(1, &vboDynamic);
 }
 
+int TileMap::getGuardianRoom()
+{
+	return guardianRoom;
+}
+
 bool TileMap::loadLevel(const string &levelFile)
 {
 	ifstream fin;
@@ -97,6 +102,10 @@ bool TileMap::loadLevel(const string &levelFile)
 
 	sstream.str(line);
 	sstream >> currBank;
+	getline(fin, line);
+
+	sstream.str(line);
+	sstream >> guardianRoom;
 
 	// LEER MAPA
 	mapita = vector<vector<Tile>> (mapSize.y + 1, vector<Tile> (mapSize.x));

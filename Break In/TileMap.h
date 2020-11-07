@@ -32,6 +32,7 @@ public:
 	int getTileSize() const { return tileSize; }
 	int getMapSizeX() const { return mapSize.x;  }
 	int getMapSizeY() const { return mapSize.y / Nrooms; }
+	int getGuardianRoom();
 
 	void setRoom(int room_) { currRoom = room_; };
 	void setBank(int bank_) { currBank = bank_; };
@@ -101,6 +102,7 @@ protected:
 	// Current Bank Info
 	int currBank;
 	int currRoom;
+	int guardianRoom;
 	int Nrooms;
 	vector<vector<Tile>> mapita;
 };

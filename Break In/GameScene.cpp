@@ -64,9 +64,9 @@ void GameScene::update(int deltaTime) {
 		scrolling = tiles_displacement != end;
 		bonus->restartTime();
 	}
-	else if (ballOnDoor())							// COMPROBAR SI HAY QUE CAMBIAR DE ROOM
+	else if (changeOfRoom())						// COMPROBAR SI HAY QUE CAMBIAR DE ROOM
 	{
-		if (room_old < room)		stride = +1;
+		if (room_old < room)			stride = +1;
 		else /*(room_old > currRoom)*/	stride = -1;
 
 		switch (room) {
@@ -115,8 +115,11 @@ void GameScene::update(int deltaTime) {
 	if (bonus->update(deltaTime))
 		player->setBonus(bonus->getActiveBonus());
 
-	if (guardian->update(deltaTime))
-		playerLosesLife();
+	if (guardian->getRoom() == player->getCurrentRoom()) {
+		if (guardian->update(deltaTime))
+			playerLosesLife();
+	}
+	else guardian->restartTime();
 
 	player->update(deltaTime);
 	map->prepareDynamicArrays();
@@ -178,7 +181,7 @@ void GameScene::gameIsOver()
 	// return to Menu Scene
 }
 
-bool GameScene::ballOnDoor()
+bool GameScene::changeOfRoom()
 {
 	room_old = room;
 
@@ -253,6 +256,7 @@ void GameScene::restartPlayerBall()
 	guardian->setTileMap(map);
 	guardian->setPosition(glm::vec2(INIT_BONUS_X_TILES * map->getTileSize(), INIT_BONUS_Y_TILES * map->getTileSize()));
 	guardian->setPlayer(player);
+	guardian->setRoom(map->getGuardianRoom());
 }
 
 bool GameScene::getGameOver()

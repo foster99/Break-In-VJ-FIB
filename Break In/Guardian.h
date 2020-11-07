@@ -14,13 +14,18 @@ public:
 
 	void alarmOn();
 	void nextAnimation();
+	bool arrivedTargetPos();
+	void trackPlayerPosition();
 	void changeModifierX(float value);
 	void changeModifierY(float value);
+	int getRoom();
+	void setRoom(int r);
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
 	void setPlayer(Player* p);
 	void restartTime();
 	bool isAwake();
+	bool checkCollision();
 	glm::vec2 getPosition();
 	glm::ivec2 getPositionInTiles();
 
@@ -40,6 +45,7 @@ private:
 	int animation, count, dir;
 	
 	// Entity Props
+	int guardianRoom;
 	glm::vec2 posGuardian;
 	glm::ivec2 sizeGuardian;
 
@@ -48,9 +54,10 @@ private:
 	float guardianTime;
 
 	// Speed Control
+	glm::vec2 targetPos;
 	float speed;
-	int speedModifierX;
-	int speedModifierY;
+	float speedModifierX;
+	float speedModifierY;
 };
 #endif // _GUARDIAN_INCLUDE
 

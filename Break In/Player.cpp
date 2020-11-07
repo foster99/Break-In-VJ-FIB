@@ -104,7 +104,7 @@ void Player::update(int deltaTime)
 		{
 			int limit = map->getTileSize() * 2;
 			int pos2Check = (int)posPlayer.y - slideOffset.y - slide->getLogicSize().y;
-			int displacement = map->getMapSizeY() * map->getTileSize() * (3 - actRoom);
+			int displacement = map->getMapSizeY() * map->getTileSize() * (3 - currRoom);
 
 			movingY = true;
 			setSign(speedY, '-');
@@ -176,9 +176,19 @@ bool Player::getDeathAnimation()
 	return deathAnimation;
 }
 
+glm::vec2 Player::getPosition()
+{
+	return posPlayer;
+}
+
+int Player::getCurrentRoom()
+{
+	return currRoom;
+}
+
 void Player::setRoom(int room)
 {
-	actRoom = room;
+	currRoom = room;
 }
 
 void Player::updateEyesAnimation()
