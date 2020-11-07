@@ -27,7 +27,7 @@ private:
 
 protected:
 	ShaderProgram texProgram;
-	float currentTime;
+	float currentTime, auxTime;
 	glm::mat4 projection;
 
 };

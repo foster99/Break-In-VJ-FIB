@@ -3,6 +3,7 @@
 
 #include "Scene.h"
 #include "TexturedQuad.h"
+#include <vector>
 
 typedef unsigned short Mode;
 
@@ -12,7 +13,7 @@ class OptionsScene : public Scene
 
 public:
 	OptionsScene();
-	OptionsScene(string filename);
+	OptionsScene(int n);
 	~OptionsScene();
 	
 	// Inherited Methods
@@ -20,14 +21,20 @@ public:
 	void update(int deltaTime);
 	void render();
 
+	void setNTextures(int n);
+	void nextTexture();
+	void prevTexture();
+	int  getCurrTex();
+
 	// Menu Methods
-	void changeTex();
-	void setTexture(string filename);
+	void setTexture(int i, string filename);
 
 private:
+
 	TexturedQuad* texQuad;
-	Texture tex;
+	vector<Texture> tex;
 	Mode mode;
-	//int actTexture; // REMOVE
+
+	int currTexture;
 };
 #endif

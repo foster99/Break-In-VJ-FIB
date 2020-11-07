@@ -7,10 +7,10 @@ OptionsScene::OptionsScene()
 	texQuad = NULL;
 }
 
-OptionsScene::OptionsScene(string filename)
+OptionsScene::OptionsScene(int n)
 {
 	texQuad = NULL;
-	setTexture(filename);
+	setNTextures(n);
 }
 
 OptionsScene::~OptionsScene()
@@ -22,7 +22,9 @@ OptionsScene::~OptionsScene()
 void OptionsScene::init()
 {
 	this->Scene::init();
-	glm::vec2 geom[2] = { glm::vec2(0.f,0.f),glm::vec2(Game::SCREEN_WIDTH,Game::SCREEN_HEIGHT) };
+	currTexture = 0;
+	tex = vector<Texture>(1);
+	glm::vec2 geom[2] = { glm::vec2(0.f,0.f), glm::vec2(Game::SCREEN_WIDTH,Game::SCREEN_HEIGHT) };
 	glm::vec2 texCoords[2] = { glm::vec2(0.f,0.f), glm::vec2(1.f,1.f) };
 	texQuad = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
 }
@@ -30,22 +32,35 @@ void OptionsScene::init()
 void OptionsScene::update(int deltaTime)
 {
 	this->Scene::update(deltaTime);
-
-	// Put menuScene updates HERE
 }
 
 void OptionsScene::render()
 {
-	texQuad->render(tex);
+	texQuad->render(tex[currTexture]);
 	this->Scene::render();
 }
 
-void OptionsScene::changeTex()
+void OptionsScene::setNTextures(int n)
 {
-	// actTexture = (actTexture + 1) % 2; // REMOVE
+	tex = vector<Texture>(n);
 }
 
-void OptionsScene::setTexture(string filename)
+void OptionsScene::nextTexture()
 {
-	tex.loadFromFile(filename.c_str(), TEXTURE_PIXEL_FORMAT_RGBA);
+	currTexture = (currTexture + 1) % tex.size();
+}
+
+void OptionsScene::prevTexture()
+{
+	currTexture--;
+	if (currTexture < 0) currTexture += tex.size();
+}
+
+int OptionsScene::getCurrTex() {
+	return currTexture;
+}
+
+void OptionsScene::setTexture(int i, string filename)
+{
+	tex[i].loadFromFile(filename.c_str(), TEXTURE_PIXEL_FORMAT_RGBA);
 }

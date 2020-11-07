@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Bonus.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="main.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="Bonus.h" />
     <ClInclude Include="MenuTileMap.h" />
     <ClInclude Include="OptionsScene.h" />
     <ClInclude Include="PasswordScene.h" />
@@ -62,22 +64,40 @@
   </ItemGroup>
   <ItemGroup>
     <Media Include="sounds\bell.wav" />
+    <Media Include="sounds\blast.wav" />
+    <Media Include="sounds\bonus.wav" />
+    <Media Include="sounds\brick_collision.wav" />
+    <Media Include="sounds\double_slide.wav" />
+    <Media Include="sounds\lose_live.wav" />
+    <Media Include="sounds\player_collision.wav" />
     <Media Include="sounds\title_song.wav" />
     <Media Include="sounds\tueeeeeeeeee.wav" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="levels\BANK_01_test.txt" />
+    <Text Include="levels\BANK_02.txt" />
     <Text Include="levels\level01.txt" />
     <Text Include="levels\leveltest.txt" />
     <Text Include="levels\menu.txt" />
-    <Text Include="levels\no_path_test.txt" />
+    <Text Include="levels\BANK_01.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\ball.png" />
+    <Image Include="images\balls.png" />
     <Image Include="images\bars.png" />
+    <Image Include="images\bonus.png" />
     <Image Include="images\chars.png" />
+    <Image Include="images\credits_screen.png" />
     <Image Include="images\dynamic_tiles.png" />
     <Image Include="images\eyes.png" />
+    <Image Include="images\instructions_screen.png" />
+    <Image Include="images\options_screen_credits.png" />
+    <Image Include="images\options_screen_exit.png" />
+    <Image Include="images\options_screen_instructions.png" />
+    <Image Include="images\password_screen.png" />
     <Image Include="images\static_tiles.png" />
+    <Image Include="images\title_screen_01.png" />
+    <Image Include="images\title_screen_02.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

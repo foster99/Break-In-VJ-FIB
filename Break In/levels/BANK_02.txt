@@ -1,0 +1,79 @@
+TILEMAP
+24 72 								-- Size of tile map in tiles
+8 8 							    -- Tile size & block size
+16 6 								-- Number of tiles in static tilesheet
+16 4 								-- Number of tiles in dynamic tilesheet
+2									-- Bank Number
+************************
+*       YYYYYYYY       *
+* HHYYRR        RRYYHH *
+* MMYY    CCCC    YYMM *
+* MMYY    CCCC    YYMM *
+****YYYYYYLLLLYYYYBB****
+* MMBB    MMMM    BBMM *
+* MMBBRR  MMMM  RRBBMM *
+* HHBB    ****    BBHH *
+* MMBBRR  YYYY  RRBBMM *
+* MMBB            BBMM *
+****YYRRRRCCCCRRRRYY****
+*   YY    CCCC    YYAA *
+*   YY            YYAA *
+*   YYRR  SSSS    YY   *
+*         SSSS         *
+*         HHHH         *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+********        ********
+********DDDDDDDD********
+*                      *
+*                      *
+*                      *
+* BB                BB *
+*   BB            BB   *
+*     BB        BB     *
+*       BB    BB       *
+*         BBBB         *
+* RR      RRRR      RR *
+*     RR        RR     *
+* RR      RRRR      RR *
+*         YYYY         *
+*       YYKKOOYY       *
+*     YY  KKOO  YY     *
+*   YY            YY   *
+* YY                YY *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+********        ********
+********DDDDDDDD********
+*                      *
+*                      *
+* RR                RR *
+* GG                GG *
+* RR                RR *
+****  RRRRRRRRRRRR  ****
+* KK  YYYYYYYYYYYY     *
+* KK  YYGGYYGGYYGG     *
+*     GGGGGGGGGGGG     *
+*     YYGGYYGGYYGG     *
+*     YYYYYYYYYYYY     *
+* RR  ****    ****  RR *
+* GG                GG *
+* RR                RR *
+****                ****
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+************************
+

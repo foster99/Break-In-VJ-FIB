@@ -28,7 +28,7 @@ public:
 	static constexpr int SCREEN_HEIGHT	= 192;
 	static constexpr int TILESIZE		= 8;
 
-	Game() {}
+	Game();
 	
 	static Game &instance()
 	{
@@ -38,6 +38,8 @@ public:
 	
 	void init();
 	void loadSounds();
+	void loadPoints();
+	void restartGameScene();
 	bool update(int deltaTime);
 	void render();
 	
@@ -52,8 +54,16 @@ public:
 	
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
-
+	void setMaxPoints(int p);
 	void playBallSound();
+
+	void playBrickSound();
+	void playBonusSound();
+	void playPlayerSound();
+	void playDoubleSlideSound();
+	void playLoseLiveSound();
+	void playBlastSound();
+
 	void playTitleSong();
 	void stopTitleSong();
 
@@ -68,6 +78,8 @@ public:
 
 private:
 
+	int max_points;
+
 	Mode currMode();
 	void setMode(Mode newMode);
 	void rollbackMode();
@@ -81,17 +93,25 @@ private:
 	OptionsScene creditsScene;			// Scene to render when showing the Credits
 	OptionsScene instructionsScene;		// Scene to render when showing the Instructions
 	PasswordScene passwordScene;		// Scene to render when showing the Passwords Menu.
-
 	
 	stack<Mode> modeHist;				// Defines the mode history (startmenu, playing, credits, ...)
 
 	bool keys[256], specialKeys[256];	// Store key states so that we can have access at any time
 	
-										//MenuScene scene;		// EXPERIMENT
-
-	Sound ball_sound;
+	// Looped Sounds
 	Sound title_song;
+	
+	// One Shoot Sound
+	Sound ball_sound;
+	Sound brick_sound;
+	Sound slide_sound;
+	Sound doubleSlide_sound;
+	Sound bonus_sound;
+	Sound loseLife_sound;
+	Sound blast_sound;
 
+	// GameScene Info
+	int bank;
 
 };
 

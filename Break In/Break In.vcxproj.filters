@@ -126,6 +126,9 @@
     <ClCompile Include="MenuTileMap.cpp">
       <Filter>Source Files\Tiles</Filter>
     </ClCompile>
+    <ClCompile Include="Bonus.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h">
@@ -185,6 +188,9 @@
     <ClInclude Include="MenuTileMap.h">
       <Filter>Header Files\Tiles</Filter>
     </ClInclude>
+    <ClInclude Include="Bonus.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Media Include="sounds\bell.wav">
@@ -196,6 +202,24 @@
     <Media Include="sounds\tueeeeeeeeee.wav">
       <Filter>Resource Files\sound</Filter>
     </Media>
+    <Media Include="sounds\blast.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\bonus.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\brick_collision.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\double_slide.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\lose_live.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\player_collision.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <Text Include="levels\level01.txt">
@@ -204,10 +228,16 @@
     <Text Include="levels\leveltest.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
-    <Text Include="levels\no_path_test.txt">
+    <Text Include="levels\menu.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
-    <Text Include="levels\menu.txt">
+    <Text Include="levels\BANK_01.txt">
+      <Filter>Resource Files\levels</Filter>
+    </Text>
+    <Text Include="levels\BANK_02.txt">
+      <Filter>Resource Files\levels</Filter>
+    </Text>
+    <Text Include="levels\BANK_01_test.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
   </ItemGroup>
@@ -229,6 +259,36 @@
     </Image>
     <Image Include="images\chars.png">
       <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="images\credits_screen.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\instructions_screen.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\options_screen_credits.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\options_screen_exit.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\options_screen_instructions.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\password_screen.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\title_screen_01.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\title_screen_02.png">
+      <Filter>Resource Files\images\screen_texture</Filter>
+    </Image>
+    <Image Include="images\balls.png">
+      <Filter>Resource Files\images\sprites</Filter>
+    </Image>
+    <Image Include="images\bonus.png">
+      <Filter>Resource Files\images\sprites</Filter>
     </Image>
   </ItemGroup>
 </Project>

@@ -26,6 +26,6 @@ private:
 	glm::ivec2 tileMapDispl, logicSize, quadSize, posSlide, singleSize, offSet;
 	glm::vec2 displ_posPlayer;
 	Texture tex;
-	Sprite* sprite;
+	Sprite* sprite = NULL;
 };
 #endif

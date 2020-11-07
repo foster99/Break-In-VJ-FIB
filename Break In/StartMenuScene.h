@@ -3,7 +3,7 @@
 
 #include "Scene.h"
 #include "TexturedQuad.h"
-
+#include "Sprite.h"
 
 // This class represents the menu scene
 
@@ -22,9 +22,22 @@ public:
 	// Menu Methods
 	void changeTex();
 
+	// Points Methods
+	string intToStringOfNDigits(int i, int Ndigits);
+	void updatePoints();
+	void renderPoints();
+	void setPoints(int p);
+	void prepareCounters(vector<Sprite*>& quads, glm::vec3& coords, const glm::vec2& minCoords, ShaderProgram& program);
+
+
 private:
 	TexturedQuad* texQuad;
 	Texture tex1, tex2;
-	//int actTexture; // REMOVE
+
+	vector<Sprite*> pointsQuads;
+	Texture digits;
+	glm::vec3 pointsCoords;
+	string points;
+
 };
 #endif

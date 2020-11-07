@@ -42,6 +42,7 @@ void Sound::drop()
 {
 	if (playing) {
 		engine->drop();
+		engine = NULL;
 		playing = false;
 	}
 }

@@ -33,23 +33,33 @@ public:
 	int getMapSizeX() const { return mapSize.x;  }
 	int getMapSizeY() const { return mapSize.y / Nrooms; }
 
+	void setRoom(int room_) { currRoom = room_; };
+	void setBank(int bank_) { currBank = bank_; };
+
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speedOg, float& modifierX);
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speedOg, float& modifierX);
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speedOg, float& modifierY);
 	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speedOg, float& modifierY);
 
 	bool tileIsSolid(int i, int j);
+	bool tileIsKey(int i, int j);
+	bool tileIsDeath(int i, int j);
+
+	void deleteKey(int i, int j);
+
 	bool loadLevel(const string &levelFile);
 	void loadTile(char c, int i, int j);
 	void loadTextures();
-	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
+	void prepareStaticArrays();
 	void prepareDynamicArrays();
 
 protected:
 
-	static constexpr char wall = '*';
-	static constexpr char black = '#';
+	// Static Tiles
+	static constexpr char wall			= '*';
+	static constexpr char black			= '#';
 
+	// Dynamic Tiles
 	static constexpr char brickRed		= 'R';
 	static constexpr char brickGreen	= 'G';
 	static constexpr char brickBlue		= 'B';
@@ -63,25 +73,36 @@ protected:
 	static constexpr char outCard		= 'O';
 	static constexpr char blueSpheres	= 'S';
 	
+	// Progam Variables
+	glm::vec2 minCoords;
+	ShaderProgram program;
+	
+	// OpenGL Variables
 	GLuint vaoStatic, vaoDynamic;
 	GLuint vboStatic, vboDynamic;
 	GLint staticPosLocation, staticTexCoordLocation, dynamicPosLocation, dynamicTexCoordLocation;
-
-	glm::vec2 minCoords;
-	ShaderProgram program;
+	bool first_time_we_prepare_Arrays;
 
 	// TileMap info
-	glm::ivec2 position, mapSize, staticTilesheetSize, dynamicTilesheetSize;
-	int tileSize, blockSize;
-	Texture staticTilesheet, dynamicTilesheet;
-	glm::vec2 staticTileTexSize, dynamicTileTexSize;
-	bool firstDynamic;
-	// Bank info
-	int bankID, Nrooms;
+	int tileSize;
+	int blockSize;
+	glm::ivec2 mapSize;
+
+	// Static Tiles Texture Variables
+	Texture staticTilesheet;
+	glm::vec2 staticTileTexSize;
+	glm::ivec2 staticTilesheetSize;
+
+	// Dynamic Tiles Texture Variables
+	Texture dynamicTilesheet;
+	glm::vec2 dynamicTileTexSize;
+	glm::ivec2 dynamicTilesheetSize;
+
+	// Current Bank Info
+	int currBank;
+	int currRoom;
+	int Nrooms;
 	vector<vector<Tile>> mapita;
-
-	//vector<vector<int>> solids;
-
 };
 
 

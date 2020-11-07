@@ -17,6 +17,7 @@ void Scene::init()
 	initShaders();
 	projection = glm::ortho(0.f, float(Game::SCREEN_WIDTH - 1), float(Game::SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
+	auxTime = 0.0f;
 }
 
 void Scene::update(int deltaTime)

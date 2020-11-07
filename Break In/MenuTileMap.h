@@ -37,17 +37,43 @@ private:
 
 	string intToStringOfNDigits(int i, int Ndigits);
 
-	Texture digits, chars;
-	vector<Sprite*> moneyQuads, line1Quads, line2Quads, pointsQuads, livesQuads, roomQuads, bankQuads;
+	Texture digits;
+	Texture chars;
+
+	// Text Sprites
+	vector<Sprite*> moneyQuads;
+	vector<Sprite*> line1Quads;
+	vector<Sprite*> line2Quads;
+	vector<Sprite*> pointsQuads;
+	vector<Sprite*> livesQuads;
+	vector<Sprite*> roomQuads;
+	vector<Sprite*> bankQuads;
 
 	// Contabilization values
-	string line1, line2, money, points, lives, room, bank;
+	string line1;
+	string line2;
+	string money;
+	string points;
+	string lives;
+	string room;
+	string bank;
 	
-	// Contabilization modification control
-	bool mod_line, mod_money, mod_points, mod_lives, mod_room, mod_bank;
+	// Contabilization control
+	bool mod_line;
+	bool mod_money;
+	bool mod_points;
+	bool mod_lives;
+	bool mod_room;
+	bool mod_bank;
 	
 	// Contabilization info
-	glm::ivec3 moneyCoords, pointsCoords, livesCoords, bankCoords, line1Coords, line2Coords, roomCoords;
+	glm::ivec3 moneyCoords;
+	glm::ivec3 pointsCoords;
+	glm::ivec3 livesCoords;
+	glm::ivec3 bankCoords;
+	glm::ivec3 line1Coords;
+	glm::ivec3 line2Coords;
+	glm::ivec3 roomCoords;
 };
 #endif
 
