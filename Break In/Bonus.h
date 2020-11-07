@@ -3,7 +3,6 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
-#include "Player.h"
 
 class Bonus
 {
@@ -14,7 +13,6 @@ public:
 
 	void changeModifierX(float value);
 	void changeModifierY(float value);
-	void setPlayer(Player* pla);
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
 	void restartTime();
@@ -37,7 +35,6 @@ private:
 	Texture tex;
 	Sprite* sprite;
 	TileMap* map;
-	Player* player;
 	
 	// Entity Props
 	glm::vec2 posBonus;
@@ -55,5 +52,5 @@ private:
 	int spdModifierY;
 };
 
-#endif // _BALL_INCLUDE
+#endif // _BONUS_INCLUDE
 

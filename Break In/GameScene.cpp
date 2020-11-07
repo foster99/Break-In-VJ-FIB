@@ -13,10 +13,10 @@ GameScene::~GameScene()
 {
 	this->Scene::~Scene();
 
-	if (player != NULL)
-		delete player;
-	if (ball != NULL)
-		delete ball;
+	if (player   != NULL)	delete player;
+	if (ball     != NULL)	delete ball;
+	if (guardian != NULL)	delete guardian;
+	if (bonus    != NULL)	delete bonus;
 }
 
 void GameScene::init() {
@@ -64,9 +64,9 @@ void GameScene::update(int deltaTime) {
 		scrolling = tiles_displacement != end;
 		bonus->restartTime();
 	}
-	else if (ballOnDoor())							// COMPROBAR SI HAY QUE CAMBIAR DE ROOM
+	else if (changeOfRoom())						// COMPROBAR SI HAY QUE CAMBIAR DE ROOM
 	{
-		if (room_old < room)		stride = +1;
+		if (room_old < room)			stride = +1;
 		else /*(room_old > currRoom)*/	stride = -1;
 
 		switch (room) {
@@ -101,6 +101,7 @@ void GameScene::update(int deltaTime) {
 			map->deleteKey(60, 2);
 			godMode = false;
 
+			guardian->alarmOn();
 			// SOLO DESAPARESE LA LLAVE CUANDO SE UPDATEA LA PARTE DINAMICA
 			// LA PARTE DINAMICA SE UPDATEA CUANDO LA PELOTA 
 		}
@@ -113,6 +114,12 @@ void GameScene::update(int deltaTime) {
 
 	if (bonus->update(deltaTime))
 		player->setBonus(bonus->getActiveBonus());
+
+	if (guardian->getRoom() == player->getCurrentRoom()) {
+		if (guardian->update(deltaTime))
+			playerLosesLife();
+	}
+	else guardian->restartTime();
 
 	player->update(deltaTime);
 	map->prepareDynamicArrays();
@@ -131,6 +138,7 @@ void GameScene::render()
 	if (!scrolling)		player->render(displacement_mat);
 	
 	bonus->render(displacement_mat);
+	guardian->render(displacement_mat);
 	ball->render(displacement_mat);
 
 	// Render Lateral Menu
@@ -173,7 +181,7 @@ void GameScene::gameIsOver()
 	// return to Menu Scene
 }
 
-bool GameScene::ballOnDoor()
+bool GameScene::changeOfRoom()
 {
 	room_old = room;
 
@@ -242,7 +250,13 @@ void GameScene::restartPlayerBall()
 	bonus->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	bonus->setTileMap(map);
 	bonus->setPosition(glm::vec2(INIT_BONUS_X_TILES * map->getTileSize(), INIT_BONUS_Y_TILES * map->getTileSize()));
-	bonus->setPlayer(player);
+
+	guardian = new Guardian();
+	guardian->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	guardian->setTileMap(map);
+	guardian->setPosition(glm::vec2(INIT_BONUS_X_TILES * map->getTileSize(), INIT_BONUS_Y_TILES * map->getTileSize()));
+	guardian->setPlayer(player);
+	guardian->setRoom(map->getGuardianRoom());
 }
 
 bool GameScene::getGameOver()

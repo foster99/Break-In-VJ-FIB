@@ -129,6 +129,9 @@
     <ClCompile Include="Bonus.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Guardian.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h">
@@ -189,6 +192,9 @@
       <Filter>Header Files\Tiles</Filter>
     </ClInclude>
     <ClInclude Include="Bonus.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Guardian.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>

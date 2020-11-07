@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Ball.h"
 #include "Bonus.h"
+#include "Guardian.h"
 #include "MenuTileMap.h"
 
 class GameScene :
@@ -45,7 +46,7 @@ public:
     void toggleGodMode();
     void toogleChangeBar();
 
-    bool ballOnDoor();
+    bool changeOfRoom();
     bool lastBallisDead();
 
     static constexpr float INIT_PLAYER_X_TILES = 12;
@@ -65,6 +66,7 @@ private:
     Player* player;
     Ball* ball;
     Bonus* bonus;
+    Guardian* guardian;
 
     // Control variables
     bool godMode;
