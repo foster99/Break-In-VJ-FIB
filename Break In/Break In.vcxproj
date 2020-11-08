@@ -70,7 +70,11 @@
     <Media Include="sounds\bonus.wav" />
     <Media Include="sounds\brick_collision.wav" />
     <Media Include="sounds\double_slide.wav" />
+    <Media Include="sounds\greenCard.wav" />
     <Media Include="sounds\lose_live.wav" />
+    <Media Include="sounds\moneyBag_01.wav" />
+    <Media Include="sounds\moneyBag_02.wav" />
+    <Media Include="sounds\moneyBag_03.wav" />
     <Media Include="sounds\player_collision.wav" />
     <Media Include="sounds\title_song.wav" />
     <Media Include="sounds\tueeeeeeeeee.wav" />

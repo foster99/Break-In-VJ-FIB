@@ -47,6 +47,8 @@ public:
     void toogleChangeBar();
 
     bool changeOfRoom();
+    void nextRoom();
+    void prevRoom();
     bool lastBallisDead();
 
     static constexpr float INIT_PLAYER_X_TILES = 12;

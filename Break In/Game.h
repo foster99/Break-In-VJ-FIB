@@ -8,6 +8,7 @@
 #include <GL/glut.h>
 #include <stack>
 #include <iostream>
+#include <random>
 
 #include "GameScene.h"
 #include "StartMenuScene.h"
@@ -63,6 +64,8 @@ public:
 	void playDoubleSlideSound();
 	void playLoseLiveSound();
 	void playBlastSound();
+	void playGreenCardSound();
+	void playMoneySound();
 
 	void playTitleSong();
 	void stopTitleSong();
@@ -109,6 +112,10 @@ private:
 	Sound bonus_sound;
 	Sound loseLife_sound;
 	Sound blast_sound;
+	Sound money_sound_01;
+	Sound money_sound_02;
+	Sound money_sound_03;
+	Sound greenCard_sound;
 
 	// GameScene Info
 	int bank;

@@ -42,11 +42,16 @@ public:
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speedOg, float& modifierY, glm::ivec2 &lastCollision);
 	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speedOg, float& modifierY, glm::ivec2 &lastCollision);
 
+	char tileCollision(int i, int j);
 	bool tileIsSolid(int i, int j);
 	bool tileIsKey(int i, int j);
 	bool tileIsDeath(int i, int j);
+	bool alarmIsOn();
 
-	void deleteKey(int i, int j);
+	void collisionBrick(char brick, int i, int j);
+	void openDoor();
+	void closeDoor();
+	void deleteSpecialTile(int i, int j, char tile);
 
 	bool loadLevel(const string &levelFile);
 	void loadTile(char c, int i, int j);
@@ -56,14 +61,16 @@ public:
 
 protected:
 
-	// Static Tiles
+	// Static tiles
 	static constexpr char wall			= '*';
 	static constexpr char black			= '#';
+	static constexpr char death			= 'X';
 
 	// Dynamic Tiles
 	static constexpr char brickRed		= 'R';
 	static constexpr char brickGreen	= 'G';
 	static constexpr char brickBlue		= 'B';
+	static constexpr char brickYellow	= 'Y';
 	static constexpr char brickLow		= 'L';
 	static constexpr char brickHigh		= 'H';
 	static constexpr char door			= 'D';
@@ -104,6 +111,7 @@ protected:
 	int currRoom;
 	int guardianRoom;
 	int Nrooms;
+	bool alarmOn;
 	vector<vector<Tile>> mapita;
 };
 

@@ -45,7 +45,10 @@ void Game::loadSounds()
 	bonus_sound = Sound("bonus.wav", false);
 	loseLife_sound = Sound("lose_live.wav", false);
 	blast_sound = Sound("blast.wav", false);
-
+	money_sound_01 = Sound("moneyBag_01.wav", false);
+	money_sound_02 = Sound("moneyBag_02.wav", false);
+	money_sound_03 = Sound("moneyBag_03.wav", false);
+	greenCard_sound = Sound("greenCard.wav", false);
 
 	//ball_sound = Sound("tueeeeeeeeee.wav", false);
 	ball_sound = Sound("ball.wav", false);
@@ -181,6 +184,8 @@ void Game::keyPressed(int key)
 			case ESC:	setMode(options);	break;
 			case 'g':	toggleGodMode();	break;
 			case 'b':	toogleChangeBar();	break;
+			case 'j':	gameScene.nextRoom(); break;
+			case 'l':	gameScene.prevRoom(); break;
 			default:						break;
 		} break;
 
@@ -230,11 +235,6 @@ void Game::keyReleased(int key)
 
 void Game::specialKeyPressed(int key)
 {
-	specialKeys[key] = true;
-}
-
-void Game::specialKeyReleased(int key)
-{
 	switch (currMode()) {
 	case startMenu:
 		switch (key) {
@@ -248,7 +248,7 @@ void Game::specialKeyReleased(int key)
 
 	case options:
 		switch (key) {
-		case GLUT_KEY_UP:	
+		case GLUT_KEY_UP:
 			playBrickSound();
 			optionsScene.prevTexture();
 			break;
@@ -274,7 +274,12 @@ void Game::specialKeyReleased(int key)
 		default:	break;
 		} break;
 	}
+	
+	specialKeys[key] = true;
+}
 
+void Game::specialKeyReleased(int key)
+{
 	specialKeys[key] = false;
 }
 
@@ -339,6 +344,23 @@ void Game::playLoseLiveSound()
 void Game::playBlastSound()
 {
 	blast_sound.play();
+}
+
+void Game::playGreenCardSound()
+{
+	greenCard_sound.play();
+}
+
+void Game::playMoneySound()
+{
+	std::default_random_engine generator;
+	std::uniform_int_distribution<int> rand(0, 2);
+
+	switch (rand(generator)) {
+	case 0: money_sound_01.play(); break;
+	case 1: money_sound_02.play(); break;
+	case 2: money_sound_03.play(); break;
+	}
 }
 
 void Game::playTitleSong()

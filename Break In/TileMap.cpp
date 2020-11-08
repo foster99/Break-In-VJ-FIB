@@ -16,6 +16,7 @@ TileMap::TileMap() {
 TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords_, ShaderProgram &program_)
 {
 	currBank = 1;
+	alarmOn = false;
 	loadLevel(levelFile);
 	loadTextures();
 
@@ -387,6 +388,41 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, flo
 	return false;
 }
 
+char TileMap::tileCollision(int i, int j)
+{
+	char tile = mapita[i][j].symbol;
+	
+	switch (tile)
+	{
+	case brickBlue:
+	case brickRed:
+	case brickYellow:
+	case brickGreen:
+	case brickLow:
+	case brickHigh:	
+		collisionBrick(tile, i, j);
+		break;
+
+	case alarm:
+		alarmOn = true;
+		break;
+
+	case key:
+		openDoor();
+	case moneyBag:
+	case coin:
+	case blueSpheres:
+	case outCard:
+		deleteSpecialTile(i, j, tile);
+		break;
+
+	default:
+		break;
+	}
+
+	return tile;
+}
+
 bool TileMap::tileIsSolid(int i, int j)
 {
 	return mapita[i][j].resistance != 0;
@@ -402,74 +438,73 @@ bool TileMap::tileIsDeath(int i, int j)
 	return (mapita[i][j].symbol == Tile::death);
 }
 
-void TileMap::deleteKey(int i, int j)
+bool TileMap::alarmIsOn()
 {
-	Tile& me		= mapita[  i  ][  j  ];
-	Tile& up		= mapita[i - 1][  j  ];
-	Tile& down		= mapita[i + 1][  j  ];
-	Tile& left		= mapita[  i  ][j - 1];
-	Tile& right		= mapita[  i  ][j + 1];
-	Tile& top_left	= mapita[i - 1][j - 1];
-	Tile& top_right	= mapita[i - 1][j + 1];
-	Tile& bot_left	= mapita[i + 1][j - 1];
-	Tile& bot_right	= mapita[i + 1][j + 1];
+	return alarmOn;
+}
 
-	if (top_left.symbol == Tile::key)
+void TileMap::collisionBrick(char brick, int i, int j)
+{
+	switch (brick)
 	{
-		top_left.loadTile(' ', i - 1, j - 1, currBank, dynamicTilesheetSize.x);
-		      up.loadTile(' ', i - 1,     j, currBank, dynamicTilesheetSize.x);
-		    left.loadTile(' ',     i, j - 1, currBank, dynamicTilesheetSize.x);
-			  me.loadTile(' ',     i,     j, currBank, dynamicTilesheetSize.x);
-	}
-	else if (top_right.symbol == Tile::key)
-	{
-		top_right.loadTile(' ', i - 1, j + 1, currBank, dynamicTilesheetSize.x);
-		       up.loadTile(' ', i - 1,     j, currBank, dynamicTilesheetSize.x);
-		    right.loadTile(' ',     i, j + 1, currBank, dynamicTilesheetSize.x);
-		       me.loadTile(' ',     i,     j, currBank, dynamicTilesheetSize.x);
-	}
-	else if (bot_left.symbol == Tile::key)
-	{
-		 bot_left.loadTile(' ', i + 1, j - 1, currBank, dynamicTilesheetSize.x);
-		     down.loadTile(' ', i + 1,     j, currBank, dynamicTilesheetSize.x);
-		     left.loadTile(' ',     i, j - 1, currBank, dynamicTilesheetSize.x);
-		       me.loadTile(' ',     i,     j, currBank, dynamicTilesheetSize.x);
-	}
-	else if (bot_right.symbol == Tile::key)
-	{
-		bot_right.loadTile(' ', i + 1, j + 1, currBank, dynamicTilesheetSize.x);
-		     down.loadTile(' ', i + 1,     j, currBank, dynamicTilesheetSize.x);
-		    right.loadTile(' ',     i, j + 1, currBank, dynamicTilesheetSize.x);
-		       me.loadTile(' ',     i,     j, currBank, dynamicTilesheetSize.x);
-	}
-
-	for (int i = mapSize.y - (currRoom * mapSize.x), offset = 8, j = offset; j < mapSize.x - offset; ++j)
-	{
-		mapita[i][j].loadTile('D', i, j, currBank, dynamicTilesheetSize.x);
-		mapita[i][j].type = Tile::dynamicTile;
-		mapita[i][j].id_1 = mapita[i][j].id_2;
-		mapita[i][j].resistance = 0;
+	case brickBlue:
+	case brickRed:
+	case brickYellow:
+	case brickGreen:
+	case brickLow:
+		loadTile(' ', i, j);
+		if (j % 2)	loadTile(' ', i, j - 1);
+		else		loadTile(' ', i, j + 1);
+		break;
+	case brickHigh:
+		loadTile(brickLow, i, j);
+		if (j % 2)	loadTile(brickLow, i, j - 1);
+		else		loadTile(brickLow, i, j + 1);
+		break;
 	}
 }
 
+void TileMap::openDoor()
+{
+	for (int i_ = mapSize.y - (currRoom * mapSize.x), offset = 8, j_ = offset; j_ < mapSize.x - offset; ++j_)
+	{
+		loadTile(Tile::door, i_, j_);
+		mapita[i_][j_].type = Tile::dynamicTile;
+		mapita[i_][j_].id_1 = mapita[i_][j_].id_2;
+		mapita[i_][j_].resistance = 0;
+	}
+}
 
+void TileMap::closeDoor()
+{
+	for (int i_ = mapSize.y - (currRoom * mapSize.x), offset = 8, j_ = offset; j_ < mapSize.x - offset; ++j_)
+	{
+		loadTile(Tile::wall, i_, j_);
+	}
+}
 
+void TileMap::deleteSpecialTile(int i, int j, char tile)
+{	
+	loadTile(' ', i, j);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	if (i % 2 == 0 && j % 2 == 0) {
+		loadTile(' ', i, j+1);
+		loadTile(' ', i+1, j+1);	//  XO
+		loadTile(' ', i+1, j);		//  OO
+	}
+	else if (i % 2 == 1 && j % 2 == 0) {
+		loadTile(' ', i, j+1);
+		loadTile(' ', i-1, j+1);	//	OO
+		loadTile(' ', i-1, j);		//	XO
+	}
+	else if (i % 2 == 0 && j % 2 == 1) {
+		loadTile(' ', i, j-1);
+		loadTile(' ', i+1, j-1);	//	OX
+		loadTile(' ', i+1, j);		//	OO
+	}
+	else if (i % 2 == 1 && j % 2 == 1) {
+		loadTile(' ', i, j-1);
+		loadTile(' ', i-1, j);		//	OO
+		loadTile(' ', i-1, j-1);	//	OX
+	}
+}

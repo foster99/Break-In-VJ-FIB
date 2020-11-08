@@ -6,8 +6,8 @@ TILEMAP
 1									-- Bank Number
 3									-- Guardian Room
 ************************
-*       BBBBBBBB    CC *
-*       GGGGGGGG    CC *
+*       BBBBBBBB       *
+*       GGGGGGGG       *
 * RRRRRR        RRRRRR *
 * MMCC            CCMM *
 * MMCC            CCMM *
@@ -37,9 +37,9 @@ TILEMAP
 *                      *
 * BB    BB    BB    BB *
 *   GGGG        GGGG   *
-* GGRRRR  GGGG  RRRR   *
+* GGKKRR  GGGG  RRRR   *
 * GGKKRR  BBBB  RRYYGG *
-*   KKRR  YYYY  RRYYGG *
+*   YYRR  YYYY  RRYYGG *
 *   YYYY        YYYY   *
 *   BBBB        BBBB   *
 *     GG          GG   *

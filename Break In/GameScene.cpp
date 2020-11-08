@@ -76,34 +76,63 @@ void GameScene::update(int deltaTime) {
 		}
 	}
 	else {
-	
-		bool ballCollided = ball->update(deltaTime);
-		// PILOTA REOTRNA POS EN TILES D'ON IMPACTE glm::ivec2 collisionIn(i,j)
 		
-		if (ballCollided)
+		if (ball->update(deltaTime))
 		{
-			money += 100;
-			menuMap->setMoney(money);
+			glm::ivec2 tile = ball->getLastCollision();
+			
+			if (tile.x < 0 || tile.y < 0) {
+				Game::instance().playPlayerSound();
+			}
+			else {
+				switch (map->tileCollision(tile[0], tile[1]))
+				{
+				case Tile::moneyBag:
+					Game::instance().playMoneySound();
+					money += 150;
+					points += 200;
+					break;
 
-			points += 33;
+				case Tile::coin:
+					Game::instance().playBrickSound();
+					money += 50;
+					points += 125;
+					break;
+
+				case Tile::blueSpheres:
+					Game::instance().playMoneySound();
+					money += 300;
+					points += 333;
+					break;
+
+				case Tile::brickBlue:
+				case Tile::brickRed:
+				case Tile::brickYellow:
+				case Tile::brickGreen:
+				case Tile::brickLow:
+					Game::instance().playBrickSound();
+					points += 100;
+					break;
+
+				case Tile::outCard:
+					Game::instance().playGreenCardSound();
+					points += 100;
+
+				case Tile::alarm:
+					points += 100;
+					guardian->alarmOn();
+
+				default: break;
+				}
+			}
+			
+			menuMap->setMoney(money);
 			menuMap->setPoints(points);
 
 			if (points > 1000) {
 				menuMap->setLine("AII LMAO", "4POGGERS"); // CAMBIA CON EL BONUS
 			}
-		}
 
-		// He col
-		glm::ivec2 last_collision_coords = glm::ivec2(0);
-		if (godMode)
-		{
-
-			map->deleteKey(60, 2);
-			godMode = false;
-
-			guardian->alarmOn();
-			// SOLO DESAPARESE LA LLAVE CUANDO SE UPDATEA LA PARTE DINAMICA
-			// LA PARTE DINAMICA SE UPDATEA CUANDO LA PELOTA 
 		}
 
 		map->setRoom(room);
@@ -185,6 +214,8 @@ bool GameScene::changeOfRoom()
 {
 	room_old = room;
 
+
+
 	if (ball->getPosition().y / 8 > 48) {
 		room = 1;
 		menuMap->setRoom(room);
@@ -203,6 +234,26 @@ bool GameScene::changeOfRoom()
 	return scrolling;
 }
 
+void GameScene::nextRoom()
+{
+	if (godMode && room < 3)
+	{
+		glm::vec2 ballPos = ball->getPosition();
+		ballPos.y -= 24 * 8;
+		ball->setPosition(ballPos);
+	}
+}
+
+void GameScene::prevRoom()
+{
+	if (godMode && room > 1)
+	{
+		glm::vec2 ballPos = ball->getPosition();
+		ballPos.y += 24 * 8;
+		ball->setPosition(ballPos);
+	}
+}
+
 bool GameScene::lastBallisDead()
 {
 	return map->tileIsDeath((ball->getBasePositionInTiles()).y, (ball->getBasePositionInTiles()).x);
@@ -211,8 +262,8 @@ bool GameScene::lastBallisDead()
 void GameScene::startBank()
 {
 	string path;
-	if (bank < 10)	path = "levels/BANK_0" + to_string(bank) +"_test.txt";
-	else			path = "levels/BANK_" + to_string(bank) + "_test.txt";
+	if (bank < 10)	path = "levels/BANK_0" + to_string(bank) +".txt";
+	else			path = "levels/BANK_" + to_string(bank) + ".txt";
 	
 	map = TileMap::createTileMap(path.c_str(), glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map->setBank(bank);

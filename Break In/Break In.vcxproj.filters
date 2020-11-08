@@ -226,6 +226,18 @@
     <Media Include="sounds\player_collision.wav">
       <Filter>Resource Files\sound</Filter>
     </Media>
+    <Media Include="sounds\moneyBag_01.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\moneyBag_02.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\moneyBag_03.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\greenCard.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <Text Include="levels\level01.txt">

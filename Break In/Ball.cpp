@@ -57,6 +57,7 @@ bool Ball::update(int deltaTime)
 			sprite->changeAnimation(3);
 			spdModifierY *= -1;
 		}
+
 		if (collisionX = (spdModifierX > 0 && map->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.x, (int)speed, spdModifierX, lastCollision))){
 			sprite->changeAnimation(1);
 			spdModifierX *= -1;
@@ -67,18 +68,11 @@ bool Ball::update(int deltaTime)
 		}
 	}
 	
-	// SOUNDS
-	if (collisionX || collisionY)
-		Game::instance().playBrickSound();
-	else if (collisionPlayer)
-		Game::instance().playPlayerSound();
-
+	if (collisionPlayer)	lastCollision = glm::ivec2(-1);
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
-	
-	// chapuza para contar colisiones, habria que cambiarlo por el retorno de un entero o un identificador
-	// de la tile con la que ha chocado etc.
-	return (collisionPlayer);
+
+	return (collisionPlayer || collisionX || collisionY);
 }
 
 void Ball::render(glm::mat4& displacement_mat)
