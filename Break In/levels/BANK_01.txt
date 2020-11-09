@@ -55,8 +55,8 @@ TILEMAP
 ********        ********
 ********DDDDDDDD********
 *                      *
-*                      *
-*                      *
+*       KK             *
+*       KK             *
 *   RRBBBB    BBBBRR   *
 * RR      BBBB      RR *
 * RRRRRRRR    RRRRRRRR *
@@ -76,5 +76,5 @@ TILEMAP
 * YYYY            YYYY *
 *                      *
 *                      *
-********        ********
+************************
 
