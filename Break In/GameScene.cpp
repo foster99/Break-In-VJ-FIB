@@ -74,6 +74,9 @@ void GameScene::update(int deltaTime) {
 		case 2: end = -24;	break;
 		case 3: end = 0;	break;
 		}
+
+		bonus->setRoom(room);
+		bonus->restartTime();
 	}
 	else {
 		
@@ -117,10 +120,12 @@ void GameScene::update(int deltaTime) {
 				case Tile::outCard:
 					Game::instance().playGreenCardSound();
 					points += 100;
+					break;
 
 				case Tile::alarm:
 					points += 100;
 					guardian->alarmOn();
+					break;
 
 				default: break;
 				}
@@ -128,28 +133,37 @@ void GameScene::update(int deltaTime) {
 			
 			menuMap->setMoney(money);
 			menuMap->setPoints(points);
-
-			if (points > 1000) {
-				menuMap->setLine("AII LMAO", "4POGGERS"); // CAMBIA CON EL BONUS
-			}
-
 		}
 
+		bonus->setRoom(room);
 		map->setRoom(room);
 		player->setRoom(room);
 		player->setTilesDisplacement(tiles_displacement);
 		player->setPosMainBall(ball->getPosition());
 	}
 
-	if (bonus->update(deltaTime))
+	if (bonus->update(deltaTime)) {
 		player->setBonus(bonus->getActiveBonus());
-
+		Game::instance().playBonusSound();
+	}
 	if (guardian->getRoom() == player->getCurrentRoom()) {
 		if (guardian->update(deltaTime))
 			playerLosesLife();
 	}
 	else guardian->restartTime();
 
+	if (player->getBonus() > 0) {
+		switch (player->getBonus()) {
+		case Bonus::multipleBall:	menuMap->setLine("AII LMAO" , "4POGGERS"); break;
+		case Bonus::blaster:		menuMap->setLine(" BLASTER" , "  POWER "); break;
+		case Bonus::doubleSlide:	menuMap->setLine(" DOUBLE " , "  SLIDE "); break;
+		case Bonus::magnet:			menuMap->setLine("  MAGNET" , " 4THEWIN"); break;
+		case Bonus::twix:			menuMap->setLine("  SNOOP " , "DOGGYDOG"); break;
+		default: break;
+		}
+	}
+	else menuMap->setLine(" SINGLE ", "  SLIDE ");
+	
 	player->update(deltaTime);
 	map->prepareDynamicArrays();
 	displacement_mat = glm::translate(glm::mat4(1.f), glm::vec3(0.f, float(tiles_displacement * 8), 0.f));
@@ -213,8 +227,6 @@ void GameScene::gameIsOver()
 bool GameScene::changeOfRoom()
 {
 	room_old = room;
-
-
 
 	if (ball->getPosition().y / 8 > 48) {
 		room = 1;
@@ -300,6 +312,8 @@ void GameScene::restartPlayerBall()
 	bonus = new Bonus();
 	bonus->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	bonus->setTileMap(map);
+	bonus->setPlayer(player);
+	bonus->setRoom(room);
 	bonus->setPosition(glm::vec2(INIT_BONUS_X_TILES * map->getTileSize(), INIT_BONUS_Y_TILES * map->getTileSize()));
 
 	guardian = new Guardian();

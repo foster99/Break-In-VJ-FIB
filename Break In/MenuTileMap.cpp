@@ -420,7 +420,7 @@ void MenuTileMap::updateLine()
 		case '6':
 		case '7':
 		case '8':
-		case '9':	sprite->changeAnimation(line1[character] + ('Z' - 'A') + 3 - '0');	break;
+		case '9':	sprite->changeAnimation(line1[character] + ('Z' - 'A') + 4 - '0');	break;
 		case 'A':
 		case 'B':
 		case 'C':

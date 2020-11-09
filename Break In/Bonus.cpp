@@ -29,13 +29,13 @@ bool Bonus::update(int deltaTime)
 {
 	// CHECK IF IT'S TIME FOR THE BONUS
 	bonusTime += deltaTime;
-	if (bonusTime < 5000) {
+	if (bonusTime < bonusDelayTime) {
 		timeToRender = false;
 		return false;
 	}
-	if (bonusTime > 5000 + bonusAliveTime)
+	if (bonusTime > bonusDelayTime + bonusAliveTime)
 	{
-		bonusTime = 0;
+		restartTime();
 		timeToRender = false;
 		return false;
 	}
@@ -49,22 +49,50 @@ bool Bonus::update(int deltaTime)
 		sprite->changeAnimation(activeBonus);
 	}
 
-	if (posBonus.x + sizeBonus > map->getMapSizeX() * map->getTileSize() || posBonus.x <= 0) spdModifierX *= -1;
-	if (posBonus.y + sizeBonus > map->getMapSizeY() * 3 * map->getTileSize() || posBonus.y <= 0) spdModifierY *= -1;
+	// CHECK COLLISION WITH WALLS
+	glm::ivec2 maxPos, minPos;
+	
+	// X LIMITS
+	minPos.x = 0;
+	maxPos.x = map->getMapSizeX() * map->getTileSize();
+	
+	// Y LIMITS
+	switch (room)
+	{
+	case 1:
+		minPos.y = 2 * 24 * map->getTileSize();
+		maxPos.y = 3 * 24 * map->getTileSize();
+		break;
+	case 2:
+		minPos.y = 1 * 24 * map->getTileSize();
+		maxPos.y = 2 * 24 * map->getTileSize();
+		break;
+	case 3:
+		minPos.y = 0;
+		maxPos.y = 1 * 24 * map->getTileSize();
+		break;
+	default: break;
+	}
 
+	// DIRECTION CORRECTION
+	if (int(posBonus.x) <= minPos.x || maxPos.x <= int(posBonus.x) + sizeBonus) spdModifierX *= -1;
+	if (int(posBonus.y) <= minPos.y || maxPos.y <= int(posBonus.y) + sizeBonus) spdModifierY *= -1;
+
+	// NEXT POSITION COMPUTATION
 	posBonus.x += speed * spdModifierX;
 	posBonus.y += speed * spdModifierY;
 
 	sprite->setPosition(glm::vec2(	float(tileMapDispl.x + posBonus.x),
 									float(tileMapDispl.y + posBonus.y)));
 	
-	bool collision_player = false;
+	// CHECK COLLISION WITH PLAYER
+	if (checkCollision())
+	{
+		restartTime();
+		return true;
+	}
 
-	// ######################
-	// check collision player
-	// ######################
-
-	return collision_player;
+	return false;
 }
 
 void Bonus::render(glm::mat4& displacement_mat)
@@ -92,8 +120,25 @@ void Bonus::setPosition(const glm::vec2& pos)
 	posBonus = pos;
 }
 
+void Bonus::setPlayer(Player* p)
+{
+	player = p;
+}
+
+void Bonus::setRoom(int r)
+{
+	room = r;
+}
+
 void Bonus::restartTime()
 {
+	switch (room) {
+	case 1:	posBonus = glm::vec2(2.f * map->getTileSize(), (3 * 24 - 5) * map->getTileSize()); break;
+	case 2:	posBonus = glm::vec2(2.f * map->getTileSize(), (2 * 24 - 5) * map->getTileSize()); break;
+	case 3:	posBonus = glm::vec2(2.f * map->getTileSize(), (1 * 24 - 5) * map->getTileSize()); break;
+	default: break;
+	}
+
 	bonusTime = 0.f;
 }
 
@@ -105,6 +150,24 @@ bool Bonus::isTimeToRender()
 int Bonus::getActiveBonus()
 {
 	return activeBonus;
+}
+
+bool Bonus::checkCollision()
+{
+	float p0_x = player->getPosition().x;
+	float p1_x = p0_x + player->getSize().x;
+	float g0_x = posBonus.x;
+	float g1_x = g0_x + sizeBonus;
+
+	float p0_y = player->getPosition().y;
+	float p1_y = p0_y + player->getSize().y;
+	float g0_y = posBonus.y;
+	float g1_y = g0_y + sizeBonus;
+
+	bool X = (p0_x <= g0_x && g0_x <= p1_x) || (p0_x <= g1_x && g1_x <= p1_x);
+	bool Y = (p0_y <= g0_y && g0_y <= p1_y) || (p0_y <= g1_y && g1_y <= p1_y);
+
+	return X && Y;
 }
 
 glm::vec2 Bonus::getPosition()

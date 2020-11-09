@@ -9,6 +9,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	speedX = 3;
 	speedY = 2;
 	animation = 2;
+	bonus = -1;
 	spritesheet.loadFromFile("images/eyes.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(sizePlayer, glm::vec2(1.f/3.f, 1.f/4.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(12);
@@ -179,6 +180,11 @@ bool Player::getDeathAnimation()
 glm::vec2 Player::getPosition()
 {
 	return posPlayer;
+}
+
+int Player::getBonus()
+{
+	return bonus;
 }
 
 int Player::getCurrentRoom()

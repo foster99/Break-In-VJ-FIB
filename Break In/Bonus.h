@@ -3,6 +3,7 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
+#include "Player.h"
 
 class Bonus
 {
@@ -11,15 +12,25 @@ public:
 	bool update(int deltaTime);
 	void render(glm::mat4& displacement_mat);
 
-	void changeModifierX(float value);
-	void changeModifierY(float value);
-	void setTileMap(TileMap* tileMap);
-	void setPosition(const glm::vec2& pos);
-	void restartTime();
-	bool isTimeToRender();
+	// Getters
 	int getActiveBonus();
 	glm::vec2 getPosition();
 	glm::ivec2 getPositionInTiles();
+	
+	// Setters
+	void setTileMap(TileMap* tileMap);
+	void setPosition(const glm::vec2& pos);
+	void setPlayer(Player* p);
+	void setRoom(int r);
+
+	// Modifiers
+	void changeModifierX(float value);
+	void changeModifierY(float value);
+	void restartTime();
+
+	// Checkers
+	bool isTimeToRender();
+	bool checkCollision();
 
 	// BONUS TYPES
 	static constexpr int multipleBall	= 0;
@@ -28,6 +39,7 @@ public:
 	static constexpr int magnet			= 3;
 	static constexpr int twix			= 4;
 
+	static constexpr float bonusDelayTime = 1000.f;
 	static constexpr float bonusAliveTime = 15000.f;
 
 private:
@@ -35,9 +47,11 @@ private:
 	Texture tex;
 	Sprite* sprite;
 	TileMap* map;
+	Player* player;
 	
 	// Entity Props
 	glm::vec2 posBonus;
+	int room;
 	int sizeBonus;
 	int activeBonus;
 	
