@@ -208,11 +208,21 @@ void GameScene::toogleChangeBar()
 	player->toogleChangeBar();
 }
 
-void GameScene::createNewBall(float spdX, float spdY)
+void GameScene::createNewBall(float spdX, float spdY, glm::vec2 pos)
 {
 	ball = new Ball();
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram,spdX,spdY);
 	ball->setPosition(glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
+	ball->setTileMap(map);
+	ball->setPlayer(player);
+	balls.push_back(ball);
+}
+
+void GameScene::createNewBall(float spdX, float spdY)
+{
+	ball = new Ball();
+	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram,spdX,spdY);
+	ball->setPosition(balls.front()->getPosition());
 	ball->setTileMap(map);
 	ball->setPlayer(player);
 	balls.push_back(ball);
@@ -294,13 +304,18 @@ void GameScene::prevRoom()
 	}
 }
 
+bool GameScene::ballisDead(Ball* ball)
+{
+	return map->tileIsDeath((ball->getBasePositionInTiles()).y, (ball->getBasePositionInTiles()).x); 
+}
+
 bool GameScene::lastBallisDead()
 {
-	if (balls.empty())
-		return true;
-	else if (balls.size() == 1)
-		return map->tileIsDeath((balls.front()->getBasePositionInTiles()).y, (balls.front()->getBasePositionInTiles()).x);
-	return false;
+	for (auto it = balls.begin(); it != balls.end(); ++it)
+		if (ballisDead(*it))
+			balls.erase(it);
+
+	return balls.empty();
 }
 
 void GameScene::startBank()
@@ -334,7 +349,7 @@ void GameScene::restartPlayerBall()
 	player->setTileMap(map);
 
 	balls.clear();
-	createNewBall(1, 1);
+	createNewBall(1, 1, glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
 
 	player->setPosMainBall(balls.front()->getPosition());
 

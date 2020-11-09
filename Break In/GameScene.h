@@ -46,11 +46,13 @@ public:
 
     void toggleGodMode();
     void toogleChangeBar();
+    void createNewBall(float spdX, float spdY, glm::vec2 pos);
     void createNewBall(float spdX, float spdY);
 
     bool changeOfRoom();
     void nextRoom();
     void prevRoom();
+    bool ballisDead(Ball* ball);
     bool lastBallisDead();
 
     static constexpr float INIT_PLAYER_X_TILES = 12;

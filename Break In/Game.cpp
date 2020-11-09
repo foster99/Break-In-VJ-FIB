@@ -181,12 +181,13 @@ void Game::keyPressed(int key)
 
 	case playing:
 		switch (key) {
-			case ESC:	setMode(options);	break;
-			case 'g':	toggleGodMode();	break;
-			case 'b':	toogleChangeBar();	break;
-			case 'j':	gameScene.nextRoom(); break;
-			case 'l':	gameScene.prevRoom(); break;
-			default:						break;
+			case ESC:	setMode(options);		break;
+			case 'g':	toggleGodMode();		break;
+			case 'b':	toogleChangeBar();		break;
+			case 'j':	gameScene.nextRoom();	break;
+			case 'l':	gameScene.prevRoom();	break;
+			case '+':	gameScene.createNewBall(1.f, 1.f);	break;
+			default:	break;
 		} break;
 
 	case options:
