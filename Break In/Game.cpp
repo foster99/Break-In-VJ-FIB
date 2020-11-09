@@ -40,6 +40,7 @@ void Game::loadSounds()
 
 
 	brick_sound = Sound("brick_collision.wav", false);
+	//slide_sound = Sound("tueeeeeeeeee.wav", false);
 	slide_sound = Sound("player_collision.wav", false);
 	doubleSlide_sound = Sound("double_slide.wav", false);
 	bonus_sound = Sound("bonus.wav", false);
@@ -50,8 +51,6 @@ void Game::loadSounds()
 	money_sound_03 = Sound("moneyBag_03.wav", false);
 	greenCard_sound = Sound("greenCard.wav", false);
 
-	//ball_sound = Sound("tueeeeeeeeee.wav", false);
-	ball_sound = Sound("ball.wav", false);
 }
 
 void Game::loadPoints()
@@ -187,6 +186,7 @@ void Game::keyPressed(int key)
 			case 'j':	gameScene.nextRoom();	break;
 			case 'l':	gameScene.prevRoom();	break;
 			case '+':	gameScene.createNewBall(1.f, 1.f);	break;
+			case '-':	gameScene.deleteLastBall(); break;
 			default:	break;
 		} break;
 
@@ -314,7 +314,7 @@ void Game::setMaxPoints(int p)
 
 void Game::playBallSound()
 {
-	ball_sound.play();
+	
 }
 
 void Game::playBrickSound()

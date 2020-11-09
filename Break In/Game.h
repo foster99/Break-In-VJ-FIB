@@ -105,7 +105,6 @@ private:
 	Sound title_song;
 	
 	// One Shoot Sound
-	Sound ball_sound;
 	Sound brick_sound;
 	Sound slide_sound;
 	Sound doubleSlide_sound;

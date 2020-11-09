@@ -48,6 +48,7 @@ public:
     void toogleChangeBar();
     void createNewBall(float spdX, float spdY, glm::vec2 pos);
     void createNewBall(float spdX, float spdY);
+    void deleteLastBall();
 
     bool changeOfRoom();
     void nextRoom();

@@ -5,20 +5,20 @@ void Slide::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	singleSize	= glm::ivec2(19, 6);
 	quadSize	= glm::ivec2(40, 6);
-	logicSize = quadSize;
+	logicSize = singleSize;
 
 	tex.loadFromFile("images/bars.png", TEXTURE_PIXEL_FORMAT_RGBA);
 
 	sprite = Sprite::createSprite(quadSize, glm::vec2(1.f, 0.2f), &tex, &shaderProgram);
 	sprite->setNumberAnimations(5);
+	
+	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));	// BLASTER
+	sprite->addKeyframe(1, glm::vec2(0.f, 0.2f));	// IMAN SIMPLE
+	sprite->addKeyframe(2, glm::vec2(0.f, 0.4f));	// NORMAL
+	sprite->addKeyframe(3, glm::vec2(0.f, 0.6f));	// IMAN DOBLE
+	sprite->addKeyframe(4, glm::vec2(0.f, 0.8f));	// NORMAL DOBLE
 
-	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
-	sprite->addKeyframe(1, glm::vec2(0.f, 0.2f));
-	sprite->addKeyframe(2, glm::vec2(0.f, 0.4f));
-	sprite->addKeyframe(3, glm::vec2(0.f, 0.6f));
-	sprite->addKeyframe(4, glm::vec2(0.f, 0.8f));
-
-	sprite->changeAnimation(4);
+	sprite->changeAnimation(2);
 
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posSlide.x), float(tileMapDispl.y + posSlide.y)));
@@ -28,6 +28,24 @@ void Slide::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 void Slide::update(int deltaTime)
 {
+	switch (bonus) {
+		case 1:
+			sprite->changeAnimation(0);
+			logicSize = singleSize;
+			break;
+		case 2:
+			sprite->changeAnimation(4);
+			logicSize = quadSize;
+			break;
+		case 3:
+			sprite->changeAnimation(1);
+			logicSize = singleSize;
+			break;
+		case 4:
+			sprite->changeAnimation(3);
+			logicSize = quadSize;
+			break;
+	}
 }
 
 
@@ -50,6 +68,11 @@ void Slide::setPosition(const glm::vec2& pos)
 void Slide::setOffSets(int offX, int offY)
 {
 	offSet = glm::ivec2(offX, offY);
+}
+
+void Slide::setBonus(int b)
+{
+	bonus = b;
 }
 
 
