@@ -57,6 +57,7 @@ void Tile::loadTile(char tile, int i, int j, int bank, int tileSheetSizeX)
 		break;
 	case alarm:
 		id_1 = 32 + 2 * 3 + (i % 2) * 16 + (j % 2);
+		id_2 = 32 + 2 * 4 + (i % 2) * 16 + (j % 2);
 		resistance = infinity;
 		type = dynamicTile;
 		break;

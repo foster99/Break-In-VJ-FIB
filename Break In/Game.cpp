@@ -37,6 +37,7 @@ void Game::init()
 void Game::loadSounds()
 {
 	title_song = Sound("title_song.wav", true);
+	alarm_sound = Sound("alarm.wav", true);
 
 
 	brick_sound = Sound("brick_collision.wav", false);
@@ -364,6 +365,11 @@ void Game::playMoneySound()
 	}
 }
 
+void Game::playAlarmSound()
+{
+	alarm_sound.play();
+}
+
 void Game::playTitleSong()
 {
 	title_song.play();
@@ -372,6 +378,11 @@ void Game::playTitleSong()
 void Game::stopTitleSong()
 {
 	title_song.drop();
+}
+
+void Game::stopAlarmSound()
+{
+	alarm_sound.drop();
 }
 
 Mode Game::currMode()

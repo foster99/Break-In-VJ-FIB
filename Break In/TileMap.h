@@ -112,6 +112,7 @@ protected:
 	int guardianRoom;
 	int Nrooms;
 	bool alarmOn;
+	int frame;
 	vector<vector<Tile>> mapita;
 };
 

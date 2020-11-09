@@ -17,8 +17,8 @@ TILEMAP
 * MMMMMM  RRRR  MMMMMM *
 ****YYYY  YYYY  YYYY****
 ****RRRR  RRRR  RRRR****
-* CC                OO *
-* CCRR            RROO *
+* CC              AAOO *
+* CCRR            AAOO *
 * RRRR            RRRR *
 *                      *
 *                      *
