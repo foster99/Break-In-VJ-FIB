@@ -197,6 +197,11 @@ glm::vec2 Player::getPosition()
 	return posPlayer;
 }
 
+float Player::getSpeedX()
+{
+	return speedX;
+}
+
 int Player::getBonus()
 {
 	return bonus;

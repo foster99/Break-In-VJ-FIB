@@ -8,6 +8,7 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, floa
 	speed = 2;
 	spdModifierX = spdX;
 	spdModifierY = spdY;
+	magnet = true;
 
 	tex.loadFromFile("images/balls.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(sizeBall, sizeBall), glm::vec2(1.f / 5.f, 1.f), &tex, &shaderProgram);
@@ -24,6 +25,30 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, floa
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
 	
+}
+
+void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, float spdX, float spdY, bool freeze)
+{
+	sizeBall = 9;
+	speed = 2;
+	spdModifierX = spdX;
+	spdModifierY = spdY;
+	magnet = freeze;
+
+	tex.loadFromFile("images/balls.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite = Sprite::createSprite(glm::ivec2(sizeBall, sizeBall), glm::vec2(1.f / 5.f, 1.f), &tex, &shaderProgram);
+	sprite->setNumberAnimations(5);
+
+	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
+	sprite->addKeyframe(1, glm::vec2(1.f / 5.f, 0.f));
+	sprite->addKeyframe(2, glm::vec2(2.f / 5.f, 0.f));
+	sprite->addKeyframe(3, glm::vec2(3.f / 5.f, 0.f));
+	sprite->addKeyframe(4, glm::vec2(4.f / 5.f, 0.f));
+
+	sprite->changeAnimation(0);
+
+	tileMapDispl = tileMapPos;
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
 }
 
 bool Ball::update(int deltaTime)
@@ -80,6 +105,17 @@ void Ball::render(glm::mat4& displacement_mat)
 	sprite->render(displacement_mat);
 }
 
+void Ball::moveWithPlayer(float spdX)
+{
+	posBall += glm::vec2(spdX,0);
+	sprite->setPosition(posBall);
+}
+
+void Ball::toogleMagnet()
+{
+	magnet = !magnet;
+}
+
 void Ball::changeModifierX(float value)
 {
 	spdModifierX = value;
@@ -105,6 +141,10 @@ void Ball::setPosition(const glm::vec2& pos)
 {
 	posBall = pos;
 	sprite->setPosition(posBall);
+}
+
+bool Ball::getMagnet() {
+	return magnet;
 }
 
 glm::vec2 Ball::getPosition()

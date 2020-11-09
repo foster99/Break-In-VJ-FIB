@@ -80,12 +80,14 @@ void GameScene::update(int deltaTime) {
 	}
 	else {
 		for (Ball* ball : balls) {
-			if (ball->update(deltaTime))
+			if (!ball->getMagnet() && ball->update(deltaTime))
 			{
 				glm::ivec2 tile = ball->getLastCollision();
-
+				
 				if (tile.x < 0 || tile.y < 0) {
 					Game::instance().playPlayerSound(); //  IMPACTO JODADORE
+					if (player->getBonus() == Bonus::magnet || player->getBonus() == Bonus::twix)
+						ball->toogleMagnet();
 				}
 				else {
 					switch (map->tileCollision(tile[0], tile[1]))
@@ -176,9 +178,29 @@ void GameScene::update(int deltaTime) {
 		}
 	}
 	else menuMap->setLine(" SINGLE ", "  SLIDE ");
-	player->update(deltaTime);
 	map->prepareDynamicArrays();
 	displacement_mat = glm::translate(glm::mat4(1.f), glm::vec3(0.f, float(tiles_displacement * 8), 0.f));
+
+	if(checkBallSlide())
+		ballOnSlide += deltaTime;
+	
+	bool reset=false;
+	//PARA CADA PELOTA MAGNETIZADA
+	int lastMov = player->update(deltaTime);
+	for (Ball* ball : balls) {
+		if (ball->getMagnet()) {
+			if (lastMov == Player::up || lastMov == Player::down || lastMov == Player::diag)
+				ball->toogleMagnet();
+			else if (lastMov == Player::right || lastMov == Player::left)
+				ball->moveWithPlayer(player->getSpeedX());
+			else if (ballOnSlide >= 3000) {
+				reset = true;
+				ball->toogleMagnet();
+			}
+		}
+	}
+	if (reset)
+		ballOnSlide = 0;
 }
 
 void GameScene::render()
@@ -227,7 +249,7 @@ void GameScene::createNewBall(float spdX, float spdY, glm::vec2 pos)
 void GameScene::createNewBall(float spdX, float spdY)
 {
 	ball = new Ball();
-	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram,spdX,spdY);
+	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram,spdX,spdY, false);
 	ball->setPosition(balls.front()->getPosition());
 	ball->setTileMap(map);
 	ball->setPlayer(player);
@@ -328,6 +350,15 @@ bool GameScene::lastBallisDead()
 			balls.erase(it);
 
 	return balls.empty();
+}
+
+bool GameScene::checkBallSlide()
+{
+	for (Ball* ball : balls) {
+		if (ball->getMagnet())
+			return true;
+	}
+	return false;
 }
 
 void GameScene::startBank()

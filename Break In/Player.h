@@ -28,6 +28,7 @@ public:
 	
 	glm::ivec2 getSize();
 	glm::vec2 getPosition();
+	float getSpeedX();
 	int getBonus();
 	int getCurrentRoom();
 	bool getDeathAnimation();

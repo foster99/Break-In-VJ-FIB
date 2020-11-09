@@ -55,6 +55,7 @@ public:
     void prevRoom();
     bool ballisDead(Ball* ball);
     bool lastBallisDead();
+    bool checkBallSlide();
 
     static constexpr float INIT_PLAYER_X_TILES = 12;
     static constexpr float INIT_PLAYER_Y_TILES = 60;
@@ -82,6 +83,7 @@ private:
     bool win;
     bool gameOver;
     bool bonusIsActive;
+    float ballOnSlide;
 
     // Game Values
     int bank;
@@ -90,7 +92,7 @@ private:
     int lives;
     int points;
     int money;
-
+    
     // Scrolling + Displacement Mat
     bool scrolling;
     int stride;

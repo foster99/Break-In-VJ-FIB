@@ -9,14 +9,19 @@ class Ball
 {
 public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, float spdX, float spdY);
+	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, float spdX, float spdY, bool freeze);
 	bool update(int deltaTime);
 	void render(glm::mat4& displacement_mat);
 
+	void moveWithPlayer(float spdX);
+
+	void toogleMagnet();
 	void changeModifierX(float value);
 	void changeModifierY(float value);
 	void setTileMap(TileMap* tileMap);
 	void setPlayer(Player* pla);
 	void setPosition(const glm::vec2& pos);
+	bool getMagnet();
 	glm::vec2 getPosition();
 	glm::ivec2 getPositionInTiles();
 	glm::ivec2 getBasePositionInTiles();
@@ -35,6 +40,7 @@ private:
 	float speed;
 	float spdModifierX;
 	float spdModifierY;
+	bool magnet;
 };
 
 #endif // _BALL_INCLUDE
