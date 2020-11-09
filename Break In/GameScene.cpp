@@ -201,6 +201,7 @@ void GameScene::update(int deltaTime) {
 	}
 	if (reset)
 		ballOnSlide = 0;
+	win = !map->moneyLeft();
 }
 
 void GameScene::render()
@@ -282,9 +283,6 @@ void GameScene::playerLosesLife()
 void GameScene::gameIsOver()
 {
 	gameOver = true;
-	// print GameOver Quad
-	// Set history points
-	// return to Menu Scene
 }
 
 bool GameScene::changeOfRoom()
@@ -484,6 +482,11 @@ void GameScene::setMoney(int m)
 void GameScene::setPoints(int p)
 {
 	points = p;
+}
+
+void GameScene::setWin(bool w)
+{
+	win = w;
 }
 
 void GameScene::toggleGodMode()

@@ -16,6 +16,7 @@ TileMap::TileMap() {
 TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords_, ShaderProgram &program_)
 {
 	currBank = 1;
+	money = 0;
 	alarmOn = false;
 	loadLevel(levelFile);
 	loadTextures();
@@ -115,6 +116,9 @@ bool TileMap::loadLevel(const string &levelFile)
 		for (int j = 0; j < mapSize.x; j++){
 			fin.get(tile);
 			loadTile(tile, i, j);
+			if (mapita[i][j].symbol == Tile::moneyBag || mapita[i][j].symbol == Tile::coin || mapita[i][j].symbol == Tile::blueSpheres) {
+				money++;
+			}
 		}
 		fin.get(tile);
 #ifndef _WIN32
@@ -122,6 +126,9 @@ bool TileMap::loadLevel(const string &levelFile)
 #endif
 	}
 	fin.close();
+
+
+	money = money / 4;
 
 	for (int i = mapSize.y, j = 0; j < mapSize.x; j++) 
 		loadTile(Tile::death, i, j);
@@ -209,7 +216,9 @@ void TileMap::prepareStaticArrays()
 		}
 	}
 
-	
+	if (nTiles <= 0) {
+		return;
+	}
 	glGenVertexArrays(1, &vaoStatic);
 	glBindVertexArray(vaoStatic);
 	glGenBuffers(1, &vboStatic);
@@ -281,6 +290,8 @@ void TileMap::prepareDynamicArrays()
 	glBindVertexArray(vaoDynamic);
 	
 	if (first_time_we_prepare_Arrays)	glGenBuffers(1, &vboDynamic);
+
+	if (nTiles <= 0) return;
 
 	glBindBuffer(GL_ARRAY_BUFFER, vboDynamic);
 	glBufferData(GL_ARRAY_BUFFER, 24 * nTiles * sizeof(float), &vertices[0], GL_STATIC_DRAW);
@@ -416,9 +427,13 @@ char TileMap::tileCollision(int i, int j)
 
 	case key:
 		openDoor();
+		deleteSpecialTile(i, j, tile);
+		break;
+
 	case moneyBag:
 	case coin:
 	case blueSpheres:
+		--money;
 	case outCard:
 		deleteSpecialTile(i, j, tile);
 		break;
@@ -448,6 +463,11 @@ bool TileMap::tileIsDeath(int i, int j)
 bool TileMap::alarmIsOn()
 {
 	return alarmOn;
+}
+
+bool TileMap::moneyLeft()
+{
+	return money > 0;
 }
 
 void TileMap::collisionBrick(char brick, int i, int j)
