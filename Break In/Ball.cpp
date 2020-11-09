@@ -2,12 +2,12 @@
 #include "Game.h"
 
 
-void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
+void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, float spdX, float spdY)
 {	
 	sizeBall = 9;
 	speed = 2;
-	spdModifierX = 1;
-	spdModifierY = 1;
+	spdModifierX = spdX;
+	spdModifierY = spdY;
 
 	tex.loadFromFile("images/balls.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(sizeBall, sizeBall), glm::vec2(1.f / 5.f, 1.f), &tex, &shaderProgram);

@@ -76,69 +76,71 @@ void GameScene::update(int deltaTime) {
 		}
 	}
 	else {
-		
-		if (ball->update(deltaTime))
-		{
-			glm::ivec2 tile = ball->getLastCollision();
-			
-			if (tile.x < 0 || tile.y < 0) {
-				Game::instance().playPlayerSound();
-			}
-			else {
-				switch (map->tileCollision(tile[0], tile[1]))
-				{
-				case Tile::moneyBag:
-					Game::instance().playMoneySound();
-					money += 150;
-					points += 200;
-					break;
+		for (Ball* ball : balls) {
+			if (ball->update(deltaTime))
+			{
+				glm::ivec2 tile = ball->getLastCollision();
 
-				case Tile::coin:
-					Game::instance().playBrickSound();
-					money += 50;
-					points += 125;
-					break;
-
-				case Tile::blueSpheres:
-					Game::instance().playMoneySound();
-					money += 300;
-					points += 333;
-					break;
-
-				case Tile::brickBlue:
-				case Tile::brickRed:
-				case Tile::brickYellow:
-				case Tile::brickGreen:
-				case Tile::brickLow:
-					Game::instance().playBrickSound();
-					points += 100;
-					break;
-
-				case Tile::outCard:
-					Game::instance().playGreenCardSound();
-					points += 100;
-
-				case Tile::alarm:
-					points += 100;
-					guardian->alarmOn();
-
-				default: break;
+				if (tile.x < 0 || tile.y < 0) {
+					Game::instance().playPlayerSound();
 				}
-			}
-			
-			menuMap->setMoney(money);
-			menuMap->setPoints(points);
+				else {
+					switch (map->tileCollision(tile[0], tile[1]))
+					{
+					case Tile::moneyBag:
+						Game::instance().playMoneySound();
+						money += 150;
+						points += 200;
+						break;
 
-			if (points > 1000) {
-				menuMap->setLine("AII LMAO", "4POGGERS"); // CAMBIA CON EL BONUS
-			}
+					case Tile::coin:
+						Game::instance().playBrickSound();
+						money += 50;
+						points += 125;
+						break;
 
+					case Tile::blueSpheres:
+						Game::instance().playMoneySound();
+						money += 300;
+						points += 333;
+						break;
+
+					case Tile::brickBlue:
+					case Tile::brickRed:
+					case Tile::brickYellow:
+					case Tile::brickGreen:
+					case Tile::brickLow:
+						Game::instance().playBrickSound();
+						points += 100;
+						break;
+
+					case Tile::outCard:
+						Game::instance().playGreenCardSound();
+						points += 100;
+
+					case Tile::alarm:
+						points += 100;
+						guardian->alarmOn();
+
+					default: break;
+					}
+				}
+
+				menuMap->setMoney(money);
+				menuMap->setPoints(points);
+
+				if (points > 1000) {
+					menuMap->setLine("AII LMAO", "4POGGERS"); // CAMBIA CON EL BONUS
+				}
+
+			}
 		}
+		
 
 		map->setRoom(room);
 		player->setRoom(room);
 		player->setTilesDisplacement(tiles_displacement);
-		player->setPosMainBall(ball->getPosition());
+		player->setPosMainBall(balls.front()->getPosition());
 	}
 
 	if (bonus->update(deltaTime))
@@ -168,7 +170,10 @@ void GameScene::render()
 	
 	bonus->render(displacement_mat);
 	guardian->render(displacement_mat);
-	ball->render(displacement_mat);
+	
+	for (Ball* ball : balls) {
+		ball->render(displacement_mat);
+	}
 
 	// Render Lateral Menu
 	glm::mat4 menu_modelview = glm::translate(glm::mat4(1.f), glm::vec3(192.f, 0.f, 0.f));
@@ -183,6 +188,16 @@ void GameScene::render()
 void GameScene::toogleChangeBar()
 {
 	player->toogleChangeBar();
+}
+
+void GameScene::createNewBall(float spdX, float spdY)
+{
+	ball = new Ball();
+	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram,spdX,spdY);
+	ball->setPosition(glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
+	ball->setTileMap(map);
+	ball->setPlayer(player);
+	balls.push_back(ball);
 }
 
 void GameScene::playerLosesLife()
@@ -212,26 +227,33 @@ void GameScene::gameIsOver()
 
 bool GameScene::changeOfRoom()
 {
-	room_old = room;
+	for (Ball* ball : balls) { 
+		room_old = room;
 
+		if (ball->getPosition().y / 8 > 48) {
+			room = 1;
+			menuMap->setRoom(room);
+		}
+		else if (ball->getPosition().y / 8 > 24) {
+			room = 2;
+			menuMap->setRoom(room);
+		}
+		else {
+			room = 3;
+			menuMap->setRoom(room);
+		}
 
+		scrolling = room != room_old;
 
-	if (ball->getPosition().y / 8 > 48) {
-		room = 1;
-		menuMap->setRoom(room);
+		if (scrolling) {
+			this->ball = ball;
+			balls.clear();
+			balls.push_back(this->ball);
+			return true;
+		}
 	}
-	else if (ball->getPosition().y / 8 > 24) {
-		room = 2;
-		menuMap->setRoom(room);
-	}
-	else {
-		room = 3;
-		menuMap->setRoom(room);
-	}
 
-	scrolling = room != room_old;
-
-	return scrolling;
+	return false;
 }
 
 void GameScene::nextRoom()
@@ -256,7 +278,11 @@ void GameScene::prevRoom()
 
 bool GameScene::lastBallisDead()
 {
-	return map->tileIsDeath((ball->getBasePositionInTiles()).y, (ball->getBasePositionInTiles()).x);
+	if (balls.empty())
+		return true;
+	else if (balls.size() == 1)
+		return map->tileIsDeath((balls.front()->getBasePositionInTiles()).y, (balls.front()->getBasePositionInTiles()).x);
+	return false;
 }
 
 void GameScene::startBank()
@@ -289,13 +315,10 @@ void GameScene::restartPlayerBall()
 	player->setRoom(room);
 	player->setTileMap(map);
 
-	ball = new Ball();
-	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	ball->setPosition(glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
-	ball->setTileMap(map);
-	ball->setPlayer(player);
+	balls.clear();
+	createNewBall(1, 1);
 
-	player->setPosMainBall(ball->getPosition());
+	player->setPosMainBall(balls.front()->getPosition());
 
 	bonus = new Bonus();
 	bonus->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
