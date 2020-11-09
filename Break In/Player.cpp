@@ -1,6 +1,6 @@
 #include "Player.h"
 #include "Game.h"
-
+#include "Bonus.h"
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {	
@@ -52,10 +52,13 @@ void setSign(int &value, char sign) {
 	}
 }
 
-void Player::update(int deltaTime)
+int Player::update(int deltaTime)
 {
-	movingX = false;
+ 	movingX = false;
 	movingY = false;
+	
+	// COMPROVACION DE BONUS Y CAMBIO SLIDE
+	slide->update(deltaTime);
 
 	glm::ivec2 slideLogic = slide->getLogicSize();
 
@@ -138,6 +141,18 @@ void Player::update(int deltaTime)
 	sprite->changeAnimation(animation);
 	sprite->setPosition((glm::vec2) tileMapDispl + posPlayer);
 	slide->setPosition((glm::vec2) tileMapDispl - (glm::vec2) slideOffset + posPlayer);
+
+	if (movingX && speedX > 0) return right;
+
+	else if (movingX && speedX < 0) return left;
+
+	else if (movingY && speedY < 0) return up;
+
+	else if (movingY && speedY > 0) return down;
+
+	else if (!movingX && !movingY) return still;
+
+	return diag;
 }
 
 void Player::render(glm::mat4& displacement_mat)
@@ -233,6 +248,7 @@ void Player::toogleChangeBar()
 void Player::setBonus(int b)
 {
 	bonus = b;
+	slide->setBonus(b);
 }
 
 void Player::setPosMainBall(glm::vec2 pos)

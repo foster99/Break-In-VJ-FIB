@@ -109,7 +109,6 @@ private:
 	Sound alarm_sound;
 
 	// One Shoot Sound
-	Sound ball_sound;
 	Sound brick_sound;
 	Sound slide_sound;
 	Sound doubleSlide_sound;

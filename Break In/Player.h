@@ -14,7 +14,7 @@ class Player
 
 public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
-	void update(int deltaTime);
+	int update(int deltaTime);
 	void render(glm::mat4& displacement_mat);
 	
 	
@@ -38,6 +38,12 @@ public:
 	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed);
 	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed);
 
+	static constexpr int still = 0;
+	static constexpr int up = 1;
+	static constexpr int down = 2;
+	static constexpr int left = 3;
+	static constexpr int right = 4;
+	static constexpr int diag = 5;
 	
 private:
 	bool movingX, movingY, deathAnimation;

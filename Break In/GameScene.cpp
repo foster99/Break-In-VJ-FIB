@@ -85,8 +85,7 @@ void GameScene::update(int deltaTime) {
 				glm::ivec2 tile = ball->getLastCollision();
 
 				if (tile.x < 0 || tile.y < 0) {
-					// Colision con el player
-					Game::instance().playPlayerSound();
+					Game::instance().playPlayerSound(); //  IMPACTO JODADORE
 				}
 				else {
 					switch (map->tileCollision(tile[0], tile[1]))
@@ -151,6 +150,10 @@ void GameScene::update(int deltaTime) {
 
 	if (bonus->update(deltaTime)) {
 		player->setBonus(bonus->getActiveBonus());
+		if (bonus->getActiveBonus() == Bonus::multipleBall) {
+			createNewBall(-0.8,1);
+			createNewBall(0.8, 1);
+		}
 		Game::instance().playBonusSound();
 	}
 	if (guardian->getRoom() == player->getCurrentRoom()) {
@@ -173,7 +176,6 @@ void GameScene::update(int deltaTime) {
 		}
 	}
 	else menuMap->setLine(" SINGLE ", "  SLIDE ");
-	
 	player->update(deltaTime);
 	map->prepareDynamicArrays();
 	displacement_mat = glm::translate(glm::mat4(1.f), glm::vec3(0.f, float(tiles_displacement * 8), 0.f));
@@ -232,6 +234,12 @@ void GameScene::createNewBall(float spdX, float spdY)
 	ball->setTileMap(map);
 	ball->setPlayer(player);
 	balls.push_back(ball);
+}
+
+void GameScene::deleteLastBall()
+{
+	if(! balls.empty())
+		balls.pop_back();
 }
 
 void GameScene::playerLosesLife()
