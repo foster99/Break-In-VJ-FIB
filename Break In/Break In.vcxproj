@@ -87,6 +87,7 @@
     <Text Include="levels\leveltest.txt" />
     <Text Include="levels\menu.txt" />
     <Text Include="levels\BANK_01.txt" />
+    <Text Include="Text.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\ball.png" />

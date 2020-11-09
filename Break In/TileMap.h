@@ -47,6 +47,7 @@ public:
 	bool tileIsKey(int i, int j);
 	bool tileIsDeath(int i, int j);
 	bool alarmIsOn();
+	bool moneyLeft();
 
 	void collisionBrick(char brick, int i, int j);
 	void openDoor();
@@ -113,6 +114,7 @@ protected:
 	int Nrooms;
 	bool alarmOn;
 	int frame;
+	int money;
 	vector<vector<Tile>> mapita;
 };
 

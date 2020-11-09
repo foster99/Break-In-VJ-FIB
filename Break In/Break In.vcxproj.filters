@@ -261,6 +261,9 @@
     <Text Include="levels\BANK_01_test.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
+    <Text Include="Text.txt">
+      <Filter>Resource Files\levels</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\ball.png">

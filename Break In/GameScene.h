@@ -43,6 +43,7 @@ public:
     void setLives(int l);
     void setMoney(int m);
     void setPoints(int p);
+    void setWin(bool w);
 
     void toggleGodMode();
     void toogleChangeBar();

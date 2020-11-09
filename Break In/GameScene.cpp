@@ -85,6 +85,7 @@ void GameScene::update(int deltaTime) {
 				glm::ivec2 tile = ball->getLastCollision();
 
 				if (tile.x < 0 || tile.y < 0) {
+					// Colision con el player
 					Game::instance().playPlayerSound();
 				}
 				else {
@@ -176,6 +177,8 @@ void GameScene::update(int deltaTime) {
 	player->update(deltaTime);
 	map->prepareDynamicArrays();
 	displacement_mat = glm::translate(glm::mat4(1.f), glm::vec3(0.f, float(tiles_displacement * 8), 0.f));
+
+	win = !map->moneyLeft();
 }
 
 void GameScene::render()
@@ -251,9 +254,6 @@ void GameScene::playerLosesLife()
 void GameScene::gameIsOver()
 {
 	gameOver = true;
-	// print GameOver Quad
-	// Set history points
-	// return to Menu Scene
 }
 
 bool GameScene::changeOfRoom()
@@ -444,6 +444,11 @@ void GameScene::setMoney(int m)
 void GameScene::setPoints(int p)
 {
 	points = p;
+}
+
+void GameScene::setWin(bool w)
+{
+	win = w;
 }
 
 void GameScene::toggleGodMode()

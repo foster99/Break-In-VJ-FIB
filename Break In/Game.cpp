@@ -97,15 +97,26 @@ bool Game::update(int deltaTime)
 		break;
 
 	case playing:
-		if (!gameScene.getGameOver()) {
-			gameScene.update(deltaTime);
+		if (gameScene.getWin()) {						// WIN
+
+			// run animation salu2
+			if (gameScene.getBank() == 2)	gameScene.setBank(1);
+			else							gameScene.setBank(1 + gameScene.getBank());
+
+			gameScene.startBank();
+			gameScene.setWin(false);
 		}
-		else {
+		else if (gameScene.getGameOver()) {				// GAMEOVER
+			
 			if (gameScene.getPoints() > max_points)
 				setMaxPoints(gameScene.getPoints());
 
 			restartGameScene();
 		}
+		else  {											// CONTINUE
+			gameScene.update(deltaTime);
+		}
+
 		stopTitleSong();
 		break;
 
