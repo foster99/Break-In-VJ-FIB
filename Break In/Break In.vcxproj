@@ -65,6 +65,7 @@
     <ClInclude Include="TileMap.h" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="sounds\alarm.wav" />
     <Media Include="sounds\bell.wav" />
     <Media Include="sounds\blast.wav" />
     <Media Include="sounds\bonus.wav" />

@@ -68,7 +68,10 @@ public:
 	void playMoneySound();
 
 	void playTitleSong();
+	void playAlarmSound();
+
 	void stopTitleSong();
+	void stopAlarmSound();
 
 	// Different Modes
 	static constexpr Mode exitGame = Mode(0);
@@ -103,7 +106,8 @@ private:
 	
 	// Looped Sounds
 	Sound title_song;
-	
+	Sound alarm_sound;
+
 	// One Shoot Sound
 	Sound brick_sound;
 	Sound slide_sound;

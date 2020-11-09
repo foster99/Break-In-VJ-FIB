@@ -160,7 +160,10 @@ void GameScene::update(int deltaTime) {
 		if (guardian->update(deltaTime))
 			playerLosesLife();
 	}
-	else guardian->restartTime();
+	else {
+		Game::instance().stopAlarmSound();
+		guardian->restartTime();
+	}
 
 	if (player->getBonus() > 0) {
 		switch (player->getBonus()) {

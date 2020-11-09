@@ -225,6 +225,7 @@ void TileMap::prepareDynamicArrays()
 	int nTiles = 0;
 	glm::vec2 posTile, texCoordTile[2];
 	vector<float> vertices;
+	frame = (++frame) % 6;
 
 	for (int i = 0; i < mapSize.y; i++)
 	{
@@ -239,10 +240,16 @@ void TileMap::prepareDynamicArrays()
 				posTile = glm::vec2(minCoords.x + j * tileSize,
 									minCoords.y + i * tileSize);
 
-
 				texCoordTile[0] = glm::vec2(float((tile.id_1) % dynamicTilesheetSize.x) / dynamicTilesheetSize.x,
 											float((tile.id_1) / dynamicTilesheetSize.x) / dynamicTilesheetSize.y);
+				
 				texCoordTile[1] = texCoordTile[0] + dynamicTileTexSize;
+
+				if (tile.symbol == Tile::alarm && alarmOn && !frame) {
+					texCoordTile[0] = glm::vec2(float((tile.id_2) % dynamicTilesheetSize.x) / dynamicTilesheetSize.x,
+												float((tile.id_2) / dynamicTilesheetSize.x) / dynamicTilesheetSize.y);
+					texCoordTile[1] = texCoordTile[0] + dynamicTileTexSize;
+				}
 
 				// First triangle
 				vertices.push_back(posTile.x);				vertices.push_back(posTile.y);

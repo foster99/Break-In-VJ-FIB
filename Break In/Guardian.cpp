@@ -1,4 +1,5 @@
 #include "Guardian.h"
+#include "Game.h"
 
 void Guardian::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
@@ -57,6 +58,7 @@ bool Guardian::update(int deltaTime) {
 		break;
 	}
 
+	Game::instance().playAlarmSound();
 
 	sprite->setPosition(glm::vec2(	float(tileMapDispl.x + posGuardian.x),
 									float(tileMapDispl.y + posGuardian.y)));
@@ -74,7 +76,10 @@ void Guardian::render(glm::mat4& displacement_mat)
 
 void Guardian::alarmOn()
 {
-	if (!isAwake()) guardianMode = tracking;
+	if (!isAwake()) {
+		guardianMode = tracking;
+		Game::instance().playAlarmSound();
+	}
 }
 
 void Guardian::nextAnimation()
@@ -118,7 +123,8 @@ int Guardian::getRoom()
 
 void Guardian::setRoom(int r)
 {
-	posGuardian.y = map->getTileSize() * (72 - 24 * (r - 1) - 2);
+	posGuardian.x = 0;
+	posGuardian.y = map->getTileSize() * (72 - 24 * (r - 1) - 1);
 	guardianRoom = r;
 }
 
