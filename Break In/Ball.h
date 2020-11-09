@@ -8,7 +8,7 @@
 class Ball
 {
 public:
-	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, float spdX, float spdY);
 	bool update(int deltaTime);
 	void render(glm::mat4& displacement_mat);
 

@@ -7,6 +7,7 @@
 #include "Bonus.h"
 #include "Guardian.h"
 #include "MenuTileMap.h"
+#include <list>
 
 class GameScene :
     public Scene
@@ -45,6 +46,7 @@ public:
 
     void toggleGodMode();
     void toogleChangeBar();
+    void createNewBall(float spdX, float spdY);
 
     bool changeOfRoom();
     void nextRoom();
@@ -67,6 +69,7 @@ private:
     // GameScene entities
     Player* player;
     Ball* ball;
+    list<Ball*> balls;
     Bonus* bonus;
     Guardian* guardian;
 

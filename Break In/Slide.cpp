@@ -68,7 +68,7 @@ void Slide::toogleChangeBar()
 
 void changeMods(int x, float& modifierY, float& modifierX, bool big) {
 	if (! big) {
-		if (x < 5) {
+		if (x < 2) {
 			modifierY = 1;
 			modifierX = -1.2;
 		}
@@ -76,7 +76,7 @@ void changeMods(int x, float& modifierY, float& modifierX, bool big) {
 			modifierY = 1;
 			modifierX = -0.5;
 		}
-		else if (x < 15) {
+		else if (x < 18) {
 			modifierY = 1;
 			modifierX = 0.5;
 		}
