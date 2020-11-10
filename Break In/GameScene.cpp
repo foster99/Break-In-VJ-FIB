@@ -370,11 +370,13 @@ void GameScene::createNewBall(float spdX, float spdY, glm::vec2 pos)
 
 void GameScene::createNewBall(float spdX, float spdY)
 {
+	if (balls.empty()) {
+		createNewBall(spdX, spdY, glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
+		return;
+	}
 	ball = new Ball();
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram,spdX,spdY, false);
-	
-	if (balls.empty())	ball->setPosition(balls.front()->getPosition());
-
+	ball->setPosition(balls.front()->getPosition());
 	ball->setTileMap(map);
 	ball->setPlayer(player);
 	balls.push_back(ball);
