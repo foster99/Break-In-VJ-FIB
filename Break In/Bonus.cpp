@@ -55,7 +55,7 @@ bool Bonus::update(int deltaTime)
 	bonusTypeTime += deltaTime;
 	if (bonusTypeTime > 3000) {
 		bonusTypeTime = 0;
-		activeBonus = (++activeBonus) % 6;
+		activeBonus = (++activeBonus) % 5;
 		sprite->changeAnimation(activeBonus);
 	}
 

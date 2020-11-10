@@ -338,7 +338,7 @@ void GameScene::update(int deltaTime) {
 		}
 		
 		for (Bullet* bullet : bullets) {
-			if (bullet->update(deltaTime)) {
+			if (!bullet->getDestroy() && bullet->update(deltaTime)) {
 				glm::ivec2 tile = bullet->getLastCollision();
 
 				switch (map->tileCollisionB(tile[0], tile[1]))
@@ -615,7 +615,7 @@ bool GameScene::lastBallisDead()
 	if (balls.empty()) return true;
 
 	for (auto it = balls.begin(); it != balls.end();)
-		if (ballisDead(*it))	it = balls.erase(it);
+		if (!(*it)->getMagnet() && ballisDead(*it))	it = balls.erase(it);
 		else					++it;
 
 	return balls.empty();
