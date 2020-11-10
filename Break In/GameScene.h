@@ -7,6 +7,7 @@
 #include "Bonus.h"
 #include "Guardian.h"
 #include "MenuTileMap.h"
+#include "Bullet.h"
 #include <list>
 
 class GameScene :
@@ -50,6 +51,7 @@ public:
     void createNewBall(float spdX, float spdY, glm::vec2 pos);
     void createNewBall(float spdX, float spdY);
     void deleteLastBall();
+    void createNewBullets();
 
     bool changeOfRoom();
     void nextRoom();
@@ -75,6 +77,8 @@ private:
     Player* player;
     Ball* ball;
     list<Ball*> balls;
+    Bullet* bullet;
+    list<Bullet*> bullets;
     Bonus* bonus;
     Guardian* guardian;
 
@@ -85,7 +89,7 @@ private:
     bool gameOver;
     bool bonusIsActive;
     float ballOnSlide;
-
+    int timeToDelete;
     // Game Values
     int bank;
     int room;

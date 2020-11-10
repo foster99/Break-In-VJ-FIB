@@ -199,6 +199,7 @@ void Game::keyPressed(int key)
 			case 'l':	gameScene.prevRoom();	break;
 			case '+':	gameScene.createNewBall(1.f, 1.f);	break;
 			case '-':	gameScene.deleteLastBall(); break;
+			case ' ':	gameScene.createNewBullets(); break;
 			default:	break;
 		} break;
 

@@ -406,6 +406,33 @@ bool TileMap::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, flo
 	return false;
 }
 
+bool TileMap::collisionMoveUpB(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speedOg, float& modifierY, glm::ivec2& lastCollision)
+{
+	int j0, j1;
+
+	int speed = int(speedOg * abs(modifierY));
+
+	j0 = (pos.x) / tileSize;
+	j1 = (pos.x + size.x) / tileSize;
+
+	for (int s = 1; s <= speed; ++s) {
+
+		for (int j = j0; j <= j1; j++)
+		{
+			if (tileIsSolid((pos.y - s) / tileSize, j) || mapita[(pos.y - s) / tileSize][j].symbol == Tile::door)
+			{
+				lastCollision = glm::ivec2((pos.y - s) / tileSize, j);
+				*posI -= float(s - 1);
+				return true;
+			}
+		}
+	}
+
+	*posI += (speedOg * modifierY);
+
+	return false;
+}
+
 char TileMap::tileCollision(int i, int j)
 {
 	char tile = mapita[i][j].symbol;
@@ -434,6 +461,36 @@ char TileMap::tileCollision(int i, int j)
 	case coin:
 	case blueSpheres:
 		--money;
+	case outCard:
+		deleteSpecialTile(i, j, tile);
+		break;
+
+	default:
+		break;
+	}
+
+	return tile;
+}
+
+char TileMap::tileCollisionB(int i, int j)
+{
+	char tile = mapita[i][j].symbol;
+
+	switch (tile)
+	{
+	case brickBlue:
+	case brickRed:
+	case brickYellow:
+	case brickGreen:
+	case brickLow:
+	case brickHigh:
+		collisionBrick(tile, i, j);
+		break;
+
+	case key:
+		openDoor();
+		deleteSpecialTile(i, j, tile);
+		break;
 	case outCard:
 		deleteSpecialTile(i, j, tile);
 		break;
