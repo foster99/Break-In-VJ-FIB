@@ -60,10 +60,10 @@ TILEMAP
 * GG                GG *
 * RR                RR *
 ****  RRRRRRRRRRRR  ****
-* KK  YYYYYYYYYYYY     *
+*     YYYYYYYYYYYY     *
 * KK  YYGGYYGGYYGG     *
-*     GGGGGGGGGGGG     *
-*     YYGGYYGGYYGG     *
+* KK  GGGGGGGGGGGG     *
+* GG  YYGGYYGGYYGG     *
 *     YYYYYYYYYYYY     *
 * RR  ****    ****  RR *
 * GG                GG *
