@@ -343,9 +343,11 @@ bool GameScene::ballisDead(Ball* ball)
 
 bool GameScene::lastBallisDead()
 {
-	for (auto it = balls.begin(); it != balls.end(); ++it)
-		if (ballisDead(*it))
-			balls.erase(it);
+	if (balls.empty()) return true;
+
+	for (auto it = balls.begin(); it != balls.end();)
+		if (ballisDead(*it))	it = balls.erase(it);
+		else					++it;
 
 	return balls.empty();
 }
