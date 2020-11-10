@@ -179,10 +179,14 @@ void Game::keyPressed(int key)
 	static constexpr int ESC = 27;
 	static constexpr int ENTER = 13;
 
+	// Para captar las teclas mayusculas como minusculas;
+	int lower_key = key;
+	if ('A' <= key && key <= 'Z') lower_key -= 'A';
+
 	switch (currMode()) {
 	case startMenu:
 		cout << "start" << endl;
-		switch (key) {
+		switch (lower_key) {
 			case ESC:	setMode(options);	break;
 			case 'p':	setMode(password);	break;
 			case 'e':	setMode(exitGame);	break;
@@ -191,20 +195,29 @@ void Game::keyPressed(int key)
 		} break;
 
 	case playing:
-		switch (key) {
+		switch (lower_key) {
 			case ESC:	setMode(options);		break;
 			case 'g':	toggleGodMode();		break;
-			case 'b':	toogleChangeBar();		break;
-			case 'j':	gameScene.nextRoom();	break;
-			case 'l':	gameScene.prevRoom();	break;
-			case '+':	gameScene.createNewBall(1.f, 1.f);	break;
-			case '-':	gameScene.deleteLastBall(); break;
+			case '+':	
+				if (keys['b']) gameScene.createNewBall(1.f, 1.f);
+				if (keys['r']) gameScene.nextRoom();
+				if (keys['d']) gameScene.openDoor();
+				if (keys['l']) gameScene.addLive();
+				// if (keys['p']) /* NEXT BONUS */
+				break;
+			case '-':	
+				if (keys['b']) gameScene.deleteLastBall();
+				if (keys['r']) gameScene.prevRoom();
+				if (keys['d']) gameScene.closeDoor();
+				if (keys['l']) gameScene.subLive();
+				// if (keys['p']) /* PREVIOUS BONUS */
+				break;
 			case ' ':	gameScene.createNewBullets(); break;
 			default:	break;
 		} break;
 
 	case options:
-		switch (key) {
+		switch (lower_key) {
 			case ESC:	rollbackMode();			break;
 			case ENTER:	
 				switch (optionsScene.getCurrTex())
@@ -220,26 +233,26 @@ void Game::keyPressed(int key)
 		} break;
 
 	case instructions: 
-		switch (key) {
+		switch (lower_key) {
 			case ESC:	rollbackMode();	break;
 			default:	break;
 		} break;
 
 	case credits:
-		switch (key) {
+		switch (lower_key) {
 			case ESC:	rollbackMode();	break;
 			default:	break;
 		} break;
 
 	case password:
-		switch (key) {
+		switch (lower_key) {
 			case ESC:	rollbackMode();	break;
 			default:	break;
 		} break;
 	}
 
-		
 	keys[key] = true;
+	keys[lower_key] = true;
 }
 
 void Game::keyReleased(int key)

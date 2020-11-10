@@ -43,8 +43,8 @@ public:
 	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, float *posY, int speedOg, float& modifierY, glm::ivec2 &lastCollision);
 	bool collisionMoveUpB(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speedOg, float& modifierY, glm::ivec2& lastCollision);
 
-	char tileCollision(int i, int j);
-	char tileCollisionB(int i, int j);
+	char ballTileCollision(int i, int j);
+	char bulletTileCollision(int i, int j);
 	bool tileIsSolid(int i, int j);
 	bool tileIsKey(int i, int j);
 	bool tileIsDeath(int i, int j);
@@ -54,6 +54,7 @@ public:
 	void collisionBrick(char brick, int i, int j);
 	void openDoor();
 	void closeDoor();
+	void toggleDeathDoor();
 	void deleteSpecialTile(int i, int j, char tile);
 
 	bool loadLevel(const string &levelFile);

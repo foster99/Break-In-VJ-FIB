@@ -288,7 +288,7 @@ void GameScene::update(int deltaTime) {
 						ball->toogleMagnet();
 				}
 				else {
-					switch (map->tileCollision(tile[0], tile[1]))
+					switch (map->ballTileCollision(tile[0], tile[1]))
 					{
 					case Tile::moneyBag:
 						Game::instance().playMoneySound();
@@ -341,7 +341,7 @@ void GameScene::update(int deltaTime) {
 			if (bullet->update(deltaTime)) {
 				glm::ivec2 tile = bullet->getLastCollision();
 
-				switch (map->tileCollisionB(tile[0], tile[1]))
+				switch (map->bulletTileCollision(tile[0], tile[1]))
 				{
 
 				case Tile::brickBlue:
@@ -365,6 +365,7 @@ void GameScene::update(int deltaTime) {
 		}
 
 		map->setRoom(room);
+		menuMap->setLives(lives);
 		player->setRoom(room);
 		player->setTilesDisplacement(tiles_displacement);
 		player->setPosMainBall(balls.front()->getPosition());
@@ -382,7 +383,7 @@ void GameScene::update(int deltaTime) {
 	}
 	if (guardian->getRoom() == player->getCurrentRoom()) {
 		if (guardian->update(deltaTime))
-			playerLosesLife();
+			if (!godMode) playerLosesLife();
 	}
 	else {
 		Game::instance().stopAlarmSound();
@@ -585,6 +586,16 @@ bool GameScene::changeOfRoom()
 	return false;
 }
 
+void GameScene::addLive()
+{
+	if (godMode) setLives(lives + 1);
+}
+
+void GameScene::subLive()
+{
+	if (godMode) setLives(lives - 1);
+}
+
 void GameScene::nextRoom()
 {
 	if (godMode && room < 3)
@@ -603,6 +614,21 @@ void GameScene::prevRoom()
 		ballPos.y += 24 * 8;
 		ball->setPosition(ballPos);
 	}
+}
+
+void GameScene::openDoor()
+{
+	if (godMode) map->openDoor();
+}
+
+void GameScene::closeDoor()
+{
+	if (godMode) map->closeDoor();
+}
+
+void GameScene::toggleDeathDoor()
+{
+	if (godMode) map->toggleDeathDoor();
 }
 
 bool GameScene::ballisDead(Ball* ball)
@@ -742,7 +768,7 @@ void GameScene::setRoom(int r)
 
 void GameScene::setLives(int l)
 {
-	lives = l;
+	if (l >= 0) lives = l;
 }
 
 void GameScene::setMoney(int m)
@@ -763,5 +789,5 @@ void GameScene::setWin(bool w)
 void GameScene::toggleGodMode()
 {
 	godMode = !godMode;
-	// possible update ????
+	toggleDeathDoor();
 }

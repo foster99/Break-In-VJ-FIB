@@ -433,7 +433,7 @@ bool TileMap::collisionMoveUpB(const glm::ivec2& pos, const glm::ivec2& size, fl
 	return false;
 }
 
-char TileMap::tileCollision(int i, int j)
+char TileMap::ballTileCollision(int i, int j)
 {
 	char tile = mapita[i][j].symbol;
 	
@@ -472,7 +472,7 @@ char TileMap::tileCollision(int i, int j)
 	return tile;
 }
 
-char TileMap::tileCollisionB(int i, int j)
+char TileMap::bulletTileCollision(int i, int j)
 {
 	char tile = mapita[i][j].symbol;
 
@@ -566,6 +566,19 @@ void TileMap::closeDoor()
 		loadTile(Tile::wall, i_, j_);
 	}
 }
+
+void TileMap::toggleDeathDoor()
+{
+	char tile;
+	int i = mapSize.y;
+
+	if (mapita[i][0].symbol == Tile::death)	tile = Tile::wall;
+	else									tile = Tile::death;
+
+	for (int j = 0; j < mapSize.x; j++)
+		loadTile(tile, i, j);
+}
+
 
 void TileMap::deleteSpecialTile(int i, int j, char tile)
 {	

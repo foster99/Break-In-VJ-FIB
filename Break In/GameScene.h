@@ -56,11 +56,18 @@ public:
     void createNewBullets();
 
     bool changeOfRoom();
-    void nextRoom();
-    void prevRoom();
     bool ballisDead(Ball* ball);
     bool lastBallisDead();
     bool checkBallSlide();
+
+    // GOD MODE
+    void addLive();
+    void subLive();
+    void nextRoom();
+    void prevRoom();
+    void openDoor();
+    void closeDoor();
+    void toggleDeathDoor();
 
     static constexpr float INIT_PLAYER_X_TILES  = 12;
     static constexpr float INIT_PLAYER_Y_TILES  = 68;
@@ -97,6 +104,7 @@ private:
     bool bonusIsActive;
     float ballOnSlide;
     int timeToDelete;
+    
     // Game Values
     int bank;
     int room;
