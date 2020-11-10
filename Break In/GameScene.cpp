@@ -371,11 +371,13 @@ void GameScene::update(int deltaTime) {
 	}
 
 	if (bonus->update(deltaTime)) {
-		player->setBonus(bonus->getActiveBonus());
+
 		if (bonus->getActiveBonus() == Bonus::multipleBall) {
 			createNewBall(-0.8,1);
 			createNewBall(0.8, 1);
 		}
+		else player->setBonus(bonus->getActiveBonus());
+		
 		Game::instance().playBonusSound();
 	}
 	if (guardian->getRoom() == player->getCurrentRoom()) {
@@ -659,7 +661,7 @@ void GameScene::restartPlayerBall()
 	player->setTileMap(map);
 
 	balls.clear();
-	createNewBall(0.2, -1, glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
+	createNewBall(1, -1, glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
 
 	player->setPosMainBall(balls.front()->getPosition());
 
