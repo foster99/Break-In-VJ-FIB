@@ -659,7 +659,7 @@ void GameScene::restartPlayerBall()
 	player->setTileMap(map);
 
 	balls.clear();
-	createNewBall(0.2, -1, glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
+	createNewBall(1, -1, glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
 
 	player->setPosMainBall(balls.front()->getPosition());
 
