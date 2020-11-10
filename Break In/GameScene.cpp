@@ -189,8 +189,10 @@ void GameScene::update(int deltaTime) {
 	int lastMov = player->update(deltaTime);
 	for (Ball* ball : balls) {
 		if (ball->getMagnet()) {
-			if (lastMov == Player::up || lastMov == Player::down || lastMov == Player::diag)
+			if (lastMov == Player::up || lastMov == Player::down || lastMov == Player::diag) {
+				reset = true;
 				ball->toogleMagnet();
+			}
 			else if (lastMov == Player::right || lastMov == Player::left)
 				ball->moveWithPlayer(player->getSpeedX());
 			else if (ballOnSlide >= 3000) {
