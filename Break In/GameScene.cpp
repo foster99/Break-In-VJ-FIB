@@ -514,7 +514,7 @@ void GameScene::deleteLastBall()
 		balls.pop_back();
 }
 
-void GameScene::createNewBullets() {
+bool GameScene::createNewBullets() {
 	if (player->getBonus() == Bonus::blaster && bullets.size() < 4) {
 		bullet = new Bullet();
 		glm::vec2 pos = player->getPosition();
@@ -528,7 +528,10 @@ void GameScene::createNewBullets() {
 		bullet->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		bullet->setTileMap(map);
 		bullets.push_back(bullet);
+
+		return true;
 	}
+	return false;
 }
 
 void GameScene::playerLosesLife()

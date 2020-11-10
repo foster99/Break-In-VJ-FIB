@@ -53,7 +53,7 @@ public:
     void createNewBall(float spdX, float spdY, glm::vec2 pos);
     void createNewBall(float spdX, float spdY);
     void deleteLastBall();
-    void createNewBullets();
+    bool createNewBullets();
 
     bool changeOfRoom();
     void nextRoom();
