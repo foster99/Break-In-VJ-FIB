@@ -212,6 +212,22 @@ void Game::keyPressed(int key)
 				if (keys['l']) gameScene.subLive();
 				// if (keys['p']) /* PREVIOUS BONUS */
 				break;
+			
+			//case '0':
+			case '1':
+			case '2':
+			//case '3':
+			//case '4':
+			//case '5':
+			//case '6':
+			//case '7':
+			//case '8':
+			//case '9':
+				if (gameScene.inGodMode()) {
+					gameScene.setBank(lower_key - '0');
+					gameScene.startBank();
+				}
+				break;
 			case ' ':
 				if (gameScene.createNewBullets())
 					playBlastSound();

@@ -68,6 +68,7 @@ public:
     void openDoor();
     void closeDoor();
     void toggleDeathDoor();
+    bool inGodMode();
 
     static constexpr float INIT_PLAYER_X_TILES  = 12;
     static constexpr float INIT_PLAYER_Y_TILES  = 68;

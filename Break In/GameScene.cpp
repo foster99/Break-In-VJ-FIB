@@ -507,7 +507,9 @@ void GameScene::createNewBall(float spdX, float spdY)
 {
 	ball = new Ball();
 	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram,spdX,spdY, false);
-	ball->setPosition(balls.front()->getPosition());
+	
+	if (balls.empty())	ball->setPosition(balls.front()->getPosition());
+
 	ball->setTileMap(map);
 	ball->setPlayer(player);
 	balls.push_back(ball);
@@ -635,7 +637,12 @@ void GameScene::closeDoor()
 
 void GameScene::toggleDeathDoor()
 {
-	if (godMode) map->toggleDeathDoor();
+	map->toggleDeathDoor();
+}
+
+bool GameScene::inGodMode()
+{
+	return godMode;
 }
 
 bool GameScene::ballisDead(Ball* ball)
@@ -649,7 +656,7 @@ bool GameScene::lastBallisDead()
 
 	for (auto it = balls.begin(); it != balls.end();)
 		if (!(*it)->getMagnet() && ballisDead(*it))	it = balls.erase(it);
-		else					++it;
+		else										++it;
 
 	return balls.empty();
 }
