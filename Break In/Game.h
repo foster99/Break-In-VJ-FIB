@@ -71,6 +71,8 @@ public:
 	void playAlarmSound();
 
 	void stopTitleSong();
+	void playGameOverSong();
+	void stopGameOverSong();
 	void stopAlarmSound();
 
 	// Different Modes
@@ -107,6 +109,7 @@ private:
 	// Looped Sounds
 	Sound title_song;
 	Sound alarm_sound;
+	Sound gameover_sound;
 
 	// One Shoot Sound
 	Sound brick_sound;

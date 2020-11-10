@@ -35,7 +35,11 @@ void GameScene::init() {
 	godMode = false;
 	alive = true;
 	gameOver = false;
+	gameOverAnimation = -1;
 	win = false;
+
+	setUpGameOverSprite();
+
 }
 
 void GameScene::update(int deltaTime) {
@@ -52,6 +56,190 @@ void GameScene::update(int deltaTime) {
 
 		if (alive) restartPlayerBall();
 		else       return;
+	}
+	else if (gameOver) {							// GAME OVER, PERO HAY QUE MOSTRAR LA ANIMACION
+		
+		static constexpr float initial_wait_time	= 1000.f;
+		static constexpr float frame_wait_time		= 250.f;
+		float time_to_wait = 0.f;
+
+		auxTime += deltaTime;
+
+		// INITIAL WAIT
+		time_to_wait += initial_wait_time;
+		if (auxTime < time_to_wait) return;
+		Game::instance().playGameOverSong();
+
+		// FULL ANIMATION 1
+		gameOverAnimation = 0;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 1;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 2;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 3;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+
+		// FULL ANIMATION 2
+		gameOverAnimation = 0;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 1;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 2;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 3;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+
+		// FULL ANIMATION 3
+		gameOverAnimation = 0;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 1;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 2;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 3;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+
+		// FULL ANIMATION 4
+		gameOverAnimation = 0;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 1;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 2;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 3;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+
+		// FULL ANIMATION 5
+		gameOverAnimation = 0;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 1;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 2;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 3;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+
+		// FULL ANIMATION 6
+		gameOverAnimation = 0;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 1;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 2;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 3;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+
+		// FULL ANIMATION 7
+		gameOverAnimation = 0;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 1;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 2;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 3;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+
+		// FULL ANIMATION 8
+		gameOverAnimation = 0;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 1;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 2;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 3;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+
+		// FULL ANIMATION 9
+		gameOverAnimation = 0;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 1;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 2;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 3;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+
+		// FULL ANIMATION 10
+		gameOverAnimation = 0;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 1;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 2;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 3;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+
+		// FULL ANIMATION 11
+		gameOverAnimation = 0;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 1;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 2;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 3;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+
+		// FULL ANIMATION 12
+		gameOverAnimation = 0;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 1;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 2;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 3;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+
+		Game::instance().stopGameOverSong();
+		gameOverAnimation = -2;
 	}
 	else if (lastBallisDead())						// COMPROBAR SI HEMOS MUERTO 
 	{
@@ -201,13 +389,14 @@ void GameScene::update(int deltaTime) {
 			}
 		}
 	}
-	if (reset)
-		ballOnSlide = 0;
+
+	if (reset)	ballOnSlide = 0;
+
 	win = !map->moneyLeft();
 }
 
 void GameScene::render()
-{
+{	
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
@@ -232,6 +421,28 @@ void GameScene::render()
 	texProgram.setUniformMatrix4f("modelview", menu_modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	menuMap->render();
+
+	if (gameOverAnimation >= 0) {
+		gameOverSprite->changeAnimation(gameOverAnimation);
+		gameOverSprite->render(glm::mat4(1));
+	}
+
+}
+
+void GameScene::setUpGameOverSprite()
+{
+	// SPRITE AND TEXTURE SET-UP
+	gameOverTex.loadFromFile("images/gameover_trans.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	gameOverSprite = Sprite::createSprite(glm::ivec2(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT), glm::vec2(1.f / 4.f, 1.f), &gameOverTex, &texProgram);
+	gameOverSprite->setNumberAnimations(4);
+
+	gameOverSprite->addKeyframe(0, glm::vec2(0.f / 4.f, 0.f));
+	gameOverSprite->addKeyframe(1, glm::vec2(1.f / 4.f, 0.f));
+	gameOverSprite->addKeyframe(2, glm::vec2(2.f / 4.f, 0.f));
+	gameOverSprite->addKeyframe(3, glm::vec2(3.f / 4.f, 0.f));
+
+	gameOverSprite->changeAnimation(0);
+	gameOverSprite->setPosition(glm::vec2(0.f));
 }
 
 void GameScene::toogleChangeBar()
@@ -285,6 +496,7 @@ void GameScene::playerLosesLife()
 void GameScene::gameIsOver()
 {
 	gameOver = true;
+	gameOverAnimation = -1;
 }
 
 bool GameScene::changeOfRoom()
@@ -394,7 +606,7 @@ void GameScene::restartPlayerBall()
 	player->setTileMap(map);
 
 	balls.clear();
-	createNewBall(1, 1, glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
+	createNewBall(0.2, -1, glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
 
 	player->setPosMainBall(balls.front()->getPosition());
 
@@ -415,7 +627,7 @@ void GameScene::restartPlayerBall()
 
 bool GameScene::getGameOver()
 {
-	return !player->getDeathAnimation() && gameOver;
+	return !player->getDeathAnimation() && (gameOverAnimation == -2) && gameOver;
 }
 
 bool GameScene::getWin()

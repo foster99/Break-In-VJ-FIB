@@ -71,6 +71,7 @@
     <Media Include="sounds\bonus.wav" />
     <Media Include="sounds\brick_collision.wav" />
     <Media Include="sounds\double_slide.wav" />
+    <Media Include="sounds\gameover.wav" />
     <Media Include="sounds\greenCard.wav" />
     <Media Include="sounds\lose_live.wav" />
     <Media Include="sounds\moneyBag_01.wav" />

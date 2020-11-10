@@ -38,7 +38,7 @@ void Game::loadSounds()
 {
 	title_song = Sound("title_song.wav", true);
 	alarm_sound = Sound("alarm.wav", true);
-
+	gameover_sound = Sound("gameover.wav", true);
 
 	brick_sound = Sound("brick_collision.wav", false);
 	//slide_sound = Sound("tueeeeeeeeee.wav", false);
@@ -389,6 +389,16 @@ void Game::playTitleSong()
 void Game::stopTitleSong()
 {
 	title_song.drop();
+}
+
+void Game::playGameOverSong()
+{
+	gameover_sound.play();
+}
+
+void Game::stopGameOverSong()
+{
+	gameover_sound.drop();
 }
 
 void Game::stopAlarmSound()

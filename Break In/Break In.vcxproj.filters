@@ -9,28 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{31b9233d-08ef-4b9c-9796-72b597cd1574}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\sound">
-      <UniqueIdentifier>{a89a3a6e-8538-41b7-a5ff-ef05ec3c135e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\images">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
-    </Filter>
-    <Filter Include="Resource Files\levels">
-      <UniqueIdentifier>{57e33690-41c5-4b67-8ef7-15ac705902fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\images\screen_texture">
-      <UniqueIdentifier>{9cc6c682-72a5-47b1-b5a7-af77ab30ea68}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\images\tile_texture">
-      <UniqueIdentifier>{a0b51eb7-12b4-44cb-b356-8888dffb65b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\images\sprites">
-      <UniqueIdentifier>{56c5b3de-17a7-41e7-99db-2a242668ffd3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Entities">
       <UniqueIdentifier>{8388b30f-8c7c-41e9-8664-c528b7027743}</UniqueIdentifier>
     </Filter>
@@ -66,6 +44,28 @@
     </Filter>
     <Filter Include="Source Files\Base">
       <UniqueIdentifier>{88e1cf6c-c3d6-4cc8-a064-e2c61c9edcd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{31b9233d-08ef-4b9c-9796-72b597cd1574}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\sound">
+      <UniqueIdentifier>{a89a3a6e-8538-41b7-a5ff-ef05ec3c135e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\images">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\images\screen_texture">
+      <UniqueIdentifier>{9cc6c682-72a5-47b1-b5a7-af77ab30ea68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\images\tile_texture">
+      <UniqueIdentifier>{a0b51eb7-12b4-44cb-b356-8888dffb65b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\images\sprites">
+      <UniqueIdentifier>{56c5b3de-17a7-41e7-99db-2a242668ffd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\levels">
+      <UniqueIdentifier>{57e33690-41c5-4b67-8ef7-15ac705902fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -239,6 +239,9 @@
       <Filter>Resource Files\sound</Filter>
     </Media>
     <Media Include="sounds\alarm.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\gameover.wav">
       <Filter>Resource Files\sound</Filter>
     </Media>
   </ItemGroup>

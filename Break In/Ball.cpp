@@ -4,7 +4,7 @@
 
 void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, float spdX, float spdY)
 {	
-	sizeBall = 9;
+	sizeBall = 8;
 	speed = 2;
 	spdModifierX = spdX;
 	spdModifierY = spdY;

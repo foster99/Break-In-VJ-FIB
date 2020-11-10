@@ -2,6 +2,7 @@
 #define _GAMESCENE_INCLUDE
 
 #include "Scene.h"
+#include "Sprite.h"
 #include "Player.h"
 #include "Ball.h"
 #include "Bonus.h"
@@ -21,6 +22,7 @@ public:
     void init();
     void update(int deltaTime);
     void render();
+    void setUpGameOverSprite();
 
     void startBank();
     void restartPlayerBall();
@@ -78,11 +80,16 @@ private:
     Bonus* bonus;
     Guardian* guardian;
 
+    // Title Quads
+    Texture gameOverTex;
+    Sprite* gameOverSprite;
+    
     // Control variables
     bool godMode;
     bool alive;
     bool win;
     bool gameOver;
+    int gameOverAnimation;
     bool bonusIsActive;
     float ballOnSlide;
 
