@@ -28,6 +28,7 @@ public:
 	
 	glm::ivec2 getSize();
 	glm::vec2 getPosition();
+	glm::ivec2 getSlideOffset();
 	float getSpeedX();
 	int getBonus();
 	int getCurrentRoom();

@@ -37,6 +37,7 @@ void GameScene::init() {
 	gameOver = false;
 	gameOverAnimation = -1;
 	win = false;
+	timeToDelete = 0;
 
 	setUpGameOverSprite();
 
@@ -45,6 +46,15 @@ void GameScene::init() {
 void GameScene::update(int deltaTime) {
 
 	this->Scene::update(deltaTime);
+
+	if ((timeToDelete % 4) == 0) {
+		//DELETEAR BULLETS SI DESTROY TRUE
+		for (auto it = bullets.begin(); it != bullets.end();)
+			if ((*it)->getDestroy())	it = bullets.erase(it);
+			else					++it;
+
+		timeToDelete = 0;
+	}
 
 	if (!alive) {									// ESTAMOS MUERTOS
 		auxTime += deltaTime;
@@ -307,15 +317,15 @@ void GameScene::update(int deltaTime) {
 						points += 100;
 						break;
 
-				case Tile::outCard:
-					Game::instance().playGreenCardSound();
-					points += 100;
-					break;
+					case Tile::outCard:
+						Game::instance().playGreenCardSound();
+						points += 100;
+						break;
 
-				case Tile::alarm:
-					points += 100;
-					guardian->alarmOn();
-					break;
+					case Tile::alarm:
+						points += 100;
+						guardian->alarmOn();
+						break;
 
 					default: break;
 					}
@@ -324,13 +334,35 @@ void GameScene::update(int deltaTime) {
 				menuMap->setMoney(money);
 				menuMap->setPoints(points);
 
-				if (points > 1000) {
-					menuMap->setLine("AII LMAO", "4POGGERS"); // CAMBIA CON EL BONUS
-				}
-
 			}
 		}
 		
+		for (Bullet* bullet : bullets) {
+			if (bullet->update(deltaTime)) {
+				glm::ivec2 tile = bullet->getLastCollision();
+
+				switch (map->tileCollisionB(tile[0], tile[1]))
+				{
+
+				case Tile::brickBlue:
+				case Tile::brickRed:
+				case Tile::brickYellow:
+				case Tile::brickGreen:
+				case Tile::brickLow:
+					Game::instance().playBrickSound();
+					points += 100;
+					break;
+				case Tile::outCard:
+					Game::instance().playGreenCardSound();
+					points += 100;
+					break;
+				default: break;
+				}
+				bullet->setDestroy();
+				menuMap->setMoney(money);
+				menuMap->setPoints(points);
+			}
+		}
 
 		map->setRoom(room);
 		player->setRoom(room);
@@ -389,9 +421,9 @@ void GameScene::update(int deltaTime) {
 			}
 		}
 	}
-
-	if (reset)	ballOnSlide = 0;
-
+	if (reset)
+		ballOnSlide = 0;
+	++timeToDelete;
 	win = !map->moneyLeft();
 }
 
@@ -411,6 +443,10 @@ void GameScene::render()
 	
 	for (Ball* ball : balls) {
 		ball->render(displacement_mat);
+	}
+
+	for (Bullet* bullet : bullets) {
+		bullet->render(displacement_mat);
 	}
 
 	// Render Lateral Menu
@@ -474,6 +510,23 @@ void GameScene::deleteLastBall()
 {
 	if(! balls.empty())
 		balls.pop_back();
+}
+
+void GameScene::createNewBullets() {
+	if (player->getBonus() == Bonus::blaster && bullets.size() < 4) {
+		bullet = new Bullet();
+		glm::vec2 pos = player->getPosition();
+		bullet->setPosition(glm::vec2(pos.x+2, pos.y - player->getSlideOffset().y));
+		bullet->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		bullet->setTileMap(map);
+		bullets.push_back(bullet);
+
+		bullet = new Bullet();
+		bullet->setPosition(glm::vec2(pos.x+10, pos.y - player->getSlideOffset().y));
+		bullet->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		bullet->setTileMap(map);
+		bullets.push_back(bullet);
+	}
 }
 
 void GameScene::playerLosesLife()

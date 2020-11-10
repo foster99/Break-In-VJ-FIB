@@ -197,6 +197,11 @@ glm::vec2 Player::getPosition()
 	return posPlayer;
 }
 
+glm::ivec2 Player::getSlideOffset()
+{
+	return slideOffset;
+}
+
 float Player::getSpeedX()
 {
 	return speedX;
