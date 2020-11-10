@@ -47,6 +47,8 @@ void GameScene::update(int deltaTime) {
 
 	this->Scene::update(deltaTime);
 
+	glm::vec2 previousPlayerPos = player->getPosition();
+
 	if ((timeToDelete % 4) == 0) {
 		//DELETEAR BULLETS SI DESTROY TRUE
 		for (auto it = bullets.begin(); it != bullets.end();)
@@ -338,7 +340,7 @@ void GameScene::update(int deltaTime) {
 		}
 		
 		for (Bullet* bullet : bullets) {
-			if (bullet->update(deltaTime)) {
+			if (!bullet->getDestroy() && bullet->update(deltaTime)) {
 				glm::ivec2 tile = bullet->getLastCollision();
 
 				switch (map->bulletTileCollision(tile[0], tile[1]))
@@ -409,10 +411,12 @@ void GameScene::update(int deltaTime) {
 	
 	bool reset=false;
 	//PARA CADA PELOTA MAGNETIZADA
-	int lastMov = player->update(deltaTime);
+	int lastMov= player->update(deltaTime);
+	glm::vec2 newPosistion = player->getPosition();
+	bool movedY = (previousPlayerPos.y != newPosistion.y);
 	for (Ball* ball : balls) {
 		if (ball->getMagnet()) {
-			if (lastMov == Player::up || lastMov == Player::down || lastMov == Player::diag) {
+			if (movedY) { // CAMVIAR: mirar pos.y abans de update i si despres ha canviat a la verga sa pilota
 				reset = true;
 				ball->toogleMagnet();
 			}
@@ -515,7 +519,7 @@ void GameScene::deleteLastBall()
 		balls.pop_back();
 }
 
-void GameScene::createNewBullets() {
+bool GameScene::createNewBullets() {
 	if (player->getBonus() == Bonus::blaster && bullets.size() < 4) {
 		bullet = new Bullet();
 		glm::vec2 pos = player->getPosition();
@@ -529,7 +533,10 @@ void GameScene::createNewBullets() {
 		bullet->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		bullet->setTileMap(map);
 		bullets.push_back(bullet);
+
+		return true;
 	}
+	return false;
 }
 
 void GameScene::playerLosesLife()
@@ -641,7 +648,7 @@ bool GameScene::lastBallisDead()
 	if (balls.empty()) return true;
 
 	for (auto it = balls.begin(); it != balls.end();)
-		if (ballisDead(*it))	it = balls.erase(it);
+		if (!(*it)->getMagnet() && ballisDead(*it))	it = balls.erase(it);
 		else					++it;
 
 	return balls.empty();

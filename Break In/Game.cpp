@@ -212,7 +212,10 @@ void Game::keyPressed(int key)
 				if (keys['l']) gameScene.subLive();
 				// if (keys['p']) /* PREVIOUS BONUS */
 				break;
-			case ' ':	gameScene.createNewBullets(); break;
+			case ' ':
+				if (gameScene.createNewBullets())
+					playBlastSound();
+				break;
 			default:	break;
 		} break;
 

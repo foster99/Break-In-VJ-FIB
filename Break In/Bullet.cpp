@@ -6,12 +6,15 @@ void Bullet::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	speed = 2;
 	destroy = false;
 
-	tex.loadFromFile("images/bee.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(sizeBullet, glm::vec2(0.5f, 0.5f), &tex, &shaderProgram);
-	sprite->setNumberAnimations(2);
+	tex.loadFromFile("images/bullet.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite = Sprite::createSprite(sizeBullet, glm::vec2(1/5.f, 1.0f), &tex, &shaderProgram);
+	sprite->setNumberAnimations(5);
 
-	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
-	sprite->addKeyframe(1, glm::vec2(0.5f, 0.5f));
+	sprite->addKeyframe(0, glm::vec2(0.f, 1.0f));
+	sprite->addKeyframe(1, glm::vec2(1/5.f, 1.f));
+	sprite->addKeyframe(1, glm::vec2(2/5.f, 1.f));
+	sprite->addKeyframe(1, glm::vec2(3/5.f, 1.f));
+	sprite->addKeyframe(1, glm::vec2(4/5.f, 1.f));
 
 	sprite->changeAnimation(0);
 

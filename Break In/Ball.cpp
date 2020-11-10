@@ -107,7 +107,10 @@ void Ball::render(glm::mat4& displacement_mat)
 
 void Ball::moveWithPlayer(float spdX)
 {
+
 	posBall += glm::vec2(spdX,0);
+	if( (posBall.x / map->getTileSize()) > (map->getMapSizeX()-2) || (posBall.x / map->getTileSize()) < 1)
+		posBall -= glm::vec2(spdX, 0);
 	sprite->setPosition(posBall);
 }
 

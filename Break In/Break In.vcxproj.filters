@@ -323,5 +323,8 @@
     <Image Include="images\bonus.png">
       <Filter>Resource Files\images\sprites</Filter>
     </Image>
+    <Image Include="images\bullet.png">
+      <Filter>Resource Files\images\sprites</Filter>
+    </Image>
   </ItemGroup>
 </Project>
