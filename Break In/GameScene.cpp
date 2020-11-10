@@ -371,11 +371,13 @@ void GameScene::update(int deltaTime) {
 	}
 
 	if (bonus->update(deltaTime)) {
-		player->setBonus(bonus->getActiveBonus());
+
 		if (bonus->getActiveBonus() == Bonus::multipleBall) {
 			createNewBall(-0.8,1);
 			createNewBall(0.8, 1);
 		}
+		else player->setBonus(bonus->getActiveBonus());
+		
 		Game::instance().playBonusSound();
 	}
 	if (guardian->getRoom() == player->getCurrentRoom()) {
