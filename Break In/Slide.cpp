@@ -28,24 +28,7 @@ void Slide::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 void Slide::update(int deltaTime)
 {
-	switch (bonus) {
-		case 1: // BLASTER
-			sprite->changeAnimation(0);
-			logicSize = singleSize;
-			break;
-		case 2: //DOUBLE SLIDE
-			sprite->changeAnimation(4);
-			logicSize = quadSize;
-			break;
-		case 3: //MAGNET
-			sprite->changeAnimation(1);
-			logicSize = singleSize;
-			break;
-		case 4: //TWIX
-			sprite->changeAnimation(3);
-			logicSize = quadSize;
-			break;
-	}
+	
 }
 
 
@@ -72,7 +55,26 @@ void Slide::setOffSets(int offX, int offY)
 
 void Slide::setBonus(int b)
 {
-	bonus = b;
+	switch (b) {
+	case 1: // BLASTER
+		sprite->changeAnimation(0);
+		logicSize = singleSize;
+		break;
+	case 2: //DOUBLE SLIDE
+		sprite->changeAnimation(4);
+		logicSize = quadSize;
+		break;
+	case 3: //MAGNET
+		sprite->changeAnimation(1);
+		logicSize = singleSize;
+		break;
+	case 4: //TWIX
+		sprite->changeAnimation(3);
+		logicSize = quadSize;
+		break;
+	default:
+		break;
+	}
 }
 
 
