@@ -58,12 +58,12 @@ public:
     bool lastBallisDead();
     bool checkBallSlide();
 
-    static constexpr float INIT_PLAYER_X_TILES = 12;
-    static constexpr float INIT_PLAYER_Y_TILES = 60;
-    static constexpr float INIT_BALL_X_TILES = INIT_PLAYER_X_TILES;
-    static constexpr float INIT_BALL_Y_TILES = INIT_PLAYER_Y_TILES - 1;
-    static constexpr float INIT_BONUS_X_TILES = 10;
-    static constexpr float INIT_BONUS_Y_TILES = 55;
+    static constexpr float INIT_PLAYER_X_TILES  = 12;
+    static constexpr float INIT_PLAYER_Y_TILES  = 68;
+    static constexpr float INIT_BALL_X_TILES    = INIT_PLAYER_X_TILES + 1;
+    static constexpr float INIT_BALL_Y_TILES    = INIT_PLAYER_Y_TILES - 2;
+    static constexpr float INIT_BONUS_X_TILES   = 10;
+    static constexpr float INIT_BONUS_Y_TILES   = 55;
 
 private:
 
