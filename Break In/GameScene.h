@@ -121,6 +121,7 @@ private:
     int antonioAnimation;
 
     // Control variables
+    bool restarted;
     bool godMode;
     bool alive;
     bool win;

@@ -2,30 +2,6 @@
 #include "Game.h"
 
 
-void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, float spdX, float spdY)
-{	
-	sizeBall = 8;
-	speed = 2;
-	spdModifierX = spdX;
-	spdModifierY = spdY;
-	magnet = true;
-
-	tex.loadFromFile("images/balls.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(sizeBall, sizeBall), glm::vec2(1.f / 5.f, 1.f), &tex, &shaderProgram);
-	sprite->setNumberAnimations(5);
-
-	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
-	sprite->addKeyframe(1, glm::vec2(1.f / 5.f, 0.f));
-	sprite->addKeyframe(2, glm::vec2(2.f / 5.f, 0.f));
-	sprite->addKeyframe(3, glm::vec2(3.f / 5.f, 0.f));
-	sprite->addKeyframe(4, glm::vec2(4.f / 5.f, 0.f));
-
-	sprite->changeAnimation(0);
-
-	tileMapDispl = tileMapPos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
-	
-}
 
 void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, float spdX, float spdY, bool freeze)
 {

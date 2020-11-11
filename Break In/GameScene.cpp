@@ -33,6 +33,7 @@ void GameScene::init() {
 	stride = 0;
 	end = 0;
 	godMode = false;
+	restarted = false;
 	alive = true;
 	gameOver = false;
 	gameOverAnimation = starts;
@@ -237,11 +238,11 @@ void GameScene::update(int deltaTime) {
 	if(checkBallSlide())
 		ballOnSlide += deltaTime;
 	
-	bool reset=false;
+	bool reset = false;
 	//PARA CADA PELOTA MAGNETIZADA
-	int lastMov= player->update(deltaTime);
+	int lastMov = player->update(deltaTime);
 	glm::vec2 newPosistion = player->getPosition();
-	bool movedY = (previousPlayerPos.y != newPosistion.y);
+	bool movedY = (!restarted && previousPlayerPos.y != newPosistion.y);
 	for (Ball* ball : balls) {
 		if (ball->getMagnet()) {
 			if (movedY) { // CAMVIAR: mirar pos.y abans de update i si despres ha canviat a la verga sa pilota
@@ -259,8 +260,8 @@ void GameScene::update(int deltaTime) {
 	
 	if (reset)	ballOnSlide = 0;
 	++timeToDelete;
-	
 	setWin(!map->moneyLeft());
+	restarted = false;
 }
 
 void GameScene::render()
@@ -390,7 +391,7 @@ void GameScene::toogleChangeBar()
 void GameScene::createNewBall(float spdX, float spdY, glm::vec2 pos)
 {
 	ball = new Ball();
-	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram,spdX,spdY);
+	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram,spdX,spdY, true);
 	ball->setPosition(glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
 	ball->setTileMap(map);
 	ball->setPlayer(player);
@@ -741,6 +742,8 @@ void GameScene::restartPlayerBall()
 	guardian->setPlayer(player);
 	guardian->setRoom(map->getGuardianRoom());
 
+	ballOnSlide = 0;
+	restarted = true;
 	//initBoss();
 }
 
