@@ -37,12 +37,13 @@ public:
 	static constexpr int blaster		= 1;
 	static constexpr int doubleSlide	= 2;
 	static constexpr int magnet			= 3;
-	static constexpr int twix			= 4;
+	static constexpr int doublePoints	= 4;
 	static constexpr int none			= 5;
+	static constexpr int twix			= 6;
 
-	static constexpr float bonusDelayTime = 1000.f;
-	static constexpr float bonusAliveTime = 15000.f;
-	static constexpr float bonusCollisionTime = 1000.f;
+	static constexpr float bonusDelayTime		=  1000.f;
+	static constexpr float bonusAliveTime		= 15000.f;
+	static constexpr float bonusCollisionTime	=  1000.f;
 
 private:
 	glm::ivec2 tileMapDispl;

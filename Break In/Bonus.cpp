@@ -21,7 +21,7 @@ void Bonus::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(blaster,		glm::vec2(1.f / 6.f, 0.f));
 	sprite->addKeyframe(doubleSlide,	glm::vec2(2.f / 6.f, 0.f));
 	sprite->addKeyframe(magnet,			glm::vec2(3.f / 6.f, 0.f));
-	sprite->addKeyframe(twix,			glm::vec2(4.f / 6.f, 0.f));
+	sprite->addKeyframe(doublePoints,	glm::vec2(4.f / 6.f, 0.f));
 	sprite->addKeyframe(none,			glm::vec2(4.f / 6.f, 0.f));
 
 	//sprite->addKeyframe(6 + multipleBall,	glm::vec2(0.f / 6.f, 1.f / 2.f));
@@ -55,7 +55,7 @@ bool Bonus::update(int deltaTime)
 	bonusTypeTime += deltaTime;
 	if (bonusTypeTime > 3000) {
 		bonusTypeTime = 0;
-		activeBonus = (++activeBonus) % 5;
+		activeBonus = (++activeBonus) % 6;
 		sprite->changeAnimation(activeBonus);
 	}
 

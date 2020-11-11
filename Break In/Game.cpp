@@ -21,6 +21,7 @@ void Game::init()
 	instructionsScene.init(); 
 
 	// GameScene initialization
+	bank = 1;
 	restartGameScene();
 
 	// OptionsScene textures to select next screen
@@ -78,7 +79,7 @@ void Game::loadPoints()
 void Game::restartGameScene()
 {
 	gameScene.init();
-	gameScene.setBank(1);
+	gameScene.setBank(bank);
 	gameScene.setRoom(1);
 	gameScene.setMoney(0);
 	gameScene.setPoints(0);
@@ -101,9 +102,10 @@ bool Game::update(int deltaTime)
 		if (gameScene.getWin()) {						// WIN
 
 			// run animation salu2
-			if (gameScene.getBank() == 2)	gameScene.setBank(1);
-			else							gameScene.setBank(1 + gameScene.getBank());
-
+			if (bank == 2)	bank = 1;
+			else			bank++;
+			
+			gameScene.setBank(bank);
 			gameScene.startBank();
 			gameScene.setWin(false);
 		}
@@ -274,6 +276,21 @@ void Game::keyPressed(int key)
 	case password:
 		switch (lower_key) {
 			case ESC:	rollbackMode();	break;
+			//case '0':
+			case '1':
+			case '2':
+				//case '3':
+				//case '4':
+				//case '5':
+				//case '6':
+				//case '7':
+				//case '8':
+				//case '9':
+				bank = lower_key - '0';
+				rollbackMode();
+				restartGameScene();
+				setMode(playing);
+				break;
 			default:	break;
 		} break;
 	}

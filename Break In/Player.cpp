@@ -72,7 +72,7 @@ int Player::update(int deltaTime)
 	}
 	else
 	{
-		if (bonus == 4) {
+		if (bonus == Bonus::twix) {
 			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 			{
 				movingX = true;
