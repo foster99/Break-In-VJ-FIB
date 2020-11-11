@@ -35,7 +35,8 @@ public:
 
     void startBank();
     void startBoss();
-    void restartPlayerBall();
+    void restartPlayerBallBank();
+    void restartPlayerBallBoss();
     void playerLosesLife();
     void gameIsOver();
 

@@ -74,7 +74,8 @@ void GameScene::update(int deltaTime) {
 		}
 		alive = !(player->getDeathAnimation());
 
-		if (alive) restartPlayerBall();
+		if (alive && bossIsAlive) restartPlayerBallBoss();
+		if (alive)				  restartPlayerBallBank();
 		else       return;
 	}
 	else if (gameOver)								// GAME OVER, PERO HAY QUE MOSTRAR LA ANIMACION
@@ -516,7 +517,7 @@ bool GameScene::createNewBullets() {
 		bullet->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		bullet->setTileMap(map);
 		bullet->setBoss(boss);
-		if (bank == 3)
+		if (bossIsAlive)
 			bullet->toogleBossFight();
 		bullets.push_back(bullet);
 
@@ -525,7 +526,7 @@ bool GameScene::createNewBullets() {
 		bullet->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		bullet->setTileMap(map);
 		bullet->setBoss(boss);
-		if (bank == 3)
+		if (bossIsAlive)
 			bullet->toogleBossFight();
 		bullets.push_back(bullet);
 
@@ -827,7 +828,7 @@ void GameScene::startBank()
 	menuMap->setPoints(points);
 	menuMap->setLine(" CASUAL ", " PLAYER ");
 
-	restartPlayerBall();
+	restartPlayerBallBank();
 	
 	greenCardAnimation = waiting;
 	winAnimation = starts;
@@ -853,11 +854,11 @@ void GameScene::startBoss()
 	menuMap->setPoints(points);
 	menuMap->setLine(" CASUAL ", " PLAYER ");
 
-	restartPlayerBall();
-	initBoss();
+	bossIsAlive = true;
+	restartPlayerBallBoss();
 }
 
-void GameScene::restartPlayerBall()
+void GameScene::restartPlayerBallBank()
 {
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -891,6 +892,41 @@ void GameScene::restartPlayerBall()
 
 }
 
+void GameScene::restartPlayerBallBoss()
+{
+	player = new Player();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	player->setTilesDisplacement(tiles_displacement);
+	player->setRoom(room);
+	player->setTileMap(map);
+
+	initBoss();
+
+	balls.clear();
+	createNewBall(1, -1, glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
+
+	player->setPosMainBall(balls.front()->getPosition());
+
+	bonus = new Bonus();
+	bonus->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	bonus->setTileMap(map);
+	bonus->setPlayer(player);
+	bonus->setRoom(room);
+	bonus->setPosition(glm::vec2(INIT_BONUS_X_TILES * map->getTileSize(), INIT_BONUS_Y_TILES * map->getTileSize()));
+
+	guardian = new Guardian();
+	guardian->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	guardian->setTileMap(map);
+	guardian->setPosition(glm::vec2(INIT_BONUS_X_TILES * map->getTileSize(), INIT_BONUS_Y_TILES * map->getTileSize()));
+	guardian->setPlayer(player);
+	guardian->setRoom(map->getGuardianRoom());
+
+	ballOnSlide = 0;
+	restarted = true;
+	Game::instance().stopAlarmSound();
+}
+
 void GameScene::initBoss()
 {
 	boss = new Boss();
@@ -898,7 +934,6 @@ void GameScene::initBoss()
 	boss->setTileMap(map);
 	boss->setPlayer(player);
 	boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 19) * map->getTileSize()));
-	bossIsAlive = true;
 }
 
 void GameScene::insertBrick(int i, int j)
