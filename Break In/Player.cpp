@@ -72,7 +72,14 @@ int Player::update(int deltaTime)
 	}
 	else
 	{
-		if (bonus == Bonus::twix) {
+		switch (bonus)
+		{
+		case Bonus::multipleBall:
+		case Bonus::none:
+			break;
+
+		case Bonus::twix:
+		{
 			if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 			{
 				movingX = true;
@@ -131,8 +138,14 @@ int Player::update(int deltaTime)
 
 			if (movingX) posPlayer.x += speedX;
 			if (movingY) posPlayer.y += speedY;
+			break;
 		}
-		else {
+		case Bonus::blaster:
+		case Bonus::doubleSlide:
+		case Bonus::magnet:
+		case Bonus::doublePoints:
+		default:
+		{
 			if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 			{
 				movingX = true;
@@ -192,6 +205,10 @@ int Player::update(int deltaTime)
 			if (movingX) posPlayer.x += speedX;
 			if (movingY) posPlayer.y += speedY;
 		}
+		
+		}
+
+			
 		
 	}
 		

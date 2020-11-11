@@ -212,11 +212,26 @@ void GameScene::update(int deltaTime) {
 
 	if (bonus->update(deltaTime)) {
 
-		if (bonus->getActiveBonus() == Bonus::multipleBall) {
-			createNewBall(-0.8,1);
+		switch (bonus->getActiveBonus())
+		{
+		case Bonus::multipleBall:
+			createNewBall(-0.8, 1);
 			createNewBall(0.8, 1);
+			break;
+
+		case Bonus::doublePoints:
+			break;
+
+		case Bonus::none:
+			break;
+
+		case Bonus::twix:
+		case Bonus::blaster:
+		case Bonus::doubleSlide:
+		case Bonus::magnet:
+			player->setBonus(bonus->getActiveBonus());
+			break;
 		}
-		else player->setBonus(bonus->getActiveBonus());
 		
 		Game::instance().playBonusSound();
 	}
