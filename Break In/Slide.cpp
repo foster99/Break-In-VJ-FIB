@@ -68,7 +68,7 @@ void Slide::setBonus(int b)
 		sprite->changeAnimation(1);
 		logicSize = singleSize;
 		break;
-	case 4: //TWIX
+	case 6: //TWIX
 		sprite->changeAnimation(3);
 		logicSize = quadSize;
 		break;

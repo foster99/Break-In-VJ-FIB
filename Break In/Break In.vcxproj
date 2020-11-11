@@ -106,6 +106,7 @@
     <Image Include="images\credits_screen.png" />
     <Image Include="images\dynamic_tiles.png" />
     <Image Include="images\eyes.png" />
+    <Image Include="images\godMode.png" />
     <Image Include="images\instructions_screen.png" />
     <Image Include="images\options_screen_credits.png" />
     <Image Include="images\options_screen_exit.png" />

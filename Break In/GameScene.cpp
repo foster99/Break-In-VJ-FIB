@@ -33,6 +33,7 @@ void GameScene::init() {
 	stride = 0;
 	end = 0;
 	godMode = false;
+	restarted = false;
 	alive = true;
 	gameOver = false;
 	gameOverAnimation = starts;
@@ -40,6 +41,14 @@ void GameScene::init() {
 	winAnimation = starts;
 	timeToDelete = 0;
 	auxTime = 0.f;
+
+	// TESTIGO GOD MODE
+	godModeTex.loadFromFile("images/godmode.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	godModeSprite = Sprite::createSprite(glm::ivec2(60,8), glm::vec2(1.f, 1.f), &godModeTex, &texProgram);
+	godModeSprite->setNumberAnimations(1);
+	godModeSprite->addKeyframe(0, glm::vec2(0.f));
+	godModeSprite->changeAnimation(0);
+	godModeSprite->setPosition(glm::vec2(24.f * 8.f + 3.f, 9.f * 8.f - 2.f));
 }
 
 void GameScene::update(int deltaTime) {
@@ -48,11 +57,11 @@ void GameScene::update(int deltaTime) {
 
 	glm::vec2 previousPlayerPos = player->getPosition();
 
-	if ((timeToDelete % 4) == 0) {
-		//DELETEAR BULLETS SI DESTROY TRUE
+	if ((timeToDelete % 4) == 0)					// DELETEAR BULLETS SI DESTROY TRUE
+	{
 		for (auto it = bullets.begin(); it != bullets.end();)
 			if ((*it)->getDestroy())	it = bullets.erase(it);
-			else					++it;
+			else						++it;
 
 		timeToDelete = 0;
 	}
@@ -216,6 +225,7 @@ void GameScene::update(int deltaTime) {
 			if (!godMode) playerLosesLife();
 	}
 	else {
+		map->setAlarm(false);
 		Game::instance().stopAlarmSound();
 		guardian->restartTime();
 	}
@@ -237,11 +247,11 @@ void GameScene::update(int deltaTime) {
 	if(checkBallSlide())
 		ballOnSlide += deltaTime;
 	
-	bool reset=false;
+	bool reset = false;
 	//PARA CADA PELOTA MAGNETIZADA
-	int lastMov= player->update(deltaTime);
+	int lastMov = player->update(deltaTime);
 	glm::vec2 newPosistion = player->getPosition();
-	bool movedY = (previousPlayerPos.y != newPosistion.y);
+	bool movedY = (!restarted && previousPlayerPos.y != newPosistion.y);
 	for (Ball* ball : balls) {
 		if (ball->getMagnet()) {
 			if (movedY) { // CAMVIAR: mirar pos.y abans de update i si despres ha canviat a la verga sa pilota
@@ -269,6 +279,7 @@ void GameScene::update(int deltaTime) {
 		
 	
 	setWin(!map->moneyLeft());
+	restarted = false;
 }
 
 void GameScene::render()
@@ -321,6 +332,8 @@ void GameScene::render()
 		antonioSprite->changeAnimation(antonioAnimation);
 		antonioSprite->render(glm::mat4(1));
 	}
+
+	if (godMode) godModeSprite->render(glm::mat4(1));
 }
 
 void GameScene::setUpGameOverSprite()
@@ -400,7 +413,7 @@ void GameScene::toogleChangeBar()
 void GameScene::createNewBall(float spdX, float spdY, glm::vec2 pos)
 {
 	ball = new Ball();
-	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram,spdX,spdY);
+	ball->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram,spdX,spdY, true);
 	ball->setPosition(glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
 	ball->setTileMap(map);
 	ball->setPlayer(player);
@@ -553,32 +566,53 @@ void GameScene::animateWin()
 
 bool GameScene::changeOfRoom()
 {
-	for (Ball* ball : balls) { 
-		room_old = room;
+	Ball* ball;
+	
+	for (auto it = balls.begin(); it != balls.end();) {
 
-		if (ball->getPosition().y / 8 > 48) {
-			room = 1;
-			menuMap->setRoom(room);
-		}
-		else if (ball->getPosition().y / 8 > 24) {
-			room = 2;
-			menuMap->setRoom(room);
-		}
-		else {
-			room = 3;
-			menuMap->setRoom(room);
-		}
+		ball = (*it);
+		int thisBallRoom = -1;
 
-		scrolling = room != room_old;
+		if (ball->getPosition().y / 8 > 48)	thisBallRoom = 1;
+		else if (ball->getPosition().y / 8 > 24)	thisBallRoom = 2;
+		else										thisBallRoom = 3;
 
-		if (scrolling) {
+		// We are jumping to the next Room with this ball
+		if (thisBallRoom > room) {
+
+			room_old = room;
+			room = thisBallRoom;
+			menuMap->setRoom(room);
+
 			this->ball = ball;
 			balls.clear();
 			balls.push_back(this->ball);
+
+			scrolling = true;
 			return true;
 		}
+		// This ball went down. 
+		else if (thisBallRoom < room) {
+
+			//  We must delete it if there exist other ones.
+			if (balls.size() > 1)
+				it = balls.erase(it);
+
+			// We must jump to the previous room otherwise.
+			else
+			{
+				room_old = room;
+				room = thisBallRoom;
+				menuMap->setRoom(room);
+
+				scrolling = true;
+				return true;
+			}
+		}
+		else ++it;
 	}
 
+	scrolling = false;
 	return false;
 }
 
@@ -729,8 +763,14 @@ void GameScene::restartPlayerBall()
 	guardian->setPosition(glm::vec2(INIT_BONUS_X_TILES * map->getTileSize(), INIT_BONUS_Y_TILES * map->getTileSize()));
 	guardian->setPlayer(player);
 	guardian->setRoom(map->getGuardianRoom());
+	
+	ballOnSlide = 0;
+	restarted = true;
+	Game::instance().stopAlarmSound();
+	
 	if(bank == 3)
 		initBoss();
+
 }
 
 void GameScene::initBoss()

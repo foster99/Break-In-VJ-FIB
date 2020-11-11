@@ -21,6 +21,7 @@ void Game::init()
 	instructionsScene.init(); 
 
 	// GameScene initialization
+	bank = 1;
 	restartGameScene();
 
 	// OptionsScene textures to select next screen
@@ -77,7 +78,7 @@ void Game::loadPoints()
 void Game::restartGameScene()
 {
 	gameScene.init();
-	gameScene.setBank(1);
+	gameScene.setBank(bank);
 	gameScene.setRoom(1);
 	gameScene.setMoney(0);
 	gameScene.setPoints(0);
@@ -93,15 +94,17 @@ bool Game::update(int deltaTime)
 		startMenuScene.setPoints(max_points);
 		startMenuScene.update(deltaTime);
 		playTitleSong();
+		stopAlarmSound();
 		break;
 
 	case playing:
 		if (gameScene.getWin()) {						// WIN
 
 			// run animation salu2
-			if (gameScene.getBank() == 3)	gameScene.setBank(1);
-			else							gameScene.setBank(1 + gameScene.getBank());
-
+			if (bank == 3)	bank = 1;
+			else			bank++;
+			
+			gameScene.setBank(bank);
 			gameScene.startBank();
 			gameScene.setWin(false);
 		}
@@ -121,18 +124,22 @@ bool Game::update(int deltaTime)
 
 	case instructions:
 		instructionsScene.update(deltaTime);
+		stopAlarmSound();
 		break;
 
 	case credits:
 		creditsScene.update(deltaTime);
+		stopAlarmSound();
 		break;
 
 	case options:
 		optionsScene.update(deltaTime);
+		stopAlarmSound();
 		break;
 
 	case password:
 		passwordScene.update(deltaTime);
+		stopAlarmSound();
 		break;
 
 	case exitGame: break;
@@ -197,15 +204,18 @@ void Game::keyPressed(int key)
 	case playing:
 		switch (lower_key) {
 			case ESC:	setMode(options);		break;
+			case 'G':
 			case 'g':	toggleGodMode();		break;
 			case '+':	
+				if (!gameScene.inGodMode()) break;
 				if (keys['b']) gameScene.createNewBall(1.f, 1.f);
 				if (keys['r']) gameScene.nextRoom();
 				if (keys['d']) gameScene.openDoor();
 				if (keys['l']) gameScene.addLive();
 				// if (keys['p']) /* NEXT BONUS */
 				break;
-			case '-':	
+			case '-':
+				if (!gameScene.inGodMode()) break;
 				if (keys['b']) gameScene.deleteLastBall();
 				if (keys['r']) gameScene.prevRoom();
 				if (keys['d']) gameScene.closeDoor();
@@ -223,10 +233,9 @@ void Game::keyPressed(int key)
 			//case '7':
 			//case '8':
 			//case '9':
-				if (gameScene.inGodMode()) {
-					gameScene.setBank(lower_key - '0');
-					gameScene.startBank();
-				}
+				if (!gameScene.inGodMode()) break;
+				gameScene.setBank(lower_key - '0');
+				gameScene.startBank();
 				break;
 			case ' ':
 				if (gameScene.createNewBullets())
@@ -266,6 +275,21 @@ void Game::keyPressed(int key)
 	case password:
 		switch (lower_key) {
 			case ESC:	rollbackMode();	break;
+			//case '0':
+			case '1':
+			case '2':
+			case '3':
+				//case '4':
+				//case '5':
+				//case '6':
+				//case '7':
+				//case '8':
+				//case '9':
+				bank = lower_key - '0';
+				rollbackMode();
+				restartGameScene();
+				setMode(playing);
+				break;
 			default:	break;
 		} break;
 	}
