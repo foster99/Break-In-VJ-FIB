@@ -41,6 +41,14 @@ void GameScene::init() {
 	winAnimation = starts;
 	timeToDelete = 0;
 	auxTime = 0.f;
+
+	// TESTIGO GOD MODE
+	godModeTex.loadFromFile("images/godmode.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	godModeSprite = Sprite::createSprite(glm::ivec2(60,8), glm::vec2(1.f, 1.f), &godModeTex, &texProgram);
+	godModeSprite->setNumberAnimations(1);
+	godModeSprite->addKeyframe(0, glm::vec2(0.f));
+	godModeSprite->changeAnimation(0);
+	godModeSprite->setPosition(glm::vec2(24.f * 8.f + 3.f, 9.f * 8.f - 2.f));
 }
 
 void GameScene::update(int deltaTime) {
@@ -313,6 +321,8 @@ void GameScene::render()
 		antonioSprite->changeAnimation(antonioAnimation);
 		antonioSprite->render(glm::mat4(1));
 	}
+
+	if (godMode) godModeSprite->render(glm::mat4(1));
 }
 
 void GameScene::setUpGameOverSprite()

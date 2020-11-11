@@ -203,15 +203,18 @@ void Game::keyPressed(int key)
 	case playing:
 		switch (lower_key) {
 			case ESC:	setMode(options);		break;
+			case 'G':
 			case 'g':	toggleGodMode();		break;
 			case '+':	
+				if (!gameScene.inGodMode()) break;
 				if (keys['b']) gameScene.createNewBall(1.f, 1.f);
 				if (keys['r']) gameScene.nextRoom();
 				if (keys['d']) gameScene.openDoor();
 				if (keys['l']) gameScene.addLive();
 				// if (keys['p']) /* NEXT BONUS */
 				break;
-			case '-':	
+			case '-':
+				if (!gameScene.inGodMode()) break;
 				if (keys['b']) gameScene.deleteLastBall();
 				if (keys['r']) gameScene.prevRoom();
 				if (keys['d']) gameScene.closeDoor();
@@ -229,10 +232,9 @@ void Game::keyPressed(int key)
 			//case '7':
 			//case '8':
 			//case '9':
-				if (gameScene.inGodMode()) {
-					gameScene.setBank(lower_key - '0');
-					gameScene.startBank();
-				}
+				if (!gameScene.inGodMode()) break;
+				gameScene.setBank(lower_key - '0');
+				gameScene.startBank();
 				break;
 			case ' ':
 				if (gameScene.createNewBullets())

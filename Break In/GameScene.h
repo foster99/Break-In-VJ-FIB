@@ -120,6 +120,10 @@ private:
     glm::vec2 antonioPos;
     int antonioAnimation;
 
+    // GodModeQuad
+    Texture godModeTex;
+    Sprite* godModeSprite;
+
     // Control variables
     bool restarted;
     bool godMode;
