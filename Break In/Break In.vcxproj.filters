@@ -256,6 +256,9 @@
     <Media Include="sounds\gameover.wav">
       <Filter>Resource Files\sound</Filter>
     </Media>
+    <Media Include="sounds\win_song.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <Text Include="levels\level01.txt">

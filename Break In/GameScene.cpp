@@ -35,12 +35,14 @@ void GameScene::init() {
 	godMode = false;
 	alive = true;
 	gameOver = false;
-	gameOverAnimation = -1;
+	gameOverAnimation = starts;
 	win = false;
+	winAnimation = starts;
 	timeToDelete = 0;
+	auxTime = 0.f;
 
 	setUpGameOverSprite();
-
+	setUpWinSprite();
 }
 
 void GameScene::update(int deltaTime) {
@@ -58,7 +60,8 @@ void GameScene::update(int deltaTime) {
 		timeToDelete = 0;
 	}
 
-	if (!alive) {									// ESTAMOS MUERTOS
+	if (!alive)										// ESTAMOS MUERTOS
+	{									
 		auxTime += deltaTime;
 		if (auxTime > 175.f) {
 			auxTime = 0;
@@ -69,189 +72,17 @@ void GameScene::update(int deltaTime) {
 		if (alive) restartPlayerBall();
 		else       return;
 	}
-	else if (gameOver) {							// GAME OVER, PERO HAY QUE MOSTRAR LA ANIMACION
-		
-		static constexpr float initial_wait_time	= 1000.f;
-		static constexpr float frame_wait_time		= 250.f;
-		float time_to_wait = 0.f;
-
+	else if (gameOver)								// GAME OVER, PERO HAY QUE MOSTRAR LA ANIMACION
+	{							
 		auxTime += deltaTime;
-
-		// INITIAL WAIT
-		time_to_wait += initial_wait_time;
-		if (auxTime < time_to_wait) return;
-		Game::instance().playGameOverSong();
-
-		// FULL ANIMATION 1
-		gameOverAnimation = 0;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 1;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 2;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 3;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-
-		// FULL ANIMATION 2
-		gameOverAnimation = 0;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 1;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 2;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 3;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-
-		// FULL ANIMATION 3
-		gameOverAnimation = 0;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 1;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 2;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 3;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-
-		// FULL ANIMATION 4
-		gameOverAnimation = 0;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 1;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 2;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 3;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-
-		// FULL ANIMATION 5
-		gameOverAnimation = 0;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 1;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 2;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 3;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-
-		// FULL ANIMATION 6
-		gameOverAnimation = 0;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 1;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 2;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 3;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-
-		// FULL ANIMATION 7
-		gameOverAnimation = 0;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 1;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 2;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 3;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-
-		// FULL ANIMATION 8
-		gameOverAnimation = 0;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 1;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 2;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 3;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-
-		// FULL ANIMATION 9
-		gameOverAnimation = 0;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 1;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 2;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 3;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-
-		// FULL ANIMATION 10
-		gameOverAnimation = 0;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 1;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 2;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 3;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-
-		// FULL ANIMATION 11
-		gameOverAnimation = 0;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 1;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 2;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 3;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-
-		// FULL ANIMATION 12
-		gameOverAnimation = 0;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 1;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 2;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-		gameOverAnimation = 3;
-		time_to_wait += frame_wait_time;
-		if (auxTime < time_to_wait) return;
-
-		Game::instance().stopGameOverSong();
-		gameOverAnimation = -2;
+		animateGameOver();
+		return;
+	}
+	else if (win)									// GAME OVER, PERO HAY QUE MOSTRAR LA ANIMACION
+	{							
+		auxTime += deltaTime;
+		animateWin();
+		return;
 	}
 	else if (lastBallisDead())						// COMPROBAR SI HEMOS MUERTO 
 	{
@@ -428,13 +259,11 @@ void GameScene::update(int deltaTime) {
 			}
 		}
 	}
-	if (reset)
-		ballOnSlide = 0;
+	
+	if (reset)	ballOnSlide = 0;
 	++timeToDelete;
-
-	boss->update(deltaTime);
-
-	win = !map->moneyLeft();
+	
+	setWin(!map->moneyLeft());
 }
 
 void GameScene::render()
@@ -458,8 +287,15 @@ void GameScene::render()
 	for (Bullet* bullet : bullets) {
 		bullet->render(displacement_mat);
 	}
-
 	boss->render(displacement_mat);
+	if (winAnimation >= 0)
+	{
+		winSprite->changeAnimation(0);
+		winSprite->render(glm::mat4(1));
+
+		antonioSprite->changeAnimation(winAnimation);
+		antonioSprite->render(glm::mat4(1));
+	}
 
 	// Render Lateral Menu
 	glm::mat4 menu_modelview = glm::translate(glm::mat4(1.f), glm::vec3(192.f, 0.f, 0.f));
@@ -470,11 +306,11 @@ void GameScene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	menuMap->render();
 
-	if (gameOverAnimation >= 0) {
+	if (gameOverAnimation >= 0)
+	{
 		gameOverSprite->changeAnimation(gameOverAnimation);
 		gameOverSprite->render(glm::mat4(1));
 	}
-
 }
 
 void GameScene::setUpGameOverSprite()
@@ -491,6 +327,31 @@ void GameScene::setUpGameOverSprite()
 
 	gameOverSprite->changeAnimation(0);
 	gameOverSprite->setPosition(glm::vec2(0.f));
+}
+
+void GameScene::setUpWinSprite()
+{
+	// SPRITE AND TEXTURE SET-UP
+	winTex.loadFromFile("images/bank_win_01.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	winSprite = Sprite::createSprite(glm::ivec2(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT), glm::vec2(1.f, 1.f), &winTex, &texProgram);
+	winSprite->setNumberAnimations(1);
+	winSprite->addKeyframe(0, glm::vec2(0.f));
+	winSprite->changeAnimation(0);
+	winSprite->setPosition(glm::vec2(0.f));
+
+	// SPRITE AND TEXTURE SET-UP
+	antonioTex.loadFromFile("images/antonio.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	antonioSprite = Sprite::createSprite(glm::ivec2(25, 30), glm::vec2(1.f / 4.f, 1.f), &antonioTex, &texProgram);
+	antonioSprite->setNumberAnimations(4);
+
+	antonioSprite->addKeyframe(0, glm::vec2(0.f / 4.f, 0.f));
+	antonioSprite->addKeyframe(1, glm::vec2(1.f / 4.f, 0.f));
+	antonioSprite->addKeyframe(2, glm::vec2(2.f / 4.f, 0.f));
+	antonioSprite->addKeyframe(3, glm::vec2(3.f / 4.f, 0.f));
+	antonioSprite->changeAnimation(0);
+
+	antonioPos = glm::vec2(45.f, 192.f - 60.f);
+	antonioSprite->setPosition(antonioPos);
 }
 
 void GameScene::toogleChangeBar()
@@ -568,7 +429,75 @@ void GameScene::playerLosesLife()
 void GameScene::gameIsOver()
 {
 	gameOver = true;
-	gameOverAnimation = -1;
+	gameOverAnimation = starts;
+}
+
+void GameScene::animateGameOver()
+{
+	static constexpr float initial_wait_time = 1000.f;
+	static constexpr float frame_wait_time = 250.f;
+	static constexpr int nAnimations = 13;
+	float time_to_wait = 0.f;
+	
+	time_to_wait += initial_wait_time;
+	if (auxTime < time_to_wait) return;
+	Game::instance().playGameOverSong();
+
+	for (int i = 0; i < nAnimations; ++i) {
+		gameOverAnimation = 0;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 1;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 2;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		gameOverAnimation = 3;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+	}
+
+	Game::instance().stopGameOverSong();
+	gameOverAnimation = finished;
+
+	return;
+}
+
+void GameScene::animateWin()
+{
+	static constexpr float initial_wait_time = 1000.f;
+	static constexpr float frame_wait_time = 100.f;
+	static constexpr int nAnimations = 53;
+	float time_to_wait = 0.f;
+
+	time_to_wait += initial_wait_time;
+	if (auxTime < time_to_wait) return;
+	Game::instance().playWinSong();
+
+	antonioPos.x += 0.08f;
+	antonioSprite->setPosition(antonioPos);
+
+	for (int i = 0; i < nAnimations; ++i) {
+		winAnimation = 0;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		winAnimation = 1;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		winAnimation = 2;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+		winAnimation = 3;
+		time_to_wait += frame_wait_time;
+		if (auxTime < time_to_wait) return;
+
+	}
+
+	Game::instance().stopWinSong();
+	winAnimation = finished;
+
+	return;
 }
 
 bool GameScene::changeOfRoom()
@@ -680,8 +609,8 @@ bool GameScene::checkBallSlide()
 void GameScene::startBank()
 {
 	string path;
-	if (bank < 10)	path = "levels/BANK_0" + to_string(bank) +".txt";
-	else			path = "levels/BANK_" + to_string(bank) + ".txt";
+	if (bank < 10)	path = "levels/BANK_0" + to_string(bank) + ".txt";
+	else			path = "levels/BANK_"  + to_string(bank) + ".txt";
 	
 	map = TileMap::createTileMap(path.c_str(), glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map->setBank(bank);
@@ -698,26 +627,26 @@ void GameScene::startBank()
 	restartPlayerBall();
 }
 
-void GameScene::startBoss()
-{
-	string path;
-	if (bank < 10)	path = "levels/BOSS_0" + to_string(bank) + ".txt";
-	else			path = "levels/BOSS_" + to_string(bank) + ".txt";
-
-	map = TileMap::createTileMap(path.c_str(), glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	map->setBank(bank);
-	map->setRoom(room);
-
-	menuMap = MenuTileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	menuMap->setBank(bank);
-	menuMap->setRoom(room);
-	menuMap->setLives(lives);
-	menuMap->setMoney(money);
-	menuMap->setPoints(points);
-	menuMap->setLine(" CASUAL ", " PLAYER ");
-
-	restartPlayerBall();
-}
+//void GameScene::startBoss()
+//{
+//	string path;
+//	if (bank < 10)	path = "levels/BOSS_0" + to_string(bank) + ".txt";
+//	else			path = "levels/BOSS_" + to_string(bank) + ".txt";
+//
+//	map = TileMap::createTileMap(path.c_str(), glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+//	map->setBank(bank);
+//	map->setRoom(room);
+//
+//	menuMap = MenuTileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+//	menuMap->setBank(bank);
+//	menuMap->setRoom(room);
+//	menuMap->setLives(lives);
+//	menuMap->setMoney(money);
+//	menuMap->setPoints(points);
+//	menuMap->setLine(" CASUAL ", " PLAYER ");
+//
+//	restartPlayerBall();
+//}
 
 void GameScene::restartPlayerBall()
 {
@@ -747,26 +676,26 @@ void GameScene::restartPlayerBall()
 	guardian->setPlayer(player);
 	guardian->setRoom(map->getGuardianRoom());
 
-	initBoss();
+	//initBoss();
 }
 
-void GameScene::initBoss()
-{
-	boss = new Boss();
-	boss->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	boss->setTileMap(map);
-	boss->setPlayer(player);
-	boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 19) * map->getTileSize()));
-}
+//void GameScene::initBoss()
+//{
+//	boss = new Boss();
+//	boss->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+//	boss->setTileMap(map);
+//	boss->setPlayer(player);
+//	boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 3) * map->getTileSize()));
+//}
 
 bool GameScene::getGameOver()
 {
-	return !player->getDeathAnimation() && (gameOverAnimation == -2) && gameOver;
+	return !player->getDeathAnimation() && (gameOverAnimation == finished) && gameOver;
 }
 
 bool GameScene::getWin()
 {
-	return win;
+	return (winAnimation == finished) && win;
 }
 
 int GameScene::getBank()
@@ -837,6 +766,7 @@ void GameScene::setPoints(int p)
 void GameScene::setWin(bool w)
 {
 	win = w;
+	if (w) winAnimation = starts;
 }
 
 void GameScene::toggleGodMode()

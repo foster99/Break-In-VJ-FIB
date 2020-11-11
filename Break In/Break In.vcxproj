@@ -84,6 +84,7 @@
     <Media Include="sounds\player_collision.wav" />
     <Media Include="sounds\title_song.wav" />
     <Media Include="sounds\tueeeeeeeeee.wav" />
+    <Media Include="sounds\win_song.wav" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\Documents\BOSS_01.txt" />

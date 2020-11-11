@@ -24,14 +24,19 @@ public:
     void init();
     void update(int deltaTime);
     void render();
+
     void setUpGameOverSprite();
     void initBoss();
+    void setUpWinSprite();
 
     void startBank();
     void startBoss();
     void restartPlayerBall();
     void playerLosesLife();
     void gameIsOver();
+
+    void animateGameOver();
+    void animateWin();
 
     bool getGameOver();
     bool getWin();
@@ -96,16 +101,27 @@ private:
     Guardian* guardian;
     Boss* boss;
 
-    // Title Quads
+    static constexpr int starts = -1;
+    static constexpr int finished = -2;
+
+    // GameOver Animation
     Texture gameOverTex;
     Sprite* gameOverSprite;
-    
+    int gameOverAnimation;
+
+    // Win Animation
+    Texture winTex;
+    Texture antonioTex;
+    Sprite* winSprite;
+    Sprite* antonioSprite;
+    glm::vec2 antonioPos;
+    int winAnimation;
+
     // Control variables
     bool godMode;
     bool alive;
     bool win;
     bool gameOver;
-    int gameOverAnimation;
     bool bonusIsActive;
     float ballOnSlide;
     int timeToDelete;
