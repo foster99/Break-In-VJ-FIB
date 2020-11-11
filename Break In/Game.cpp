@@ -41,6 +41,7 @@ void Game::loadSounds()
 	alarm_sound			= Sound("alarm.wav", true);
 	gameover_song		= Sound("gameover.wav", true);
 	win_song			= Sound("win_song.wav", true);
+	boss_song			= Sound("boss_song.wav", true);
 
 	slide_sound			= Sound("player_collision.wav", false);
 	brick_sound			= Sound("brick_collision.wav", false);
@@ -53,6 +54,7 @@ void Game::loadSounds()
 	money_sound_03		= Sound("moneyBag_03.wav", false);
 	greenCard_sound		= Sound("greenCard.wav", false);
 	bossHit_sound		= Sound("tueeeeeeeeee.wav", false);
+	boss_animation_sound= Sound("boss_animation_sound.wav", false);
 }
 
 void Game::loadPoints()
@@ -108,6 +110,13 @@ bool Game::update(int deltaTime)
 			gameScene.setPoints(0);
 			gameScene.startBank();
 			gameScene.setWin(false);
+		}
+		if (gameScene.getGoBoss()) {						// WIN
+
+			// No hace falta cambiar el banco porque el numero del banco
+			// es el mismo numero que el del boss.
+			gameScene.startBoss();
+			gameScene.setGoBoss(false);
 		}
 		else if (gameScene.getGameOver()) {				// GAMEOVER
 			
@@ -207,6 +216,9 @@ void Game::keyPressed(int key)
 			case ESC:	setMode(options);		break;
 			case 'G':
 			case 'g':	toggleGodMode();		break;
+			case 'k':
+				if (!gameScene.inGodMode()) break;
+				gameScene.setWin(true);
 			case 'x':
 				if (!gameScene.inGodMode()) break;
 				gameScene.insertBrick(0, 0);
@@ -438,6 +450,11 @@ void Game::playMoneySound()
 	}
 }
 
+void Game::playBossAnimationSound()
+{
+	boss_animation_sound.play();
+}
+
 void Game::playBossHitSound()
 {
 	bossHit_sound.play();
@@ -468,6 +485,11 @@ void Game::playWinSong()
 	win_song.play();
 }
 
+void Game::playBossSong()
+{
+	boss_song.play();
+}
+
 void Game::stopGameOverSong()
 {
 	gameover_song.drop();
@@ -476,6 +498,11 @@ void Game::stopGameOverSong()
 void Game::stopWinSong()
 {
 	win_song.drop();
+}
+
+void Game::stopBossSong()
+{
+	boss_song.drop();
 }
 
 void Game::stopAlarmSound()

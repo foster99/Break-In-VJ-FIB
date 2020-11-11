@@ -31,6 +31,7 @@ public:
     void setUpGameOverSprite();
     void setUpWinSprite();
     void setUpGreenCardSprite();
+    void setUpGoBossSprite();
 
     void startBank();
     void startBoss();
@@ -40,10 +41,12 @@ public:
 
     void animateGameOver();
     void animateWin();
-    
+    void animateGoBoss();
+
     bool getGameOver();
     bool getWin();
-    
+    bool getGoBoss();
+
     int getBank();
     int getRoom();
     int getLives();
@@ -58,6 +61,7 @@ public:
     void setMoney(int m);
     void setPoints(int p);
     void setWin(bool w);
+    void setGoBoss(bool w);
 
     void toggleGodMode();
     void toogleChangeBar();
@@ -120,6 +124,10 @@ private:
     Sprite* winSprite;
     int winAnimation;
 
+    // Boss Animation
+    Texture goBossTex;
+    Sprite* goBossSprite;
+    int goBossAnimation;
 
     // Antonio Animation
     Texture antonioTex;
@@ -136,11 +144,15 @@ private:
     Sprite* greenCardSprite;
     int greenCardAnimation;
 
+    // Boss Features
+    bool bossIsAlive;
+
     // Control variables
     bool restarted;
     bool godMode;
     bool alive;
     bool win;
+    bool goBoss;
     bool gameOver;
     bool bonusIsActive;
     float ballOnSlide;

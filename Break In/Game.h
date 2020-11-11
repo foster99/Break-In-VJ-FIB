@@ -66,17 +66,21 @@ public:
 	void playBlastSound();
 	void playGreenCardSound();
 	void playMoneySound();
+	void playBossAnimationSound();
 	void playBossHitSound();
 	
+
 	void playAlarmSound();
 	void playTitleSong();
 	void playGameOverSong();
 	void playWinSong();
+	void playBossSong();
 
 	void stopAlarmSound();
 	void stopTitleSong();
 	void stopGameOverSong();
 	void stopWinSong();
+	void stopBossSong();
 
 	// Different Modes
 	static constexpr Mode exitGame = Mode(0);
@@ -127,6 +131,7 @@ private:
 	Sound money_sound_02;
 	Sound money_sound_03;
 	Sound greenCard_sound;
+	Sound boss_animation_sound;
 	Sound bossHit_sound;
 
 	// GameScene Info

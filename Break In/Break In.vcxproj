@@ -73,6 +73,8 @@
     <Media Include="sounds\bell.wav" />
     <Media Include="sounds\blast.wav" />
     <Media Include="sounds\bonus.wav" />
+    <Media Include="sounds\boss_animation_sound.wav" />
+    <Media Include="sounds\boss_song.wav" />
     <Media Include="sounds\brick_collision.wav" />
     <Media Include="sounds\double_slide.wav" />
     <Media Include="sounds\gameover.wav" />
@@ -90,11 +92,9 @@
     <Text Include="levels\BANK_01_test.txt" />
     <Text Include="levels\BANK_02.txt" />
     <Text Include="levels\BANK_03.txt" />
-    <Text Include="levels\level01.txt" />
-    <Text Include="levels\leveltest.txt" />
     <Text Include="levels\menu.txt" />
     <Text Include="levels\BANK_01.txt" />
-    <Text Include="Text.txt" />
+    <Text Include="BOSS_01.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\ball.png" />
@@ -102,6 +102,7 @@
     <Image Include="images\bars.png" />
     <Image Include="images\bonus.png" />
     <Image Include="images\boss.png" />
+    <Image Include="images\boss_animation.png" />
     <Image Include="images\bullet.png" />
     <Image Include="images\chars.png" />
     <Image Include="images\credits_screen.png" />

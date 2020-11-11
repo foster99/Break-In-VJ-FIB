@@ -89,6 +89,12 @@ void GameScene::update(int deltaTime) {
 		animateWin();
 		return;
 	}
+	else if (goBoss)								// GAME OVER, PERO HAY QUE MOSTRAR LA ANIMACION
+	{
+		auxTime += deltaTime;
+		animateGoBoss();
+		return;
+	}
 	else if (lastBallisDead())						// COMPROBAR SI HEMOS MUERTO 
 	{
 		playerLosesLife();
@@ -258,11 +264,13 @@ void GameScene::update(int deltaTime) {
 	if(checkBallSlide())
 		ballOnSlide += deltaTime;
 	
-	bool reset = false;
-	//PARA CADA PELOTA MAGNETIZADA
-	int lastMov = player->update(deltaTime);
-	glm::vec2 newPosistion = player->getPosition();
-	bool movedY = (!restarted && previousPlayerPos.y != newPosistion.y);
+	// Pelotas Magnetizadas
+
+	bool reset				= false;
+	int lastMov				= player->update(deltaTime);
+	glm::vec2 newPosistion	= player->getPosition();
+	bool movedY				= (!restarted && previousPlayerPos.y != newPosistion.y);
+
 	for (Ball* ball : balls) {
 		if (ball->getMagnet()) {
 			if (movedY) { // CAMVIAR: mirar pos.y abans de update i si despres ha canviat a la verga sa pilota
@@ -278,15 +286,23 @@ void GameScene::update(int deltaTime) {
 		}
 	}
 
-	if (bank == 3) {
+	// BOSS
+	if (bossIsAlive) {
 		if (boss->update(deltaTime))
 			if (!godMode) playerLosesLife();
 	}
 	
-	if (reset)	ballOnSlide = 0;
+	if (reset)
+		ballOnSlide = 0;
+	
 	++timeToDelete;
 	
-	setWin(!map->moneyLeft());
+	if (goBossAnimation == starts)
+		setGoBoss(!map->moneyLeft());
+
+	if (goBossAnimation == finished)
+		setWin(!bossIsAlive);
+
 	restarted = false;
 }
 
@@ -311,17 +327,9 @@ void GameScene::render()
 	for (Bullet* bullet : bullets) {
 		bullet->render(displacement_mat);
 	}
-	if(bank == 3)
-		boss->render(displacement_mat);
 	
-	if (winAnimation >= 0)
-	{
-		winSprite->changeAnimation(0);
-		winSprite->render(glm::mat4(1));
-
-		antonioSprite->changeAnimation(antonioAnimation);
-		antonioSprite->render(glm::mat4(1));
-	}
+	if (bossIsAlive)
+		boss->render(displacement_mat);
 
 	// Render Lateral Menu
 	glm::mat4 menu_modelview = glm::translate(glm::mat4(1.f), glm::vec3(192.f, 0.f, 0.f));
@@ -332,8 +340,20 @@ void GameScene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	menuMap->render();
 
+	if (godMode) godModeSprite->render(glm::mat4(1));
+
+
 	if (greenCardAnimation == starts) {
 		greenCardSprite->render(glm::mat4(1));
+	}
+
+	if (winAnimation >= 0)
+	{
+		winSprite->changeAnimation(0);
+		winSprite->render(glm::mat4(1));
+
+		antonioSprite->changeAnimation(antonioAnimation);
+		antonioSprite->render(glm::mat4(1));
 	}
 
 	if (gameOverAnimation >= 0)
@@ -345,7 +365,11 @@ void GameScene::render()
 		antonioSprite->render(glm::mat4(1));
 	}
 
-	if (godMode) godModeSprite->render(glm::mat4(1));
+	if (goBoss && goBossAnimation == starts)
+	{
+		goBossSprite->changeAnimation(0);
+		goBossSprite->render(glm::mat4(1));
+	}
 }
 
 void GameScene::setUpGameOverSprite()
@@ -429,6 +453,19 @@ void GameScene::setUpGreenCardSprite()
 
 }
 
+void GameScene::setUpGoBossSprite()
+{
+	// SPRITE AND TEXTURE SET-UP
+	goBossTex.loadFromFile("images/boss_animation.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	goBossSprite = Sprite::createSprite(glm::ivec2(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT), glm::vec2(1.f, 1.f), &goBossTex, &texProgram);
+	goBossSprite->setNumberAnimations(1);
+	goBossSprite->addKeyframe(0, glm::vec2(0.f));
+	goBossSprite->changeAnimation(0);
+	goBossSprite->setPosition(glm::vec2(0));
+
+	Game::instance().playBossAnimationSound();
+}
+
 void GameScene::toogleChangeBar()
 {
 	player->toogleChangeBar();
@@ -442,7 +479,7 @@ void GameScene::createNewBall(float spdX, float spdY, glm::vec2 pos)
 	ball->setTileMap(map);
 	ball->setPlayer(player);
 	ball->setBoss(boss);
-	if (bank == 3)
+	if (bossIsAlive)
 		ball->toogleBossFight();
 	balls.push_back(ball);
 }
@@ -459,7 +496,7 @@ void GameScene::createNewBall(float spdX, float spdY)
 	ball->setTileMap(map);
 	ball->setPlayer(player);
 	ball->setBoss(boss);
-	if (bank == 3)
+	if (bossIsAlive)
 		ball->toogleBossFight();
 	balls.push_back(ball);
 }
@@ -523,6 +560,7 @@ void GameScene::animateGameOver()
 	
 	time_to_wait += initial_wait_time;
 	if (auxTime < time_to_wait) return;
+	Game::instance().stopBossSong();
 	Game::instance().stopAlarmSound();
 	Game::instance().playGameOverSong();
 
@@ -563,6 +601,8 @@ void GameScene::animateWin()
 
 	time_to_wait += initial_wait_time;
 	if (auxTime < time_to_wait) return;
+
+	Game::instance().stopBossSong();
 	Game::instance().stopAlarmSound();
 	Game::instance().playWinSong();
 
@@ -590,6 +630,23 @@ void GameScene::animateWin()
 
 	Game::instance().stopWinSong();
 	winAnimation = finished;
+
+	return;
+}
+
+void GameScene::animateGoBoss()
+{
+	static constexpr float initial_wait_time = 6000.f;
+
+	float time_to_wait = 0.f;
+
+	time_to_wait += initial_wait_time;
+	Game::instance().stopAlarmSound();
+
+	if (auxTime < time_to_wait) return;
+
+	goBossAnimation = finished;
+	Game::instance().playBossSong();
 
 	return;
 }
@@ -768,13 +825,14 @@ void GameScene::startBank()
 	greenCardAnimation = waiting;
 	winAnimation = starts;
 	gameOverAnimation = starts;
+	goBossAnimation = starts;
 }
 
 void GameScene::startBoss()
 {
 	string path;
 	if (bank < 10)	path = "levels/BOSS_0" + to_string(bank) + ".txt";
-	else			path = "levels/BOSS_" + to_string(bank) + ".txt";
+	else			path = "levels/BOSS_"  + to_string(bank) + ".txt";
 
 	map = TileMap::createTileMap(path.c_str(), glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	map->setBank(bank);
@@ -789,6 +847,7 @@ void GameScene::startBoss()
 	menuMap->setLine(" CASUAL ", " PLAYER ");
 
 	restartPlayerBall();
+	initBoss();
 }
 
 void GameScene::restartPlayerBall()
@@ -799,9 +858,6 @@ void GameScene::restartPlayerBall()
 	player->setTilesDisplacement(tiles_displacement);
 	player->setRoom(room);
 	player->setTileMap(map);
-
-	if (bank == 3) 
-		initBoss();
 
 	balls.clear();
 	createNewBall(1, -1, glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
@@ -835,6 +891,7 @@ void GameScene::initBoss()
 	boss->setTileMap(map);
 	boss->setPlayer(player);
 	boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 19) * map->getTileSize()));
+	bossIsAlive = true;
 }
 
 void GameScene::insertBrick(int i, int j)
@@ -854,6 +911,11 @@ bool GameScene::getGameOver()
 bool GameScene::getWin()
 {
 	return (winAnimation == finished) && win;
+}
+
+bool GameScene::getGoBoss()
+{
+	return (goBossAnimation == finished) && goBoss;
 }
 
 int GameScene::getBank()
@@ -925,6 +987,12 @@ void GameScene::setWin(bool w)
 {
 	win = w;
 	if (w) setUpWinSprite();
+}
+
+void GameScene::setGoBoss(bool w)
+{
+	goBoss = w;
+	if (w) setUpGoBossSprite();
 }
 
 void GameScene::toggleGodMode()

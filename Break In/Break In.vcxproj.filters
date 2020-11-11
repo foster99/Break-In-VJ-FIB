@@ -259,14 +259,14 @@
     <Media Include="sounds\win_song.wav">
       <Filter>Resource Files\sound</Filter>
     </Media>
+    <Media Include="sounds\boss_song.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\boss_animation_sound.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="levels\level01.txt">
-      <Filter>Resource Files\levels</Filter>
-    </Text>
-    <Text Include="levels\leveltest.txt">
-      <Filter>Resource Files\levels</Filter>
-    </Text>
     <Text Include="levels\menu.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
@@ -279,10 +279,10 @@
     <Text Include="levels\BANK_01_test.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
-    <Text Include="Text.txt">
+    <Text Include="levels\BANK_03.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
-    <Text Include="levels\BANK_03.txt">
+    <Text Include="BOSS_01.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
   </ItemGroup>
@@ -343,6 +343,9 @@
     </Image>
     <Image Include="images\boss.png">
       <Filter>Resource Files\images\sprites</Filter>
+    </Image>
+    <Image Include="images\boss_animation.png">
+      <Filter>Resource Files\images</Filter>
     </Image>
   </ItemGroup>
 </Project>
