@@ -42,7 +42,6 @@ void Game::loadSounds()
 	gameover_song		= Sound("gameover.wav", true);
 	win_song			= Sound("win_song.wav", true);
 
-	//slide_sound = Sound("tueeeeeeeeee.wav", false);
 	slide_sound			= Sound("player_collision.wav", false);
 	brick_sound			= Sound("brick_collision.wav", false);
 	doubleSlide_sound	= Sound("double_slide.wav", false);
@@ -53,7 +52,7 @@ void Game::loadSounds()
 	money_sound_02		= Sound("moneyBag_02.wav", false);
 	money_sound_03		= Sound("moneyBag_03.wav", false);
 	greenCard_sound		= Sound("greenCard.wav", false);
-
+	bossHit_sound		= Sound("tueeeeeeeeee.wav", false);
 }
 
 void Game::loadPoints()
@@ -102,7 +101,7 @@ bool Game::update(int deltaTime)
 		if (gameScene.getWin()) {						// WIN
 
 			// run animation salu2
-			if (bank == 2)	bank = 1;
+			if (bank == 3)	bank = 1;
 			else			bank++;
 			
 			gameScene.setBank(bank);
@@ -227,7 +226,7 @@ void Game::keyPressed(int key)
 			//case '0':
 			case '1':
 			case '2':
-			//case '3':
+			case '3':
 			//case '4':
 			//case '5':
 			//case '6':
@@ -279,7 +278,7 @@ void Game::keyPressed(int key)
 			//case '0':
 			case '1':
 			case '2':
-				//case '3':
+			case '3':
 				//case '4':
 				//case '5':
 				//case '6':
@@ -432,6 +431,11 @@ void Game::playMoneySound()
 	case 1: money_sound_02.play(); break;
 	case 2: money_sound_03.play(); break;
 	}
+}
+
+void Game::playBossHitSound()
+{
+	bossHit_sound.play();
 }
 
 void Game::playAlarmSound()
