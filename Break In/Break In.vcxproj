@@ -87,9 +87,9 @@
     <Media Include="sounds\win_song.wav" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\..\Documents\BOSS_01.txt" />
     <Text Include="levels\BANK_01_test.txt" />
     <Text Include="levels\BANK_02.txt" />
+    <Text Include="levels\BANK_03.txt" />
     <Text Include="levels\level01.txt" />
     <Text Include="levels\leveltest.txt" />
     <Text Include="levels\menu.txt" />
