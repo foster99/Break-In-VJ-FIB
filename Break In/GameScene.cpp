@@ -287,7 +287,7 @@ void GameScene::render()
 	for (Bullet* bullet : bullets) {
 		bullet->render(displacement_mat);
 	}
-	boss->render(displacement_mat);
+	//boss->render(displacement_mat);
 	if (winAnimation >= 0)
 	{
 		winSprite->changeAnimation(0);
