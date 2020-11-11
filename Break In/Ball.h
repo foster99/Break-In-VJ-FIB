@@ -4,6 +4,7 @@
 #include "Sprite.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "Boss.h"
 
 class Ball
 {
@@ -15,11 +16,16 @@ public:
 	void moveWithPlayer(float spdX);
 
 	void toogleMagnet();
+	void toogleBossFight();
 	void changeModifierX(float value);
 	void changeModifierY(float value);
+	
 	void setTileMap(TileMap* tileMap);
 	void setPlayer(Player* pla);
 	void setPosition(const glm::vec2& pos);
+	void setBoss(Boss* b);
+	
+
 	bool getMagnet();
 	glm::vec2 getPosition();
 	glm::ivec2 getPositionInTiles();
@@ -35,11 +41,13 @@ private:
 	Sprite* sprite;
 	TileMap* map;
 	Player* player;
+	Boss* boss;
+
 	int sizeBall;
 	float speed;
 	float spdModifierX;
 	float spdModifierY;
-	bool magnet;
+	bool magnet, bossFight;
 };
 
 #endif // _BALL_INCLUDE

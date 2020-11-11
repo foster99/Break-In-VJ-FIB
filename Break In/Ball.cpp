@@ -10,6 +10,7 @@ void Ball::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, floa
 	spdModifierX = spdX;
 	spdModifierY = spdY;
 	magnet = freeze;
+	bossFight = false;
 
 	tex.loadFromFile("images/balls.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(sizeBall, sizeBall), glm::vec2(1.f / 5.f, 1.f), &tex, &shaderProgram);
@@ -32,23 +33,42 @@ bool Ball::update(int deltaTime)
 	bool collisionY = false;
 	bool collisionX = false;
 	bool collisionPlayer = false;
-
+	bool collisionBoss = false;
 	sprite->changeAnimation(0);
 
-	if (collisionPlayer = (spdModifierY > 0 && player->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int)speed, spdModifierY, spdModifierX))) {
-		spdModifierY *= -1;
-		sprite->changeAnimation(4);
-	}
-	else if (collisionPlayer = (spdModifierY > 0 && spdModifierX > 0 && player->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
-		spdModifierX *= -1;
-		sprite->changeAnimation(1);
-	}
-	else if (collisionPlayer = (spdModifierY > 0 && spdModifierX < 0 && player->collisionMoveLeft(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
-		spdModifierX *= -1;
-		sprite->changeAnimation(2);
+	if (bossFight) {
+		if (collisionBoss = (spdModifierY < 0 && boss->collisionMoveUp(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int)speed, spdModifierY, spdModifierX))) {
+			sprite->changeAnimation(3);
+			spdModifierY *= -1;
+		}
+		if (collisionBoss = (spdModifierX > 0 && boss->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
+			spdModifierX *= -1;
+			if (spdModifierY < 0) spdModifierY *= -1;
+			sprite->changeAnimation(1);
+		}
+		else if (collisionBoss = (spdModifierX < 0 && boss->collisionMoveLeft(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
+			spdModifierX *= -1;
+			if (spdModifierY < 0) spdModifierY *= -1;
+			sprite->changeAnimation(2);
+		}
 	}
 
-	if (!collisionPlayer)
+	if (!collisionBoss) {
+		if (collisionPlayer = (spdModifierY > 0 && player->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int)speed, spdModifierY, spdModifierX))) {
+			spdModifierY *= -1;
+			sprite->changeAnimation(4);
+		}
+		else if (collisionPlayer = (spdModifierY > 0 && spdModifierX > 0 && player->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
+			spdModifierX *= -1;
+			sprite->changeAnimation(1);
+		}
+		else if (collisionPlayer = (spdModifierY > 0 && spdModifierX < 0 && player->collisionMoveLeft(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
+			spdModifierX *= -1;
+			sprite->changeAnimation(2);
+		}
+	}
+
+	if (!collisionPlayer && !collisionBoss)
 	{
 		if (collisionY = (spdModifierY > 0 && map->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int)speed, spdModifierY, lastCollision))) {
 			sprite->changeAnimation(4);
@@ -95,6 +115,11 @@ void Ball::toogleMagnet()
 	magnet = !magnet;
 }
 
+void Ball::toogleBossFight()
+{
+	bossFight = !bossFight;
+}
+
 void Ball::changeModifierX(float value)
 {
 	spdModifierX = value;
@@ -120,6 +145,11 @@ void Ball::setPosition(const glm::vec2& pos)
 {
 	posBall = pos;
 	sprite->setPosition(posBall);
+}
+
+void Ball::setBoss(Boss* b)
+{
+	boss = b;
 }
 
 bool Ball::getMagnet() {

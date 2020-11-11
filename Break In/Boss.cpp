@@ -59,13 +59,13 @@ bool Boss::update(int deltaTime)
 	}
 
 	if (movingRight) {
-		if ((posBoss.x + bossSize.x) < ((mapX - 1) * tileSize))
+		if ((posBoss.x + bossSize.x) < ((mapX - 2) * tileSize))
 			posBoss += glm::vec2(speed, 0);
 		else
 			movingRight = !movingRight;
 	}
 	else {
-		if (posBoss.x > tileSize)
+		if (posBoss.x > (tileSize*2))
 			posBoss -= glm::vec2(speed, 0);
 		else
 			movingRight = !movingRight;
@@ -94,11 +94,6 @@ void Boss::setPosition(const glm::vec2& pos)
 void Boss::setPlayer(Player* p)
 {
 	player = p;
-}
-
-void Boss::setBall(Ball* b)
-{
-	ball = b;
 }
 
 bool Boss::checkCollision()
@@ -130,8 +125,6 @@ bool Boss::onSlide(const glm::ivec2& pos, int sizeX, float& modifierY, float& mo
 	for (int x = 0; x < sizeX; ++x) {
 		if ((pos.x + x) >= (posBoss.x) && (pos.x + x) <= (posBoss.x + bossSize.x)) {
 
-			/* REBOTE NORMAL AKA INVERTIR DIRECCION*/
-
 			return true;
 		}
 	}
@@ -147,41 +140,76 @@ bool Boss::onSide(const glm::ivec2& pos, int sizeY) {
 }
 
 
-bool Boss::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed)
+bool Boss::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speedBall)
 {
 	int rightLimit = pos.x + size.x;
+	int speedBall2 = abs(speedBall);
 
-	for (int s = 1; s <= speed; ++s) {
-		if ((rightLimit + s) == posBoss.x  && onSide(pos, size.y)) {
-			*posJ += s - 1;
-			return true;
+	//if (movingRight) {
+		for (int spb = 0; spb < speed; ++spb) {
+			for (int s = 1; s <= speedBall2; ++s) {
+				if ((rightLimit + s) == (posBoss.x + spb) && onSide(pos, size.y)) {
+					*posJ += s - 1;
+					return true;
+				}
+			}
+
 		}
-	}
+	//}
+
+	//else {
+		for (int spb = 0; spb >= (-1 * speed); --spb) {
+			for (int s = 1; s <= speedBall2; ++s) {
+				if ((rightLimit + s) == (posBoss.x + spb) && onSide(pos, size.y)) {
+					*posJ += s - 1;
+					return true;
+				}
+			}
+		}
+	//}
+
+
 	return false;
 }
 
-bool Boss::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed)
+bool Boss::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speedBall)
 {
 	int leftLimit = pos.x;
+	int speedBall2 = abs(speedBall);
 
-	for (int s = 1; s <= speed; ++s) {
-		if (leftLimit == (posBoss.x + bossSize.x) && onSide(pos, size.y)) {
-			*posJ -= s - 1;
-			return true;
+	//if (movingRight) {
+		for (int spb = 0; spb < speed; ++spb) {
+			for (int s = 1; s <= speedBall2; ++s) {
+				if (leftLimit == (posBoss.x + bossSize.x + spb) && onSide(pos, size.y)) {
+					*posJ -= s - 1;
+					return true;
+				}
+			}
 		}
-	}
+	//}
+
+	//else {
+		for (int spb = 0; spb >= (-1 * speed); --spb) {
+			for (int s = 1; s <= speedBall2; ++s) {
+				if (leftLimit == (posBoss.x + bossSize.x + spb) && onSide(pos, size.y)) {
+					*posJ -= s - 1;
+					return true;
+				}
+			}
+		}
+	//}
+		
 	return false;
 }
 
 
-// CAMBIAR VOLLISION MOVE UP
 bool Boss::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float& modifierY, float& modifierX)
 {
 	int spd = int(speed + abs(modifierY));
 
 	for (int s = 1; s <= spd; ++s) {
-		if ((pos.y + s + size.y) == posBoss.y && onSlide(pos, size.x, modifierY, modifierX)) {
-			*posI += s - 1;
+		if ((pos.y - s) == (posBoss.y + bossSize.y) && onSlide(pos, size.x, modifierY, modifierX)) {
+			*posI -= s - 1;
 			return true;
 		}
 	}
