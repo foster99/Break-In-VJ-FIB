@@ -40,9 +40,6 @@ void GameScene::init() {
 	winAnimation = starts;
 	timeToDelete = 0;
 	auxTime = 0.f;
-
-	setUpGameOverSprite();
-	setUpWinSprite();
 }
 
 void GameScene::update(int deltaTime) {
@@ -293,7 +290,7 @@ void GameScene::render()
 		winSprite->changeAnimation(0);
 		winSprite->render(glm::mat4(1));
 
-		antonioSprite->changeAnimation(winAnimation);
+		antonioSprite->changeAnimation(antonioAnimation);
 		antonioSprite->render(glm::mat4(1));
 	}
 
@@ -310,13 +307,20 @@ void GameScene::render()
 	{
 		gameOverSprite->changeAnimation(gameOverAnimation);
 		gameOverSprite->render(glm::mat4(1));
+
+		antonioSprite->changeAnimation(antonioAnimation);
+		antonioSprite->render(glm::mat4(1));
 	}
 }
 
 void GameScene::setUpGameOverSprite()
 {
+	string path = "images/gameover_trans.png";
+	gameOverAnimation = starts;
+	antonioAnimation = 0;
+
 	// SPRITE AND TEXTURE SET-UP
-	gameOverTex.loadFromFile("images/gameover_trans.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	gameOverTex.loadFromFile(path, TEXTURE_PIXEL_FORMAT_RGBA);
 	gameOverSprite = Sprite::createSprite(glm::ivec2(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT), glm::vec2(1.f / 4.f, 1.f), &gameOverTex, &texProgram);
 	gameOverSprite->setNumberAnimations(4);
 
@@ -327,12 +331,34 @@ void GameScene::setUpGameOverSprite()
 
 	gameOverSprite->changeAnimation(0);
 	gameOverSprite->setPosition(glm::vec2(0.f));
+
+	// SPRITE AND TEXTURE SET-UP
+	antonioTex.loadFromFile("images/antonio.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	antonioSprite = Sprite::createSprite(glm::ivec2(25, 30), glm::vec2(1.f / 4.f, 1.f), &antonioTex, &texProgram);
+	antonioSprite->setNumberAnimations(4);
+
+	antonioSprite->addKeyframe(0, glm::vec2(0.f / 4.f, 0.f));
+	antonioSprite->addKeyframe(1, glm::vec2(1.f / 4.f, 0.f));
+	antonioSprite->addKeyframe(2, glm::vec2(2.f / 4.f, 0.f));
+	antonioSprite->addKeyframe(3, glm::vec2(3.f / 4.f, 0.f));
+	antonioSprite->changeAnimation(0);
+
+	antonioPos = glm::vec2(10.f, 192.f - 30.f);
+	antonioSprite->setPosition(antonioPos);
+
+	auxTime = 0.f;
 }
 
 void GameScene::setUpWinSprite()
 {
+	string path;
+	if (bank < 10)	path = "images/bank_win_0" + to_string(bank) + ".png";
+	else			path = "images/bank_win_"  + to_string(bank) + ".png";
+	
+	winAnimation = starts;
+
 	// SPRITE AND TEXTURE SET-UP
-	winTex.loadFromFile("images/bank_win_01.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	winTex.loadFromFile(path, TEXTURE_PIXEL_FORMAT_RGBA);
 	winSprite = Sprite::createSprite(glm::ivec2(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT), glm::vec2(1.f, 1.f), &winTex, &texProgram);
 	winSprite->setNumberAnimations(1);
 	winSprite->addKeyframe(0, glm::vec2(0.f));
@@ -352,6 +378,8 @@ void GameScene::setUpWinSprite()
 
 	antonioPos = glm::vec2(45.f, 192.f - 60.f);
 	antonioSprite->setPosition(antonioPos);
+
+	auxTime = 0.f;
 }
 
 void GameScene::toogleChangeBar()
@@ -413,6 +441,7 @@ void GameScene::playerLosesLife()
 {
 	lives -= 1;
 	alive = false;
+	Game::instance().stopAlarmSound();
 
 	if (lives < 0) {
 		player->setDeathAnimation(true);
@@ -429,7 +458,7 @@ void GameScene::playerLosesLife()
 void GameScene::gameIsOver()
 {
 	gameOver = true;
-	gameOverAnimation = starts;
+	setUpGameOverSprite();
 }
 
 void GameScene::animateGameOver()
@@ -441,19 +470,27 @@ void GameScene::animateGameOver()
 	
 	time_to_wait += initial_wait_time;
 	if (auxTime < time_to_wait) return;
+	Game::instance().stopAlarmSound();
 	Game::instance().playGameOverSong();
+
+	antonioPos.x += 0.08f;
+	antonioSprite->setPosition(antonioPos);
 
 	for (int i = 0; i < nAnimations; ++i) {
 		gameOverAnimation = 0;
+		antonioAnimation = 0;
 		time_to_wait += frame_wait_time;
 		if (auxTime < time_to_wait) return;
 		gameOverAnimation = 1;
+		antonioAnimation = 1;
 		time_to_wait += frame_wait_time;
 		if (auxTime < time_to_wait) return;
 		gameOverAnimation = 2;
+		antonioAnimation = 2;
 		time_to_wait += frame_wait_time;
 		if (auxTime < time_to_wait) return;
 		gameOverAnimation = 3;
+		antonioAnimation = 3;
 		time_to_wait += frame_wait_time;
 		if (auxTime < time_to_wait) return;
 	}
@@ -473,6 +510,7 @@ void GameScene::animateWin()
 
 	time_to_wait += initial_wait_time;
 	if (auxTime < time_to_wait) return;
+	Game::instance().stopAlarmSound();
 	Game::instance().playWinSong();
 
 	antonioPos.x += 0.08f;
@@ -480,18 +518,21 @@ void GameScene::animateWin()
 
 	for (int i = 0; i < nAnimations; ++i) {
 		winAnimation = 0;
+		antonioAnimation = 0;
 		time_to_wait += frame_wait_time;
 		if (auxTime < time_to_wait) return;
 		winAnimation = 1;
+		antonioAnimation = 1;
 		time_to_wait += frame_wait_time;
 		if (auxTime < time_to_wait) return;
 		winAnimation = 2;
+		antonioAnimation = 2;
 		time_to_wait += frame_wait_time;
 		if (auxTime < time_to_wait) return;
 		winAnimation = 3;
+		antonioAnimation = 3;
 		time_to_wait += frame_wait_time;
 		if (auxTime < time_to_wait) return;
-
 	}
 
 	Game::instance().stopWinSong();
@@ -625,6 +666,9 @@ void GameScene::startBank()
 	menuMap->setLine(" CASUAL ", " PLAYER ");
 
 	restartPlayerBall();
+	
+	winAnimation = starts;
+	gameOverAnimation = starts;
 }
 
 void GameScene::restartPlayerBall()
@@ -734,7 +778,7 @@ void GameScene::setPoints(int p)
 void GameScene::setWin(bool w)
 {
 	win = w;
-	if (w) winAnimation = starts;
+	if (w) setUpWinSprite();
 }
 
 void GameScene::toggleGodMode()

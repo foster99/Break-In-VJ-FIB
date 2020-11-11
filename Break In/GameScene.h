@@ -109,11 +109,14 @@ private:
 
     // Win Animation
     Texture winTex;
-    Texture antonioTex;
     Sprite* winSprite;
+    int winAnimation;
+
+    // Antonio Animation
+    Texture antonioTex;
     Sprite* antonioSprite;
     glm::vec2 antonioPos;
-    int winAnimation;
+    int antonioAnimation;
 
     // Control variables
     bool godMode;
