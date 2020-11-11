@@ -9,7 +9,7 @@
 #include "Guardian.h"
 #include "MenuTileMap.h"
 #include "Bullet.h"
-//#include "Boss.h"
+#include "Boss.h"
 #include <list>
 
 class GameScene :
@@ -26,10 +26,11 @@ public:
     void render();
 
     void setUpGameOverSprite();
+    void initBoss();
     void setUpWinSprite();
 
     void startBank();
-   // void startBoss();
+    void startBoss();
     void restartPlayerBall();
     void playerLosesLife();
     void gameIsOver();
@@ -98,6 +99,7 @@ private:
     list<Bullet*> bullets;
     Bonus* bonus;
     Guardian* guardian;
+    Boss* boss;
 
     static constexpr int starts = -1;
     static constexpr int finished = -2;

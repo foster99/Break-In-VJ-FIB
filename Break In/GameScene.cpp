@@ -259,7 +259,7 @@ void GameScene::update(int deltaTime) {
 	
 	if (reset)	ballOnSlide = 0;
 	++timeToDelete;
-
+	
 	setWin(!map->moneyLeft());
 }
 
@@ -284,7 +284,7 @@ void GameScene::render()
 	for (Bullet* bullet : bullets) {
 		bullet->render(displacement_mat);
 	}
-
+	//boss->render(displacement_mat);
 	if (winAnimation >= 0)
 	{
 		winSprite->changeAnimation(0);
@@ -671,6 +671,27 @@ void GameScene::startBank()
 	gameOverAnimation = starts;
 }
 
+//void GameScene::startBoss()
+//{
+//	string path;
+//	if (bank < 10)	path = "levels/BOSS_0" + to_string(bank) + ".txt";
+//	else			path = "levels/BOSS_" + to_string(bank) + ".txt";
+//
+//	map = TileMap::createTileMap(path.c_str(), glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+//	map->setBank(bank);
+//	map->setRoom(room);
+//
+//	menuMap = MenuTileMap::createTileMap("levels/menu.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+//	menuMap->setBank(bank);
+//	menuMap->setRoom(room);
+//	menuMap->setLives(lives);
+//	menuMap->setMoney(money);
+//	menuMap->setPoints(points);
+//	menuMap->setLine(" CASUAL ", " PLAYER ");
+//
+//	restartPlayerBall();
+//}
+
 void GameScene::restartPlayerBall()
 {
 	player = new Player();
@@ -698,7 +719,18 @@ void GameScene::restartPlayerBall()
 	guardian->setPosition(glm::vec2(INIT_BONUS_X_TILES * map->getTileSize(), INIT_BONUS_Y_TILES * map->getTileSize()));
 	guardian->setPlayer(player);
 	guardian->setRoom(map->getGuardianRoom());
+
+	//initBoss();
 }
+
+//void GameScene::initBoss()
+//{
+//	boss = new Boss();
+//	boss->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+//	boss->setTileMap(map);
+//	boss->setPlayer(player);
+//	boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 3) * map->getTileSize()));
+//}
 
 bool GameScene::getGameOver()
 {
