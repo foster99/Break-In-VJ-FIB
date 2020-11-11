@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Bonus.cpp" />
+    <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene.cpp" />
@@ -45,6 +46,7 @@
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene.h" />
@@ -84,6 +86,7 @@
     <Media Include="sounds\tueeeeeeeeee.wav" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="..\..\..\Documents\BOSS_01.txt" />
     <Text Include="levels\BANK_01_test.txt" />
     <Text Include="levels\BANK_02.txt" />
     <Text Include="levels\level01.txt" />

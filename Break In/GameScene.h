@@ -9,7 +9,7 @@
 #include "Guardian.h"
 #include "MenuTileMap.h"
 #include "Bullet.h"
-//#include "Boss.h"
+#include "Boss.h"
 #include <list>
 
 class GameScene :
@@ -25,10 +25,10 @@ public:
     void update(int deltaTime);
     void render();
     void setUpGameOverSprite();
-   // void initBoss();
+    void initBoss();
 
     void startBank();
-   // void startBoss();
+    void startBoss();
     void restartPlayerBall();
     void playerLosesLife();
     void gameIsOver();
@@ -94,7 +94,7 @@ private:
     list<Bullet*> bullets;
     Bonus* bonus;
     Guardian* guardian;
-  //  Boss* boss;
+    Boss* boss;
 
     // Title Quads
     Texture gameOverTex;

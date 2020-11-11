@@ -135,6 +135,9 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h">
@@ -201,6 +204,9 @@
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>
@@ -271,6 +277,9 @@
       <Filter>Resource Files\levels</Filter>
     </Text>
     <Text Include="Text.txt">
+      <Filter>Resource Files\levels</Filter>
+    </Text>
+    <Text Include="..\..\..\Documents\BOSS_01.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
   </ItemGroup>
