@@ -81,6 +81,7 @@ public:
 	void stopGameOverSong();
 	void stopWinSong();
 	void stopBossSong();
+	void stopAllSongs();
 
 	// Different Modes
 	static constexpr Mode exitGame = Mode(0);
