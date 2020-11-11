@@ -277,15 +277,14 @@ void GameScene::update(int deltaTime) {
 			}
 		}
 	}
-	
-	if (reset)	ballOnSlide = 0;
-	++timeToDelete;
-	
+
 	if (bank == 3) {
 		if (boss->update(deltaTime))
 			if (!godMode) playerLosesLife();
 	}
-		
+	
+	if (reset)	ballOnSlide = 0;
+	++timeToDelete;
 	
 	setWin(!map->moneyLeft());
 	restarted = false;
@@ -442,6 +441,9 @@ void GameScene::createNewBall(float spdX, float spdY, glm::vec2 pos)
 	ball->setPosition(glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
 	ball->setTileMap(map);
 	ball->setPlayer(player);
+	ball->setBoss(boss);
+	if (bank == 3)
+		ball->toogleBossFight();
 	balls.push_back(ball);
 }
 
@@ -456,6 +458,9 @@ void GameScene::createNewBall(float spdX, float spdY)
 	ball->setPosition(balls.front()->getPosition());
 	ball->setTileMap(map);
 	ball->setPlayer(player);
+	ball->setBoss(boss);
+	if (bank == 3)
+		ball->toogleBossFight();
 	balls.push_back(ball);
 }
 
@@ -795,6 +800,9 @@ void GameScene::restartPlayerBall()
 	player->setRoom(room);
 	player->setTileMap(map);
 
+	if (bank == 3) 
+		initBoss();
+
 	balls.clear();
 	createNewBall(1, -1, glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
 
@@ -817,9 +825,6 @@ void GameScene::restartPlayerBall()
 	ballOnSlide = 0;
 	restarted = true;
 	Game::instance().stopAlarmSound();
-	
-	if(bank == 3)
-		initBoss();
 
 }
 
@@ -829,8 +834,7 @@ void GameScene::initBoss()
 	boss->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	boss->setTileMap(map);
 	boss->setPlayer(player);
-	boss->setBall(ball);
-	boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 20) * map->getTileSize()));
+	boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 19) * map->getTileSize()));
 }
 
 void GameScene::insertBrick(int i, int j)

@@ -13,13 +13,33 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	std::uniform_int_distribution<int> rand(1000, 3000);
 	time2Switch= rand(generator);
 	
-	tex.loadFromFile("images/bee.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(bossSize, glm::vec2(1.f,1.f), &tex, &shaderProgram);
-	sprite->setNumberAnimations(1);
+	tex.loadFromFile("images/boss.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite = Sprite::createSprite(bossSize, glm::vec2(1.f / 3.f,1.f/5.f), &tex, &shaderProgram);
+	sprite->setNumberAnimations(15);
 
-	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
+	sprite->addKeyframe(0,	glm::vec2(0.f,			0.f / 5.f));
+	sprite->addKeyframe(1,	glm::vec2(1.f / 3.f,	0.f / 5.f));
+	sprite->addKeyframe(2,	glm::vec2(2.f / 3.f,	0.f / 5.f));
 
-	sprite->changeAnimation(0);
+	sprite->addKeyframe(3,	glm::vec2(0.f,			1.f / 5.f));
+	sprite->addKeyframe(4,	glm::vec2(1.f / 3.f,	1.f / 5.f));
+	sprite->addKeyframe(5,	glm::vec2(2.f / 3.f,	1.f / 5.f));
+	
+	sprite->addKeyframe(6,	glm::vec2(0.f,			2.f / 5.f));
+	sprite->addKeyframe(7,	glm::vec2(1.f / 3.f,	2.f / 5.f));
+	sprite->addKeyframe(8,	glm::vec2(2.f / 3.f,	2.f / 5.f));
+	
+	sprite->addKeyframe(9,	glm::vec2(0.f,			3.f / 5.f));
+	sprite->addKeyframe(10,	glm::vec2(1.f / 3.f,	3.f / 5.f));
+	sprite->addKeyframe(11,	glm::vec2(2.f / 3.f,	3.f / 5.f));
+	
+	sprite->addKeyframe(12,	glm::vec2(0.f,			4.f / 5.f));
+	sprite->addKeyframe(13,	glm::vec2(1.f / 3.f,	4.f / 5.f));
+	sprite->addKeyframe(14,	glm::vec2(2.f / 3.f,	4.f / 5.f));
+
+	
+
+	sprite->changeAnimation(13);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBoss.x), float(tileMapDispl.y + posBoss.y)));
 }
 
@@ -39,13 +59,13 @@ bool Boss::update(int deltaTime)
 	}
 
 	if (movingRight) {
-		if ((posBoss.x + bossSize.x) < ((mapX - 1) * tileSize))
+		if ((posBoss.x + bossSize.x) < ((mapX - 2) * tileSize))
 			posBoss += glm::vec2(speed, 0);
 		else
 			movingRight = !movingRight;
 	}
 	else {
-		if (posBoss.x > tileSize)
+		if (posBoss.x > (tileSize*2))
 			posBoss -= glm::vec2(speed, 0);
 		else
 			movingRight = !movingRight;
@@ -74,11 +94,6 @@ void Boss::setPosition(const glm::vec2& pos)
 void Boss::setPlayer(Player* p)
 {
 	player = p;
-}
-
-void Boss::setBall(Ball* b)
-{
-	ball = b;
 }
 
 bool Boss::checkCollision()
@@ -110,8 +125,6 @@ bool Boss::onSlide(const glm::ivec2& pos, int sizeX, float& modifierY, float& mo
 	for (int x = 0; x < sizeX; ++x) {
 		if ((pos.x + x) >= (posBoss.x) && (pos.x + x) <= (posBoss.x + bossSize.x)) {
 
-			/* REBOTE NORMAL AKA INVERTIR DIRECCION*/
-
 			return true;
 		}
 	}
@@ -127,41 +140,76 @@ bool Boss::onSide(const glm::ivec2& pos, int sizeY) {
 }
 
 
-bool Boss::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed)
+bool Boss::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speedBall)
 {
 	int rightLimit = pos.x + size.x;
+	int speedBall2 = abs(speedBall);
 
-	for (int s = 1; s <= speed; ++s) {
-		if ((rightLimit + s) == posBoss.x  && onSide(pos, size.y)) {
-			*posJ += s - 1;
-			return true;
+	//if (movingRight) {
+		for (int spb = 0; spb < speed; ++spb) {
+			for (int s = 1; s <= speedBall2; ++s) {
+				if ((rightLimit + s) == (posBoss.x + spb) && onSide(pos, size.y)) {
+					*posJ += s - 1;
+					return true;
+				}
+			}
+
 		}
-	}
+	//}
+
+	//else {
+		for (int spb = 0; spb >= (-1 * speed); --spb) {
+			for (int s = 1; s <= speedBall2; ++s) {
+				if ((rightLimit + s) == (posBoss.x + spb) && onSide(pos, size.y)) {
+					*posJ += s - 1;
+					return true;
+				}
+			}
+		}
+	//}
+
+
 	return false;
 }
 
-bool Boss::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed)
+bool Boss::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speedBall)
 {
 	int leftLimit = pos.x;
+	int speedBall2 = abs(speedBall);
 
-	for (int s = 1; s <= speed; ++s) {
-		if (leftLimit == (posBoss.x + bossSize.x) && onSide(pos, size.y)) {
-			*posJ -= s - 1;
-			return true;
+	//if (movingRight) {
+		for (int spb = 0; spb < speed; ++spb) {
+			for (int s = 1; s <= speedBall2; ++s) {
+				if (leftLimit == (posBoss.x + bossSize.x + spb) && onSide(pos, size.y)) {
+					*posJ -= s - 1;
+					return true;
+				}
+			}
 		}
-	}
+	//}
+
+	//else {
+		for (int spb = 0; spb >= (-1 * speed); --spb) {
+			for (int s = 1; s <= speedBall2; ++s) {
+				if (leftLimit == (posBoss.x + bossSize.x + spb) && onSide(pos, size.y)) {
+					*posJ -= s - 1;
+					return true;
+				}
+			}
+		}
+	//}
+		
 	return false;
 }
 
 
-// CAMBIAR VOLLISION MOVE UP
 bool Boss::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float& modifierY, float& modifierX)
 {
 	int spd = int(speed + abs(modifierY));
 
 	for (int s = 1; s <= spd; ++s) {
-		if ((pos.y + s + size.y) == posBoss.y && onSlide(pos, size.x, modifierY, modifierX)) {
-			*posI += s - 1;
+		if ((pos.y - s) == (posBoss.y + bossSize.y) && onSlide(pos, size.x, modifierY, modifierX)) {
+			*posI -= s - 1;
 			return true;
 		}
 	}
