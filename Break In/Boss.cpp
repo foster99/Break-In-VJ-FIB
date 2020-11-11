@@ -113,10 +113,10 @@ bool Boss::collisionWithPlayer() {
 	float g0_y = posBoss.y;
 	float g1_y = g0_y + bossSize.y;
 
-	bool X = (p0_x <= g0_x && g0_x <= p1_x) || (p0_x <= g1_x && g1_x <= p1_x);
-	bool Y = (p0_y <= g0_y && g0_y <= p1_y) || (p0_y <= g1_y && g1_y <= p1_y);
+	bool X = (g0_x <= p0_x && p0_x <= g1_x) || (g0_x <= p1_x && p1_x <= g1_x);
+	bool Y = (g0_y <= p0_y && p0_y <= g1_y) || (g0_y <= p1_y && p1_y <= g1_y);
 
-	return X && Y;
+	return (X && Y);
 }
 
 

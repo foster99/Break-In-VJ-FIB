@@ -127,12 +127,13 @@ void GameScene::update(int deltaTime) {
 		return;
 	}
 	else {
+		int collided;
 		for (Ball* ball : balls) {
-			if (!ball->getMagnet() && ball->update(deltaTime))
+			if (!ball->getMagnet() && ball->update(deltaTime,collided))
 			{
 				glm::ivec2 tile = ball->getLastCollision();
 				
-				if (tile.x < 0 || tile.y < 0) {
+				if (collided == PLAYER_COLLISION) {
 					Game::instance().playPlayerSound(); //  IMPACTO JODADORE
 					if (player->getBonus() == Bonus::magnet || player->getBonus() == Bonus::twix)
 						ball->toogleMagnet();
@@ -183,7 +184,7 @@ void GameScene::update(int deltaTime) {
 		}
 		
 		for (Bullet* bullet : bullets) {
-			if (!bullet->getDestroy() && bullet->update(deltaTime)) {
+			if (!bullet->getDestroy() && bullet->update(deltaTime,collided)) {
 				glm::ivec2 tile = bullet->getLastCollision();
 
 				switch (map->bulletTileCollision(tile[0], tile[1]))
@@ -514,12 +515,18 @@ bool GameScene::createNewBullets() {
 		bullet->setPosition(glm::vec2(pos.x+2, pos.y - player->getSlideOffset().y));
 		bullet->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		bullet->setTileMap(map);
+		bullet->setBoss(boss);
+		if (bank == 3)
+			bullet->toogleBossFight();
 		bullets.push_back(bullet);
 
 		bullet = new Bullet();
 		bullet->setPosition(glm::vec2(pos.x+10, pos.y - player->getSlideOffset().y));
 		bullet->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		bullet->setTileMap(map);
+		bullet->setBoss(boss);
+		if (bank == 3)
+			bullet->toogleBossFight();
 		bullets.push_back(bullet);
 
 		return true;

@@ -94,6 +94,11 @@ public:
     static constexpr float INIT_BONUS_X_TILES   = 10;
     static constexpr float INIT_BONUS_Y_TILES   = 55;
 
+    static constexpr float TILE_COLLISION = 0;
+    static constexpr float PLAYER_COLLISION = 1;
+    static constexpr float BOSS_COLLISION = 2;
+
+
 private:
 
     // Tile Maps
