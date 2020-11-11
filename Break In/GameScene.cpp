@@ -288,8 +288,6 @@ void GameScene::update(int deltaTime) {
 	if (bank == 3) {
 		if (boss->update(deltaTime))
 			if (!godMode) playerLosesLife();
-		if(boss->collisionWithBall())
-			Game::instance().playBossHitSound();
 	}
 		
 	

@@ -13,13 +13,33 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	std::uniform_int_distribution<int> rand(1000, 3000);
 	time2Switch= rand(generator);
 	
-	tex.loadFromFile("images/bee.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(bossSize, glm::vec2(1.f,1.f), &tex, &shaderProgram);
-	sprite->setNumberAnimations(1);
+	tex.loadFromFile("images/boss.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite = Sprite::createSprite(bossSize, glm::vec2(1.f / 3.f,1.f/5.f), &tex, &shaderProgram);
+	sprite->setNumberAnimations(15);
 
-	sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
+	sprite->addKeyframe(0,	glm::vec2(0.f,			0.f / 5.f));
+	sprite->addKeyframe(1,	glm::vec2(1.f / 3.f,	0.f / 5.f));
+	sprite->addKeyframe(2,	glm::vec2(2.f / 3.f,	0.f / 5.f));
 
-	sprite->changeAnimation(0);
+	sprite->addKeyframe(3,	glm::vec2(0.f,			1.f / 5.f));
+	sprite->addKeyframe(4,	glm::vec2(1.f / 3.f,	1.f / 5.f));
+	sprite->addKeyframe(5,	glm::vec2(2.f / 3.f,	1.f / 5.f));
+	
+	sprite->addKeyframe(6,	glm::vec2(0.f,			2.f / 5.f));
+	sprite->addKeyframe(7,	glm::vec2(1.f / 3.f,	2.f / 5.f));
+	sprite->addKeyframe(8,	glm::vec2(2.f / 3.f,	2.f / 5.f));
+	
+	sprite->addKeyframe(9,	glm::vec2(0.f,			3.f / 5.f));
+	sprite->addKeyframe(10,	glm::vec2(1.f / 3.f,	3.f / 5.f));
+	sprite->addKeyframe(11,	glm::vec2(2.f / 3.f,	3.f / 5.f));
+	
+	sprite->addKeyframe(12,	glm::vec2(0.f,			4.f / 5.f));
+	sprite->addKeyframe(13,	glm::vec2(1.f / 3.f,	4.f / 5.f));
+	sprite->addKeyframe(14,	glm::vec2(2.f / 3.f,	4.f / 5.f));
+
+	
+
+	sprite->changeAnimation(13);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBoss.x), float(tileMapDispl.y + posBoss.y)));
 }
 
