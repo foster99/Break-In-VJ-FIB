@@ -10,7 +10,7 @@ class Ball
 {
 public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, float spdX, float spdY, bool freeze);
-	bool update(int deltaTime);
+	bool update(int deltaTime, int& collided);
 	void render(glm::mat4& displacement_mat);
 
 	void moveWithPlayer(float spdX);

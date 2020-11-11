@@ -3,18 +3,23 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
+#include "Boss.h"
 
 class Bullet
 {
 public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	bool update(int deltaTime);
+	bool update(int deltaTime, int& collided);
 	void render(glm::mat4& displacement_mat);
 
+	void toogleBossFight();
+
 	bool getDestroy();
+	
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
 	void setDestroy();
+	void setBoss(Boss* b);
 
 	glm::ivec2 getLastCollision();
 
@@ -24,8 +29,9 @@ private:
 	Texture tex;
 	Sprite* sprite;
 	TileMap* map;
+	Boss* boss;
 	float speed;
-	bool destroy;
+	bool destroy, bossFight;
 };
 
 #endif // _BULLET_INCLUDE
