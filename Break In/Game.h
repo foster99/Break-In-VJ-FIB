@@ -66,14 +66,16 @@ public:
 	void playBlastSound();
 	void playGreenCardSound();
 	void playMoneySound();
-
-	void playTitleSong();
+	
 	void playAlarmSound();
-
-	void stopTitleSong();
+	void playTitleSong();
 	void playGameOverSong();
-	void stopGameOverSong();
+	void playWinSong();
+
 	void stopAlarmSound();
+	void stopTitleSong();
+	void stopGameOverSong();
+	void stopWinSong();
 
 	// Different Modes
 	static constexpr Mode exitGame = Mode(0);
@@ -108,8 +110,10 @@ private:
 	
 	// Looped Sounds
 	Sound title_song;
+	Sound gameover_song;
+	Sound win_song;
+	Sound boss_song;
 	Sound alarm_sound;
-	Sound gameover_sound;
 
 	// One Shoot Sound
 	Sound brick_sound;

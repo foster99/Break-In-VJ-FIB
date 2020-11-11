@@ -40,9 +40,9 @@ void GameScene::init() {
 	winAnimation = starts;
 	timeToDelete = 0;
 	auxTime = 0.f;
+
 	setUpGameOverSprite();
 	setUpWinSprite();
-
 }
 
 void GameScene::update(int deltaTime) {
@@ -288,6 +288,15 @@ void GameScene::render()
 		bullet->render(displacement_mat);
 	}
 
+	if (winAnimation >= 0)
+	{
+		winSprite->changeAnimation(0);
+		winSprite->render(glm::mat4(1));
+
+		antonioSprite->changeAnimation(winAnimation);
+		antonioSprite->render(glm::mat4(1));
+	}
+
 	// Render Lateral Menu
 	glm::mat4 menu_modelview = glm::translate(glm::mat4(1.f), glm::vec3(192.f, 0.f, 0.f));
 	texProgram.use();
@@ -302,15 +311,6 @@ void GameScene::render()
 		gameOverSprite->changeAnimation(gameOverAnimation);
 		gameOverSprite->render(glm::mat4(1));
 	}
-	if (winAnimation >= 0)
-	{
-		winSprite->changeAnimation(0);
-		winSprite->render(glm::mat4(1));
-
-		antonioSprite->changeAnimation(winAnimation);
-		antonioSprite->render(glm::mat4(1));
-	}
-
 }
 
 void GameScene::setUpGameOverSprite()
@@ -333,7 +333,7 @@ void GameScene::setUpWinSprite()
 {
 	// SPRITE AND TEXTURE SET-UP
 	winTex.loadFromFile("images/bank_win_01.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	winSprite = Sprite::createSprite(glm::ivec2(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT), glm::vec2(1.f, 1.f), &gameOverTex, &texProgram);
+	winSprite = Sprite::createSprite(glm::ivec2(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT), glm::vec2(1.f, 1.f), &winTex, &texProgram);
 	winSprite->setNumberAnimations(1);
 	winSprite->addKeyframe(0, glm::vec2(0.f));
 	winSprite->changeAnimation(0);
@@ -341,16 +341,17 @@ void GameScene::setUpWinSprite()
 
 	// SPRITE AND TEXTURE SET-UP
 	antonioTex.loadFromFile("images/antonio.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	antonioSprite = Sprite::createSprite(glm::ivec2(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT), glm::vec2(1.f / 4.f, 1.f), &gameOverTex, &texProgram);
+	antonioSprite = Sprite::createSprite(glm::ivec2(25, 30), glm::vec2(1.f / 4.f, 1.f), &antonioTex, &texProgram);
 	antonioSprite->setNumberAnimations(4);
 
 	antonioSprite->addKeyframe(0, glm::vec2(0.f / 4.f, 0.f));
 	antonioSprite->addKeyframe(1, glm::vec2(1.f / 4.f, 0.f));
 	antonioSprite->addKeyframe(2, glm::vec2(2.f / 4.f, 0.f));
 	antonioSprite->addKeyframe(3, glm::vec2(3.f / 4.f, 0.f));
-
 	antonioSprite->changeAnimation(0);
-	antonioSprite->setPosition(glm::vec2(0.f));
+
+	antonioPos = glm::vec2(45.f, 192.f - 60.f);
+	antonioSprite->setPosition(antonioPos);
 }
 
 void GameScene::toogleChangeBar()
@@ -466,13 +467,16 @@ void GameScene::animateGameOver()
 void GameScene::animateWin()
 {
 	static constexpr float initial_wait_time = 1000.f;
-	static constexpr float frame_wait_time = 250.f;
-	static constexpr int nAnimations = 13;
+	static constexpr float frame_wait_time = 100.f;
+	static constexpr int nAnimations = 53;
 	float time_to_wait = 0.f;
 
 	time_to_wait += initial_wait_time;
 	if (auxTime < time_to_wait) return;
-	Game::instance().playGameOverSong();
+	Game::instance().playWinSong();
+
+	antonioPos.x += 0.08f;
+	antonioSprite->setPosition(antonioPos);
 
 	for (int i = 0; i < nAnimations; ++i) {
 		winAnimation = 0;
@@ -487,9 +491,10 @@ void GameScene::animateWin()
 		winAnimation = 3;
 		time_to_wait += frame_wait_time;
 		if (auxTime < time_to_wait) return;
+
 	}
 
-	Game::instance().stopGameOverSong();
+	Game::instance().stopWinSong();
 	winAnimation = finished;
 
 	return;

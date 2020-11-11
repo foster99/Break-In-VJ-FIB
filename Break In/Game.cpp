@@ -36,21 +36,22 @@ void Game::init()
 
 void Game::loadSounds()
 {
-	title_song = Sound("title_song.wav", true);
-	alarm_sound = Sound("alarm.wav", true);
-	gameover_sound = Sound("gameover.wav", true);
+	title_song			= Sound("title_song.wav", true);
+	alarm_sound			= Sound("alarm.wav", true);
+	gameover_song		= Sound("gameover.wav", true);
+	win_song			= Sound("win_song.wav", true);
 
-	brick_sound = Sound("brick_collision.wav", false);
 	//slide_sound = Sound("tueeeeeeeeee.wav", false);
-	slide_sound = Sound("player_collision.wav", false);
-	doubleSlide_sound = Sound("double_slide.wav", false);
-	bonus_sound = Sound("bonus.wav", false);
-	loseLife_sound = Sound("lose_live.wav", false);
-	blast_sound = Sound("blast.wav", false);
-	money_sound_01 = Sound("moneyBag_01.wav", false);
-	money_sound_02 = Sound("moneyBag_02.wav", false);
-	money_sound_03 = Sound("moneyBag_03.wav", false);
-	greenCard_sound = Sound("greenCard.wav", false);
+	slide_sound			= Sound("player_collision.wav", false);
+	brick_sound			= Sound("brick_collision.wav", false);
+	doubleSlide_sound	= Sound("double_slide.wav", false);
+	bonus_sound			= Sound("bonus.wav", false);
+	loseLife_sound		= Sound("lose_live.wav", false);
+	blast_sound			= Sound("blast.wav", false);
+	money_sound_01		= Sound("moneyBag_01.wav", false);
+	money_sound_02		= Sound("moneyBag_02.wav", false);
+	money_sound_03		= Sound("moneyBag_03.wav", false);
+	greenCard_sound		= Sound("greenCard.wav", false);
 
 }
 
@@ -426,12 +427,22 @@ void Game::stopTitleSong()
 
 void Game::playGameOverSong()
 {
-	gameover_sound.play();
+	gameover_song.play();
+}
+
+void Game::playWinSong()
+{
+	win_song.play();
 }
 
 void Game::stopGameOverSong()
 {
-	gameover_sound.drop();
+	gameover_song.drop();
+}
+
+void Game::stopWinSong()
+{
+	win_song.drop();
 }
 
 void Game::stopAlarmSound()

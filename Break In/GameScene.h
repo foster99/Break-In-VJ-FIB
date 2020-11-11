@@ -98,7 +98,6 @@ private:
     list<Bullet*> bullets;
     Bonus* bonus;
     Guardian* guardian;
-  //  Boss* boss;
 
     static constexpr int starts = -1;
     static constexpr int finished = -2;
@@ -113,6 +112,7 @@ private:
     Texture antonioTex;
     Sprite* winSprite;
     Sprite* antonioSprite;
+    glm::vec2 antonioPos;
     int winAnimation;
 
     // Control variables
