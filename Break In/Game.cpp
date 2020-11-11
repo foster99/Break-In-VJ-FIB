@@ -105,6 +105,7 @@ bool Game::update(int deltaTime)
 			else			bank++;
 			
 			gameScene.setBank(bank);
+			gameScene.setPoints(0);
 			gameScene.startBank();
 			gameScene.setWin(false);
 		}
@@ -206,6 +207,10 @@ void Game::keyPressed(int key)
 			case ESC:	setMode(options);		break;
 			case 'G':
 			case 'g':	toggleGodMode();		break;
+			case 'x':
+				if (!gameScene.inGodMode()) break;
+				gameScene.insertBrick(0, 0);
+				break;
 			case '+':	
 				if (!gameScene.inGodMode()) break;
 				if (keys['b']) gameScene.createNewBall(1.f, 1.f);

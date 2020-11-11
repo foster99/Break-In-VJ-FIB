@@ -29,6 +29,9 @@ public:
 	void render(); 
 	void free();
 	
+	void insertBrick(int i, int j);
+	bool tileIsSpecial(int i_, int j_);
+
 	int getTileSize() const { return tileSize; }
 	int getMapSizeX() const { return mapSize.x;  }
 	int getMapSizeY() const { return mapSize.y / Nrooms; }

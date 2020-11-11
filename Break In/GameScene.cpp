@@ -65,7 +65,6 @@ void GameScene::update(int deltaTime) {
 
 		timeToDelete = 0;
 	}
-
 	if (!alive)										// ESTAMOS MUERTOS
 	{									
 		auxTime += deltaTime;
@@ -115,6 +114,12 @@ void GameScene::update(int deltaTime) {
 		bonus->setRoom(room);
 		bonus->restartTime();
 	}
+	else if (greenCardAnimation == starts){
+		if (convertPointsToMoney())
+			greenCardAnimation = finished;
+		
+		return;
+	}
 	else {
 		for (Ball* ball : balls) {
 			if (!ball->getMagnet() && ball->update(deltaTime))
@@ -131,20 +136,17 @@ void GameScene::update(int deltaTime) {
 					{
 					case Tile::moneyBag:
 						Game::instance().playMoneySound();
-						money += 150;
-						points += 200;
+						money += 100;
 						break;
 
 					case Tile::coin:
 						Game::instance().playBrickSound();
 						money += 50;
-						points += 125;
 						break;
 
 					case Tile::blueSpheres:
 						Game::instance().playMoneySound();
-						money += 300;
-						points += 333;
+						money += 250;
 						break;
 
 					case Tile::brickBlue:
@@ -157,12 +159,10 @@ void GameScene::update(int deltaTime) {
 						break;
 
 					case Tile::outCard:
-						Game::instance().playGreenCardSound();
-						points += 100;
+						takeGreenCard();
 						break;
 
 					case Tile::alarm:
-						points += 100;
 						guardian->alarmOn();
 						break;
 
@@ -189,10 +189,6 @@ void GameScene::update(int deltaTime) {
 				case Tile::brickGreen:
 				case Tile::brickLow:
 					Game::instance().playBrickSound();
-					points += 100;
-					break;
-				case Tile::outCard:
-					Game::instance().playGreenCardSound();
 					points += 100;
 					break;
 				default: break;
@@ -288,8 +284,6 @@ void GameScene::update(int deltaTime) {
 	if (bank == 3) {
 		if (boss->update(deltaTime))
 			if (!godMode) playerLosesLife();
-		if(boss->collisionWithBall())
-			Game::instance().playBossHitSound();
 	}
 		
 	
@@ -338,6 +332,10 @@ void GameScene::render()
 	texProgram.setUniformMatrix4f("modelview", menu_modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	menuMap->render();
+
+	if (greenCardAnimation == starts) {
+		greenCardSprite->render(glm::mat4(1));
+	}
 
 	if (gameOverAnimation >= 0)
 	{
@@ -418,6 +416,18 @@ void GameScene::setUpWinSprite()
 	antonioSprite->setPosition(antonioPos);
 
 	auxTime = 0.f;
+}
+
+void GameScene::setUpGreenCardSprite()
+{
+	// SPRITE AND TEXTURE SET-UP
+	greenCardTex.loadFromFile("images/greenCard.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	greenCardSprite = Sprite::createSprite(glm::ivec2(19.f*8.f,14.f * 8.f ), glm::vec2(1.f, 1.f), &greenCardTex, &texProgram);
+	greenCardSprite->setNumberAnimations(1);
+	greenCardSprite->addKeyframe(0, glm::vec2(0.f));
+	greenCardSprite->changeAnimation(0);
+	greenCardSprite->setPosition(glm::vec2(2.5f * 8.f, 5.f * 8.f));
+
 }
 
 void GameScene::toogleChangeBar()
@@ -579,6 +589,30 @@ void GameScene::animateWin()
 	return;
 }
 
+void GameScene::takeGreenCard()
+{
+	Game::instance().playGreenCardSound();
+	greenCardAnimation = starts;
+	setUpGreenCardSprite();
+}
+
+bool GameScene::convertPointsToMoney()
+{
+	int step = 50;
+	if (points >= step) {
+		points -= step;
+		money += step;
+	}
+	else {
+		money += points;
+		points = 0;
+	}
+	menuMap->setPoints(points);
+	menuMap->setMoney(money);
+	
+	return points <= 0;
+}
+
 bool GameScene::changeOfRoom()
 {
 	Ball* ball;
@@ -726,6 +760,7 @@ void GameScene::startBank()
 
 	restartPlayerBall();
 	
+	greenCardAnimation = waiting;
 	winAnimation = starts;
 	gameOverAnimation = starts;
 }
@@ -796,6 +831,15 @@ void GameScene::initBoss()
 	boss->setPlayer(player);
 	boss->setBall(ball);
 	boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 20) * map->getTileSize()));
+}
+
+void GameScene::insertBrick(int i, int j)
+{
+	std::random_device rd;
+	int I = 2 + (rd() % 19);
+	int J = 1 + (rd() % 20);
+
+	map->insertBrick(I, J);
 }
 
 bool GameScene::getGameOver()

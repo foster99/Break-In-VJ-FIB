@@ -1,4 +1,5 @@
 #include "TileMap.h"
+#include <random>
 using namespace std;
 
 
@@ -59,6 +60,53 @@ void TileMap::free()
 {
 	glDeleteBuffers(1, &vboStatic);
 	glDeleteBuffers(1, &vboDynamic);
+}
+
+void TileMap::insertBrick(int i_, int j_)
+{
+	// Solo podemos insertar el columnas pares
+	int i = i_;
+	int j = (j_ % 2 == 0) ? j_ : j_+ 1;
+
+	if (!(2 <= i && i <= 20 && 1 <= j && j <= 22))	// Excepcion si pintas en un sitio que no toca.
+		assert(false);
+
+	if (tileIsSpecial(i, j)) return;
+
+	// Escoge aleatoriamente el tipo de bloque
+	char tile;
+	std::random_device rd;
+
+	switch (rd() % 6)
+	{
+	case 1: tile = Tile::brickRed;		break;
+	case 2: tile = Tile::brickBlue;		break;
+	case 3: tile = Tile::brickGreen;	break;
+	case 4: tile = Tile::brickYellow;	break;
+	case 5: tile = Tile::brickLow;		break;
+	case 0: tile = Tile::brickHigh;		break;
+	}
+
+	loadTile(tile, i, j);
+	loadTile(tile, i, j+1);
+}
+
+bool TileMap::tileIsSpecial(int i, int j)
+{
+	switch (mapita[i][j].symbol)
+	{
+		case moneyBag:
+		case coin:
+		case alarm:
+		case key:
+		case outCard:
+		case blueSpheres:
+		case door:
+		case wall:
+		case death:
+			return true;
+	}
+	return false;
 }
 
 int TileMap::getGuardianRoom()

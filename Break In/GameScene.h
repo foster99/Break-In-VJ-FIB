@@ -25,9 +25,12 @@ public:
     void update(int deltaTime);
     void render();
 
-    void setUpGameOverSprite();
     void initBoss();
+    void insertBrick(int i, int j);
+
+    void setUpGameOverSprite();
     void setUpWinSprite();
+    void setUpGreenCardSprite();
 
     void startBank();
     void startBoss();
@@ -37,7 +40,7 @@ public:
 
     void animateGameOver();
     void animateWin();
-
+    
     bool getGameOver();
     bool getWin();
     
@@ -62,7 +65,9 @@ public:
     void createNewBall(float spdX, float spdY);
     void deleteLastBall();
     bool createNewBullets();
-
+    
+    bool convertPointsToMoney();
+    void takeGreenCard();
     bool changeOfRoom();
     bool ballisDead(Ball* ball);
     bool lastBallisDead();
@@ -101,6 +106,7 @@ private:
     Guardian* guardian;
     Boss* boss;
 
+    static constexpr int waiting = 0;
     static constexpr int starts = -1;
     static constexpr int finished = -2;
 
@@ -114,6 +120,7 @@ private:
     Sprite* winSprite;
     int winAnimation;
 
+
     // Antonio Animation
     Texture antonioTex;
     Sprite* antonioSprite;
@@ -123,6 +130,11 @@ private:
     // GodModeQuad
     Texture godModeTex;
     Sprite* godModeSprite;
+    
+    // GreenCard
+    Texture greenCardTex;
+    Sprite* greenCardSprite;
+    int greenCardAnimation;
 
     // Control variables
     bool restarted;
