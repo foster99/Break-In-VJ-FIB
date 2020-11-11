@@ -139,6 +139,9 @@ void GameScene::update(int deltaTime) {
 					if (player->getBonus() == Bonus::magnet || player->getBonus() == Bonus::twix)
 						ball->toogleMagnet();
 				}
+				else if (collided == BOSS_COLLISION) {
+					boss->takeDamage(5, boss->BALL);
+				}
 				else {
 					switch (map->ballTileCollision(tile[0], tile[1]))
 					{
@@ -187,7 +190,8 @@ void GameScene::update(int deltaTime) {
 		for (Bullet* bullet : bullets) {
 			if (!bullet->getDestroy() && bullet->update(deltaTime,collided)) {
 				glm::ivec2 tile = bullet->getLastCollision();
-
+				if (collided == BOSS_COLLISION)
+					boss->takeDamage(2,boss->BULLET);
 				switch (map->bulletTileCollision(tile[0], tile[1]))
 				{
 

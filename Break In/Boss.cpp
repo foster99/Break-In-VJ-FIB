@@ -9,6 +9,10 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	movingRight = true;
 	tileMapDispl = tileMapPos;
 
+	status = NORMAL;
+	healthPoints = 100;
+	shieldDurability = 100;
+
 	std::default_random_engine generator;
 	std::uniform_int_distribution<int> rand(1000, 3000);
 	time2Switch= rand(generator);
@@ -39,7 +43,7 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	
 
-	sprite->changeAnimation(13);
+	sprite->changeAnimation(0);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBoss.x), float(tileMapDispl.y + posBoss.y)));
 }
 
@@ -94,6 +98,14 @@ void Boss::setPosition(const glm::vec2& pos)
 void Boss::setPlayer(Player* p)
 {
 	player = p;
+}
+
+void Boss::takeDamage(int hp, int source)
+{
+	healthPoints -= hp;
+	if (healthPoints <= 0)
+		sprite->changeAnimation(5);
+	hitted = true;
 }
 
 bool Boss::checkCollision()
