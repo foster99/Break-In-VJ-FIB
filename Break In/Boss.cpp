@@ -104,20 +104,66 @@ bool Boss::collisionWithPlayer() {
 	return X && Y;
 }
 
-bool Boss::collisionWithBall()
+
+bool Boss::onSlide(const glm::ivec2& pos, int sizeX, float& modifierY, float& modifierX) {
+
+	for (int x = 0; x < sizeX; ++x) {
+		if ((pos.x + x) >= (posBoss.x) && (pos.x + x) <= (posBoss.x + bossSize.x)) {
+
+			/* REBOTE NORMAL AKA INVERTIR DIRECCION*/
+
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Boss::onSide(const glm::ivec2& pos, int sizeY) {
+	for (int y = 0; y <= sizeY; ++y) {
+		if ((pos.y + y) >= posBoss.y && (pos.y + y) <= (posBoss.y + bossSize.y))
+			return true;
+	}
+	return false;
+}
+
+
+bool Boss::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed)
 {
-	float p0_x = ball->getPosition().x;
-	float p1_x = p0_x + ball->getBallSize();
-	float g0_x = posBoss.x;
-	float g1_x = g0_x + bossSize.x;
+	int rightLimit = pos.x + size.x;
 
-	float p0_y = ball->getPosition().y;
-	float p1_y = p0_y + ball->getBallSize();
-	float g0_y = posBoss.y;
-	float g1_y = g0_y + bossSize.y;
+	for (int s = 1; s <= speed; ++s) {
+		if ((rightLimit + s) == posBoss.x  && onSide(pos, size.y)) {
+			*posJ += s - 1;
+			return true;
+		}
+	}
+	return false;
+}
 
-	bool X = (p0_x <= g0_x && g0_x <= p1_x) || (p0_x <= g1_x && g1_x <= p1_x);
-	bool Y = (p0_y <= g0_y && g0_y <= p1_y) || (p0_y <= g1_y && g1_y <= p1_y);
+bool Boss::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed)
+{
+	int leftLimit = pos.x;
 
-	return X && Y;
+	for (int s = 1; s <= speed; ++s) {
+		if (leftLimit == (posBoss.x + bossSize.x) && onSide(pos, size.y)) {
+			*posJ -= s - 1;
+			return true;
+		}
+	}
+	return false;
+}
+
+
+// CAMBIAR VOLLISION MOVE UP
+bool Boss::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float& modifierY, float& modifierX)
+{
+	int spd = int(speed + abs(modifierY));
+
+	for (int s = 1; s <= spd; ++s) {
+		if ((pos.y + s + size.y) == posBoss.y && onSlide(pos, size.x, modifierY, modifierX)) {
+			*posI += s - 1;
+			return true;
+		}
+	}
+	return false;
 }
