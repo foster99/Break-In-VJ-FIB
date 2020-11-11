@@ -97,6 +97,7 @@ bool Game::update(int deltaTime)
 		startMenuScene.update(deltaTime);
 		playTitleSong();
 		stopAlarmSound();
+		stopBossSong();
 		break;
 
 	case playing:
@@ -149,6 +150,7 @@ bool Game::update(int deltaTime)
 
 	case password:
 		passwordScene.update(deltaTime);
+		stopBossSong();
 		stopAlarmSound();
 		break;
 
@@ -503,6 +505,15 @@ void Game::stopWinSong()
 void Game::stopBossSong()
 {
 	boss_song.drop();
+}
+
+void Game::stopAllSongs()
+{
+	stopAlarmSound();
+	stopTitleSong();
+	stopGameOverSong();
+	stopWinSong();
+	stopBossSong();
 }
 
 void Game::stopAlarmSound()

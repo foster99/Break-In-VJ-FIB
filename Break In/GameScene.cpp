@@ -74,8 +74,8 @@ void GameScene::update(int deltaTime) {
 		}
 		alive = !(player->getDeathAnimation());
 
-		if (alive && bossIsAlive) restartPlayerBallBoss();
-		if (alive)				  restartPlayerBallBank();
+		     if (alive && bossIsAlive) restartPlayerBallBoss();
+		else if (alive)				   restartPlayerBallBank();
 		else       return;
 	}
 	else if (gameOver)								// GAME OVER, PERO HAY QUE MOSTRAR LA ANIMACION
@@ -544,6 +544,7 @@ void GameScene::playerLosesLife()
 	lives -= 1;
 	alive = false;
 	Game::instance().stopAlarmSound();
+	Game::instance().stopBossSong();
 
 	if (lives < 0) {
 		player->setDeathAnimation(true);
@@ -838,6 +839,7 @@ void GameScene::startBank()
 	winAnimation = starts;
 	gameOverAnimation = starts;
 	goBossAnimation = starts;
+	bossIsAlive = false;
 }
 
 void GameScene::startBoss()
@@ -928,6 +930,7 @@ void GameScene::restartPlayerBallBoss()
 
 	ballOnSlide = 0;
 	restarted = true;
+	Game::instance().playBossSong();
 	Game::instance().stopAlarmSound();
 }
 
