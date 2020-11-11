@@ -36,6 +36,7 @@ public:
 
 	void setRoom(int room_) { currRoom = room_; };
 	void setBank(int bank_) { currBank = bank_; };
+	void setAlarm(bool a)   { alarmOn  =     a; };
 
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speedOg, float& modifierX, glm::ivec2 &lastCollision);
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, float *posX, int speedOg, float& modifierX, glm::ivec2 &lastCollision);

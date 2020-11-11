@@ -94,6 +94,7 @@ bool Game::update(int deltaTime)
 		startMenuScene.setPoints(max_points);
 		startMenuScene.update(deltaTime);
 		playTitleSong();
+		stopAlarmSound();
 		break;
 
 	case playing:
@@ -122,18 +123,22 @@ bool Game::update(int deltaTime)
 
 	case instructions:
 		instructionsScene.update(deltaTime);
+		stopAlarmSound();
 		break;
 
 	case credits:
 		creditsScene.update(deltaTime);
+		stopAlarmSound();
 		break;
 
 	case options:
 		optionsScene.update(deltaTime);
+		stopAlarmSound();
 		break;
 
 	case password:
 		passwordScene.update(deltaTime);
+		stopAlarmSound();
 		break;
 
 	case exitGame: break;

@@ -217,6 +217,7 @@ void GameScene::update(int deltaTime) {
 			if (!godMode) playerLosesLife();
 	}
 	else {
+		map->setAlarm(false);
 		Game::instance().stopAlarmSound();
 		guardian->restartTime();
 	}
@@ -744,6 +745,8 @@ void GameScene::restartPlayerBall()
 
 	ballOnSlide = 0;
 	restarted = true;
+	Game::instance().stopAlarmSound();
+
 	//initBoss();
 }
 
