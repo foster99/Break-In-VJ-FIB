@@ -48,11 +48,11 @@ void GameScene::update(int deltaTime) {
 
 	glm::vec2 previousPlayerPos = player->getPosition();
 
-	if ((timeToDelete % 4) == 0) {
-		//DELETEAR BULLETS SI DESTROY TRUE
+	if ((timeToDelete % 4) == 0)					// DELETEAR BULLETS SI DESTROY TRUE
+	{
 		for (auto it = bullets.begin(); it != bullets.end();)
 			if ((*it)->getDestroy())	it = bullets.erase(it);
-			else					++it;
+			else						++it;
 
 		timeToDelete = 0;
 	}
@@ -543,32 +543,53 @@ void GameScene::animateWin()
 
 bool GameScene::changeOfRoom()
 {
-	for (Ball* ball : balls) { 
-		room_old = room;
+	Ball* ball;
+	
+	for (auto it = balls.begin(); it != balls.end();) {
 
-		if (ball->getPosition().y / 8 > 48) {
-			room = 1;
-			menuMap->setRoom(room);
-		}
-		else if (ball->getPosition().y / 8 > 24) {
-			room = 2;
-			menuMap->setRoom(room);
-		}
-		else {
-			room = 3;
-			menuMap->setRoom(room);
-		}
+		ball = (*it);
+		int thisBallRoom = -1;
 
-		scrolling = room != room_old;
+		if (ball->getPosition().y / 8 > 48)	thisBallRoom = 1;
+		else if (ball->getPosition().y / 8 > 24)	thisBallRoom = 2;
+		else										thisBallRoom = 3;
 
-		if (scrolling) {
+		// We are jumping to the next Room with this ball
+		if (thisBallRoom > room) {
+
+			room_old = room;
+			room = thisBallRoom;
+			menuMap->setRoom(room);
+
 			this->ball = ball;
 			balls.clear();
 			balls.push_back(this->ball);
+
+			scrolling = true;
 			return true;
 		}
+		// This ball went down. 
+		else if (thisBallRoom < room) {
+
+			//  We must delete it if there exist other ones.
+			if (balls.size() > 1)
+				it = balls.erase(it);
+
+			// We must jump to the previous room otherwise.
+			else
+			{
+				room_old = room;
+				room = thisBallRoom;
+				menuMap->setRoom(room);
+
+				scrolling = true;
+				return true;
+			}
+		}
+		else ++it;
 	}
 
+	scrolling = false;
 	return false;
 }
 
