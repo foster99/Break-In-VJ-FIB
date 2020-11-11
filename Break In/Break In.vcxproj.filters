@@ -341,5 +341,8 @@
     <Image Include="images\godMode.png">
       <Filter>Resource Files\images\sprites</Filter>
     </Image>
+    <Image Include="images\boss.png">
+      <Filter>Resource Files\images\sprites</Filter>
+    </Image>
   </ItemGroup>
 </Project>

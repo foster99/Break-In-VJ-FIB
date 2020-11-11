@@ -101,6 +101,7 @@
     <Image Include="images\balls.png" />
     <Image Include="images\bars.png" />
     <Image Include="images\bonus.png" />
+    <Image Include="images\boss.png" />
     <Image Include="images\bullet.png" />
     <Image Include="images\chars.png" />
     <Image Include="images\credits_screen.png" />
