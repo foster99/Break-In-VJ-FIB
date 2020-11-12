@@ -274,6 +274,12 @@
     <Media Include="sounds\hit.wav">
       <Filter>Resource Files\sound</Filter>
     </Media>
+    <Media Include="sounds\tracking_sound.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\spray.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <Text Include="levels\menu.txt">

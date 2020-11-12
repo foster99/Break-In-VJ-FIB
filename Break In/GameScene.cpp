@@ -323,6 +323,8 @@ void GameScene::update(int deltaTime) {
 				boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES* map->getTileSize(), (INIT_PLAYER_Y_TILES - 19)* map->getTileSize()));
 			}
 		if (boss->getPlayerGuard()) {
+			if (player->getBonus() != Bonus::twix)
+				Game::instance().playSpraySound();
 			player->setBonus(Bonus::twix);
 			boss->setPlayerGuard(false);
 		}

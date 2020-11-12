@@ -216,6 +216,7 @@ bool Boss::update(int deltaTime)
 			case SLEEP: break;
 			case TRACKING:
 				actTracking += deltaTime;
+				Game::instance().playTrackingSound();
 				if (actTracking < trackingTime) {
 					nextAnimation();
 					spdModifierX = 0.f;
@@ -223,12 +224,14 @@ bool Boss::update(int deltaTime)
 					//speed = 0;
 				}
 				else {
+					Game::instance().stopTrackingSound();
 					trackPlayerPosition();
 					hunterMode = MOVING;
 					status = FIRE;
 				}
 				break;
 			case MOVING:
+				Game::instance().stopTrackingSound();
 				if (arrivedTargetPos()) {
 					actTracking = 0;
 					hunterMode = TRACKING;
@@ -247,6 +250,7 @@ bool Boss::update(int deltaTime)
 		}
 	}
 	else {								// END BOSS FIGHT
+		Game::instance().stopTrackingSound();
 		alive = false;
 	}
 
@@ -259,6 +263,7 @@ bool Boss::update(int deltaTime)
 	case BROKENSHIELD:	sprite->changeAnimation(13);	break;
 	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBoss.x), float(tileMapDispl.y + posBoss.y)));
+
 
 	return collisionWithPlayer();
 }
@@ -399,21 +404,24 @@ bool Boss::arrivedTargetPos()
 
 void Boss::takeDamage(int hp, int source)
 {
-	if (status == Boss::SHIELD || status == Boss::BROKENSHIELD || status == Boss::FIRE)
+	
+	switch (status)
 	{
+	case Boss::SHIELD:
+	case Boss::BROKENSHIELD:
 		Game::instance().playShieldSound();
-		return;
-	}
-	healthPoints -= hp;
-	if (healthPoints < 0)
-		healthPoints = 0;
-	hitted = true;
-	Game::instance().playBossHitSound();
-}
 
-bool Boss::checkCollision()
-{
-	return false;
+	case Boss::FIRE:
+		return;
+
+	default:
+		Game::instance().playBossHitSound();
+
+		healthPoints -= hp;
+		if (healthPoints < 0)	healthPoints = 0;
+		
+		hitted = true;
+	}
 }
 
 bool Boss::collisionWithPlayer() {

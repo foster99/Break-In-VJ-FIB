@@ -70,14 +70,17 @@ public:
 	void playBossHitSound();
 	void playBombSound();
 	void playShieldSound();
+	void playSpraySound();
 
 	void playAlarmSound();
+	void playTrackingSound();
 	void playTitleSong();
 	void playGameOverSong();
 	void playWinSong();
 	void playBossSong();
 
 	void stopAlarmSound();
+	void stopTrackingSound();
 	void stopTitleSong();
 	void stopGameOverSong();
 	void stopWinSong();
@@ -137,6 +140,8 @@ private:
 	Sound bossHit_sound;
 	Sound shield_sound;
 	Sound bomb_sound;
+	Sound spray_sound;
+	Sound tracking_sound;
 	// GameScene Info
 	int bank;
 

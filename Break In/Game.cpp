@@ -41,6 +41,7 @@ void Game::loadSounds()
 {
 	title_song			= Sound("title_song.wav", true);
 	alarm_sound			= Sound("alarm.wav", true);
+	tracking_sound		= Sound("tracking_sound.wav", true);
 	gameover_song		= Sound("gameover.wav", true);
 	win_song			= Sound("win_song.wav", true);
 	boss_song			= Sound("boss_song.wav", true);
@@ -59,6 +60,7 @@ void Game::loadSounds()
 	boss_animation_sound= Sound("boss_animation_sound.wav", false);
 	shield_sound		= Sound("shield.wav", false);
 	bomb_sound			= Sound("bomb.wav", false);
+	spray_sound			= Sound("spray.wav", false);
 }
 
 void Game::loadPoints()
@@ -481,9 +483,19 @@ void Game::playShieldSound()
 	shield_sound.play();
 }
 
+void Game::playSpraySound()
+{
+	spray_sound.play();
+}
+
 void Game::playAlarmSound()
 {
 	alarm_sound.play();
+}
+
+void Game::playTrackingSound()
+{
+	tracking_sound.play();
 }
 
 void Game::playTitleSong()
@@ -538,6 +550,11 @@ void Game::stopAllSongs()
 void Game::stopAlarmSound()
 {
 	alarm_sound.drop();
+}
+
+void Game::stopTrackingSound()
+{
+	tracking_sound.drop();
 }
 
 Mode Game::currMode()
