@@ -160,7 +160,7 @@ bool Slide::onSide(const glm::ivec2& pos, int sizeY) {
 
 bool Slide::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float& modifierY, float& modifierX)
 {
-	int spd = int(speed + abs(modifierY));
+	int spd = int(speed * abs(modifierY));
 	
 	for (int s = 1; s <= spd; ++s) {
 		if ((pos.y + s + size.y) == posSlide.y && onSlide(pos, size.x, modifierY, modifierX)) {

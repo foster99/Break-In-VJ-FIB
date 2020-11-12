@@ -36,10 +36,15 @@ bool Ball::update(int deltaTime, int& collided)
 	bool collisionBoss = false;
 	sprite->changeAnimation(0);
 
-	if (bossFight) {
+	if (bossFight && boss->getHunterMode() != boss->MOVING) {
 		if (collisionBoss = (spdModifierY < 0 && boss->collisionMoveUp(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int)speed, spdModifierY, spdModifierX))) {
 			sprite->changeAnimation(3);
 			spdModifierY *= -1;
+			collided = 2;
+		}
+		else if (collisionBoss = (spdModifierY > 0 && boss->collisionMoveDown(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, (int)speed, spdModifierY, spdModifierX))) {
+			spdModifierY *= -1;
+			sprite->changeAnimation(4);
 			collided = 2;
 		}
 		else if (collisionBoss = (spdModifierX > 0 && boss->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
