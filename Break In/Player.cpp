@@ -75,7 +75,7 @@ int Player::update(int deltaTime)
 		switch (bonus)
 		{
 		case Bonus::multipleBall:
-		case Bonus::none:
+		case Bonus::wall:
 			break;
 
 		case Bonus::twix:

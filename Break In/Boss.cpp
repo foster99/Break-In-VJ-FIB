@@ -100,7 +100,7 @@ bool Boss::update(int deltaTime)
 	if (brickTime > 1000.f)
 	{
 		std::random_device rd;
-		int i = 48 + 7 + (rd() % 6);
+		int i = 48 + 7 + (rd() % 8);
 		int j = 1 + (rd() % 20);
 		map->insertBrick(i, j);
 

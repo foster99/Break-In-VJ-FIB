@@ -133,6 +133,17 @@ void TileMap::insertShield1()
 	insertBrick(i - 1, j - 2);
 	insertBrick(i + 2, j - 2);
 
+	insertBrick(i, j - 4);
+	insertBrick(i + 1, j - 4);
+	insertBrick(i, j + 4);
+	insertBrick(i + 1, j + 4);
+	insertBrick(i - 1, j);
+	insertBrick(i + 2, j);
+	insertBrick(i - 1, j + 4);
+	insertBrick(i + 2, j + 4);
+	insertBrick(i - 1, j - 4);
+	insertBrick(i + 2, j - 4);
+
 }
 
 void TileMap::insertShield2()
@@ -155,6 +166,17 @@ void TileMap::insertShield2()
 	insertBrick(i + 2, j + 2);
 	insertBrick(i - 1, j - 2);
 	insertBrick(i + 2, j - 2);
+
+	insertBrick(i, j - 4);
+	insertBrick(i + 1, j - 4);
+	insertBrick(i, j + 4);
+	insertBrick(i + 1, j + 4);
+	insertBrick(i - 1, j);
+	insertBrick(i + 2, j);
+	insertBrick(i - 1, j + 4);
+	insertBrick(i + 2, j + 4);
+	insertBrick(i - 1, j - 4);
+	insertBrick(i + 2, j - 4);
 }
 
 void TileMap::deleteShield1()
@@ -687,10 +709,13 @@ void TileMap::closeDoor()
 
 void TileMap::closeDeathDoor()
 {
-	for (int i_ = 71, j_ = 0; j_ < mapSize.x; ++j_) {
-		loadTile(Tile::wall, i_, j_);
+	for (int i_ = 71, offset = 8, j_ = offset; j_ < mapSize.x - offset; ++j_) {
+		loadTile(' ', i_, j_);
 	}
 	prepareStaticArrays();
+	for (int i_ = 71, offset = 8, j_ = offset; j_ < mapSize.x - offset; ++j_) {
+		loadTile(Tile::brickLow, i_, j_);
+	}
 }
 
 void TileMap::toggleDeathDoor(bool die)

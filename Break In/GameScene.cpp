@@ -216,11 +216,8 @@ void GameScene::update(int deltaTime) {
 					points += 100;
 					break;
 				case Tile::bomb1:
-					if (bossIsAlive) boss->setShield1(false);
-					break;
-
 				case Tile::bomb2:
-					if (bossIsAlive) boss->setShield2(false);
+					Game::instance().playShieldSound();
 					break;
 				default: break;
 				}
@@ -249,12 +246,14 @@ void GameScene::update(int deltaTime) {
 		case Bonus::doublePoints:
 			break;
 
-		case Bonus::none:
+		case Bonus::wall:
+			if (bossIsAlive) map->closeDeathDoor();
 			break;
 
+		case Bonus::doubleSlide:
+			Game::instance().playDoubleSlideSound();
 		case Bonus::twix:
 		case Bonus::blaster:
-		case Bonus::doubleSlide:
 		case Bonus::magnet:
 			player->setBonus(bonus->getActiveBonus());
 			break;
@@ -910,6 +909,7 @@ void GameScene::restartPlayerBallBank()
 	bonus->setTileMap(map);
 	bonus->setPlayer(player);
 	bonus->setRoom(room);
+	bonus->setBossMode(false);
 	bonus->setPosition(glm::vec2(INIT_BONUS_X_TILES * map->getTileSize(), INIT_BONUS_Y_TILES * map->getTileSize()));
 
 	guardian = new Guardian();
@@ -946,6 +946,7 @@ void GameScene::restartPlayerBallBoss()
 	bonus->setTileMap(map);
 	bonus->setPlayer(player);
 	bonus->setRoom(room);
+	bonus->setBossMode(true);
 	bonus->setPosition(glm::vec2(INIT_BONUS_X_TILES * map->getTileSize(), INIT_BONUS_Y_TILES * map->getTileSize()));
 
 	guardian = new Guardian();
