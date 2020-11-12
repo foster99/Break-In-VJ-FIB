@@ -21,7 +21,7 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	actTracking = 0;
 	healthPoints = 100;
 	shieldDurability = 100;
-	playerGuard = true;
+	playerGuard = false;
 	fase1_status = waiting;
 
 	std::default_random_engine generator;
