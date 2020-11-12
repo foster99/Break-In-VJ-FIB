@@ -29,7 +29,7 @@ bool Bullet::update(int deltaTime, int& collided)
 	bool collisionBoss = false;
 	float mdfY = -1;
 	float mdfX = 0;
-	if (bossFight) {
+	if (bossFight && boss->getHunterMode() != boss->MOVING) {
 		if (collisionBoss = boss->collisionMoveUp(posBullet, sizeBullet, &posBullet.y, (int)speed, mdfY, mdfX))
 			collided = 2;
 	}

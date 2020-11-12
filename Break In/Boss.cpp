@@ -198,7 +198,7 @@ bool Boss::update(int deltaTime)
 			healthPoints = 100;
 			fase3_status = part1;
 		}
-		if (fase3_status == part1) {
+		else if (fase3_status == part1 && healthPoints > 0) {
 			switch (hunterMode) {
 			case SLEEP: break;
 			case TRACKING:
@@ -212,12 +212,14 @@ bool Boss::update(int deltaTime)
 				else {
 					trackPlayerPosition();
 					hunterMode = MOVING;
+					status = FIRE;
 				}
 				break;
 			case MOVING:
 				if (arrivedTargetPos()) {
 					actTracking = 0;
 					hunterMode = TRACKING;
+					status = NORMAL;
 				}
 				else {
 					posBoss.x += speed * spdModifierX;
@@ -226,7 +228,10 @@ bool Boss::update(int deltaTime)
 				break;
 			}
 		}
-		
+		else if (fase3_status = part1 && healthPoints <= 0) {
+			status = STUNED;
+			++fase;
+		}
 	}
 	else {								// END BOSS FIGHT
 		alive = false;
@@ -481,6 +486,19 @@ bool Boss::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, float*
 	for (int s = 1; s <= spd; ++s) {
 		if ((pos.y - s) == ((int) posBoss.y + bossSize.y) && onSlide(pos, size.x, modifierY, modifierX)) {
 			*posI -= s - 1;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Boss::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float& modifierY, float& modifierX)
+{
+	int spd = int(speed * abs(modifierY));
+
+	for (int s = 1; s <= spd; ++s) {
+		if ((pos.y + s + size.y) == ((int)posBoss.y) && onSlide(pos, size.x, modifierY, modifierX)) {
+			*posI += s - 1;
 			return true;
 		}
 	}
