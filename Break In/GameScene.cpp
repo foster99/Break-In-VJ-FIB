@@ -141,6 +141,7 @@ void GameScene::update(int deltaTime) {
 				}
 				else if (collided == BOSS_COLLISION) {
 					boss->takeDamage(5, boss->BALL);
+					boss->setHunterMode(boss->TRACKING);
 				}
 				else {
 					switch (map->ballTileCollision(tile[0], tile[1]))
@@ -190,8 +191,11 @@ void GameScene::update(int deltaTime) {
 		for (Bullet* bullet : bullets) {
 			if (!bullet->getDestroy() && bullet->update(deltaTime,collided)) {
 				glm::ivec2 tile = bullet->getLastCollision();
-				if (collided == BOSS_COLLISION)
-					boss->takeDamage(2,boss->BULLET);
+				if (collided == BOSS_COLLISION) {
+					boss->takeDamage(2, boss->BULLET);
+					boss->setHunterMode(boss->TRACKING);
+				}
+					
 				switch (map->bulletTileCollision(tile[0], tile[1]))
 				{
 
@@ -295,7 +299,11 @@ void GameScene::update(int deltaTime) {
 	// BOSS
 	if (bossIsAlive) {
 		if (boss->update(deltaTime))
-			if (!godMode) playerLosesLife();
+			if (!godMode) {
+				playerLosesLife();
+				boss->setHunterMode(boss->SLEEP);
+				boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES* map->getTileSize(), (INIT_PLAYER_Y_TILES - 19)* map->getTileSize()));
+			}
 	}
 	
 	if (reset)

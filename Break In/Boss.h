@@ -17,6 +17,14 @@ public:
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
 	void setPlayer(Player* p);
+	void setFase(int f);
+	void setStatus(int s);
+	void setHunterMode(int hm);
+
+	void nextAnimation();
+	void trackPlayerPosition();
+	bool arrivedTargetPos();
+
 
 	void takeDamage(int hp, int source);
 	
@@ -39,7 +47,12 @@ public:
 	static constexpr int FIRE			= 2;
 	static constexpr int SHIELD			= 3;
 	static constexpr int BROKENSHIELD	= 4;
+	
+	static constexpr int SLEEP			= 0;
+	static constexpr int TRACKING		= 1;
+	static constexpr int MOVING			= 2;
 
+	static constexpr float trackingTime = 1000.f;
 
 private:
 	glm::ivec2 tileMapDispl, bossSize;
@@ -49,17 +62,19 @@ private:
 	TileMap* map;
 	Player* player;
 
+	glm::vec2 targetPos;
+
 	// Speed Control
 	float speed;
-	int spdModifierX;
-	int spdModifierY;
+	float spdModifierX;
+	float spdModifierY;
 	bool movingRight, hitted;
 
 	// Event Control
 	int fase;
 	int bank;
-	int time2Switch, hits2Disable, currentHits, status, healthPoints, shieldDurability;
-	float elapsedTime;
+	int time2Switch, hits2Disable, currentHits, status, healthPoints, shieldDurability, hunterMode;
+	float elapsedTime, actTracking;
 };
 
 #endif

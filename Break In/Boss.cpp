@@ -7,11 +7,13 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	speed = 2;
 	spdModifierX = 1;
 	spdModifierY = 1;
-	fase = 1;
+	fase = 3;
 	movingRight = true;
 	tileMapDispl = tileMapPos;
 
 	status = NORMAL;
+	hunterMode = SLEEP;
+	actTracking = 0;
 	healthPoints = 100;
 	shieldDurability = 100;
 
@@ -57,44 +59,68 @@ bool Boss::update(int deltaTime)
 	int mapX = map->getMapSizeX();
 	int tileSize = map->getTileSize();
 	elapsedTime += deltaTime;
-	if (elapsedTime > time2Switch) {
-		elapsedTime = 0;
 		
-		std::default_random_engine generator;
-		std::uniform_int_distribution<int> rand(1000, 3000);
-		time2Switch = rand(generator);
-
-		movingRight = !movingRight;
-	}
-
-	if (movingRight) {
-		if ((posBoss.x + bossSize.x) < ((mapX - 2) * tileSize))
-			posBoss += glm::vec2(speed, 0);
-		else
-			movingRight = !movingRight;
-	}
-	else {
-		if (posBoss.x > (tileSize*2))
-			posBoss -= glm::vec2(speed, 0);
-		else
-			movingRight = !movingRight;
-	}
-	
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBoss.x), float(tileMapDispl.y + posBoss.y)));
-	
 	// FASE 1
 	if (fase == 1) {					// FASE 1
+		if (elapsedTime > time2Switch) {
+			elapsedTime = 0;
 
+			std::default_random_engine generator;
+			std::uniform_int_distribution<int> rand(1000, 3000);
+			time2Switch = rand(generator);
+
+			movingRight = !movingRight;
+		}
+
+		if (movingRight) {
+			if ((posBoss.x + bossSize.x) < ((mapX - 2) * tileSize))
+				posBoss += glm::vec2(speed, 0);
+			else
+				movingRight = !movingRight;
+		}
+		else {
+			if (posBoss.x > (tileSize * 2))
+				posBoss -= glm::vec2(speed, 0);
+			else
+				movingRight = !movingRight;
+		}
 	}
 	else if (bank > 1 && fase == 2) {	// FASE 2
 
 	}
-	else if (bank > 2 && fase == 3) {	// FASE 3
-
+	//bank > 2 && fase == 3
+	else if (fase == 3) {	// FASE 3
+		switch (hunterMode) {
+			case SLEEP: break;
+				break;
+			case TRACKING:
+				actTracking += deltaTime;
+				if (actTracking < trackingTime) {
+					nextAnimation();
+				}
+				else {
+					trackPlayerPosition();
+					hunterMode = MOVING;
+				}
+				break;
+			case MOVING:
+				if (arrivedTargetPos()) {
+					actTracking = 0;
+					hunterMode = TRACKING;
+				}
+				else {
+					posBoss.x += speed * spdModifierX;
+					posBoss.y += speed * spdModifierY;
+				}
+				break;
+		}
 	}
 	else {								// END BOSS FIGHT
 
 	}
+	
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBoss.x), float(tileMapDispl.y + posBoss.y)));
+
 	
 	return collisionWithPlayer();
 }
@@ -119,12 +145,47 @@ void Boss::setPlayer(Player* p)
 	player = p;
 }
 
+void Boss::setFase(int f)
+{
+	fase = f;
+}
+
+void Boss::setStatus(int s)
+{
+	status = s;
+}
+
+void Boss::setHunterMode(int hm)
+{
+	hunterMode = hm;
+}
+
+void Boss::nextAnimation()
+{
+	
+}
+
+void Boss::trackPlayerPosition()
+{
+	targetPos = player->getPosition();
+
+	glm::vec2 V = glm::normalize(targetPos - posBoss);
+	spdModifierX = V.x;
+	spdModifierY = V.y;
+}
+
+bool Boss::arrivedTargetPos()
+{
+	return glm::length(targetPos - posBoss) < 8;
+}
+
 void Boss::takeDamage(int hp, int source)
 {
 	healthPoints -= hp;
 	if (healthPoints <= 0)
 		sprite->changeAnimation(5);
 	hitted = true;
+
 	Game::instance().playBossHitSound();
 }
 
