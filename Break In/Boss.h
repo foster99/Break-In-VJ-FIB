@@ -13,13 +13,13 @@ public:
 	bool update(int deltaTime);
 	void render(glm::mat4& displacement_mat);
 
-
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
 	void setPlayer(Player* p);
 	void setFase(int f);
 	void setStatus(int s);
 	void setHunterMode(int hm);
+	void setBank(int b);
 
 	void nextAnimation();
 	void trackPlayerPosition();

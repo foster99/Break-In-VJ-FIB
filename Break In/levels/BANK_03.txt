@@ -32,26 +32,26 @@ TILEMAP
 ********DDDDDDDD********
 *                      *
 *                      *
+*   ****        ****   *
 *                      *
 *                      *
 *                      *
-*                      *
-*   GGGG        GGGG   *
-* GGKKRR  GGGG  RRRR   *
-* GGKKRR  BBBB  RRYYGG *
-*   YYRR  YYYY  RRYYGG *
-*   YYYY        YYYY   *
-*   BBBB        BBBB   *
-*     GG          GG   *
-*                      *
-*                      *
-*                      *
-*                      *
+*   LLLL *    * LLLL   *
+*   BBBB *    * BBBB   *
+*   RRRR *    * RRRR   *
+*   YYRR *    * RRKK   *
+*   YYRR *    * RRKK   *
+*   RRRR *    * RRRR   *
+*     GG *    * RRRR   *
+*   GGYY *    * YYGG   *
+* GGYYGGYY    YYGGYYGG *
+*   GGYY        YYGG   *
 *                      *
 *                      *
 *                      *
-*                      *
-*                      *
+* RRRRRR        RRRRRR *
+* YYYYYY        YYYYYY *
+* RRRRRR        RRRRRR *
 ********        ********
 ********DDDDDDDD********
 *                      *

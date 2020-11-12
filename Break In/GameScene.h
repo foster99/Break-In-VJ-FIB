@@ -85,7 +85,7 @@ public:
     void prevRoom();
     void openDoor();
     void closeDoor();
-    void toggleDeathDoor();
+    void toggleDeathDoor(bool die);
     bool inGodMode();
 
     static constexpr float INIT_PLAYER_X_TILES  = 12;

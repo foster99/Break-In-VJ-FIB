@@ -110,11 +110,14 @@ bool Boss::update(int deltaTime)
 		if (fase1_status == part1 && healthPoints > 0) {		// modo normal
 			status = Boss::NORMAL;
 			statusTime = 0.f;
-			if (healthPoints <= 50) fase1_status = part2;
+			if (healthPoints <= 50) {
+				fase1_status = part2;
+				statusTime = 0.f;
+			}
 		}
 		else if (fase1_status == part2 && healthPoints > 0)		// modo stunned
 		{
-			status = Boss::STUNED;		// te stunea
+			status = Boss::FIRE;		// te stunea
 			statusTime += deltaTime;
 			if (statusTime > 4000.f) {	// si llevas 4sec stuned
 				status = Boss::SHIELD;	// te pones escudo
@@ -124,27 +127,34 @@ bool Boss::update(int deltaTime)
 		else if (fase1_status == part3 && healthPoints > 0)		// modo escudo
 		{
 			shield1 = true;
+			shield2 = true;
 			map->insertShield1();
+			map->insertShield2();
 			fase1_status = part4;
 		}
-		else if (fase1_status == part4 && !shield1 && healthPoints > 0)
+		else if (fase1_status == part4 && (!shield1 ^ !shield2) && healthPoints > 0)
 		{
-			status = Boss::NORMAL;
+			status = Boss::BROKENSHIELD;
 			fase1_status = part5;
 		}
-		else if (fase1_status == part5 && healthPoints <= 0)
+		else if (fase1_status == part5 && !shield1 && !shield2 && healthPoints > 0)
+		{
+			status = Boss::NORMAL;
+			fase1_status = part6;
+		}
+		else if (fase1_status == part6 && healthPoints <= 0)
 		{
 			fase1_status = done;
 		}
 		else if (fase1_status == done){
-			fase++;
+ 			fase++;
 		}
 	}
 	else if (bank > 1 && fase == 2) {	// FASE 2
-
+		fase = 3;
 	}
-	//bank > 2 && fase == 3
-	else if (fase == 3) {	// FASE 3
+	else if (bank > 2 && fase == 3) {	// FASE 3
+		map->closeDeathDoor();
 		switch (hunterMode) {
 			case SLEEP: break;
 				break;
@@ -245,6 +255,11 @@ void Boss::setHunterMode(int hm)
 	hunterMode = hm;
 }
 
+void Boss::setBank(int b)
+{
+	bank = b;
+}
+
 void Boss::nextAnimation()
 {
 	
@@ -266,7 +281,7 @@ bool Boss::arrivedTargetPos()
 
 void Boss::takeDamage(int hp, int source)
 {
-	if (status == Boss::SHIELD)
+	if (status == Boss::SHIELD || status == Boss::BROKENSHIELD || status == Boss::FIRE)
 	{
 		Game::instance().playShieldSound();
 		return;
