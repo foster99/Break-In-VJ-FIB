@@ -1,4 +1,6 @@
 #include "Game.h"
+#include <sstream>
+#include <iomanip>
 
 Game::Game() {}
 
@@ -123,8 +125,8 @@ bool Game::update(int deltaTime)
 		}
 		else if (gameScene.getGameOver()) {				// GAMEOVER
 			
-			if (gameScene.getPoints() > max_points)
-				setMaxPoints(gameScene.getPoints());
+			if (gameScene.getMoney() > max_points)
+				setMaxPoints(gameScene.getMoney());
 
 			restartGameScene();
 		}
@@ -391,7 +393,17 @@ bool Game::getSpecialKey(int key) const
 
 void Game::setMaxPoints(int p)
 {
-	if (p > max_points) max_points = p;
+	if (p > max_points)
+	{
+		max_points = p;
+
+		string s = to_string(max_points);
+
+		ofstream myfile;
+		myfile.open("levels/maxpoints.txt");
+		myfile << s;
+		myfile.close();
+	}
 	startMenuScene.setPoints(max_points);
 }
 

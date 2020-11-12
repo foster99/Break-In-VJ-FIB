@@ -86,7 +86,7 @@ void GameScene::update(int deltaTime) {
 		animateGameOver();
 		return;
 	}
-	else if (win)									// GAME OVER, PERO HAY QUE MOSTRAR LA ANIMACION
+	else if (win && greenCardAnimation == finished)	// GAME OVER, PERO HAY QUE MOSTRAR LA ANIMACION
 	{							
 		auxTime += deltaTime;
 		animateWin();
@@ -219,6 +219,7 @@ void GameScene::update(int deltaTime) {
 				case Tile::bomb2:
 					Game::instance().playShieldSound();
 					break;
+
 				default: break;
 				}
 				bullet->setDestroy();
@@ -329,8 +330,13 @@ void GameScene::update(int deltaTime) {
 	if (goBossAnimation == starts)
 		setGoBoss(!map->moneyLeft());
 
-	if (goBossAnimation == finished)
-		setWin(!bossIsAlive);
+	if (goBossAnimation == finished) {
+		if (!bossIsAlive) {
+
+			takeGreenCard();
+			if (points > 0) setWin(!bossIsAlive);
+		}
+	}
 
 	restarted = false;
 }

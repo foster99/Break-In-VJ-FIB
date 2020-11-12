@@ -631,9 +631,6 @@ char TileMap::bulletTileCollision(int i, int j)
 		openDoor();
 		deleteSpecialTile(i, j, tile);
 		break;
-	case outCard:
-		deleteSpecialTile(i, j, tile);
-		break;
 
 	default:
 		break;
