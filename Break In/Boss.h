@@ -39,21 +39,16 @@ public:
 	void setShield1(bool s);
 	void setShield2(bool s);
 
-
 	bool isAlive();
 	void takeDamage(int hp, int source);
 	
 	bool onSlide(const glm::ivec2& pos, int sizeX, float& modifierY, float& modifierX);
 	bool onSide(const glm::ivec2& pos, int sizeY);
 
-	bool checkCollision();
 	bool collisionWithPlayer();
-
-
 	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed);
 	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, float* posJ, int speed);
 	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float& modifierY, float& modifierX);
-
 	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float& modifierY, float& modifierX);
 
 	static constexpr int BALL = 0;
