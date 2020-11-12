@@ -22,6 +22,7 @@ public:
 	void setPosition(const glm::vec2& pos);
 	void setPlayer(Player* p);
 	void setRoom(int r);
+	void setBossMode(bool m);
 
 	// Modifiers
 	void changeModifierX(float value);
@@ -38,7 +39,7 @@ public:
 	static constexpr int doubleSlide	= 2;
 	static constexpr int magnet			= 3;
 	static constexpr int doublePoints	= 4;
-	static constexpr int none			= 5;
+	static constexpr int wall			= 5;
 	static constexpr int twix			= 6;
 
 	static constexpr float bonusDelayTime		=  1000.f;
@@ -57,7 +58,8 @@ private:
 	int room;
 	int sizeBonus;
 	int activeBonus;
-	
+	bool bossMode;
+
 	// Time Control
 	float bonusTime;
 	float bonusTypeTime;

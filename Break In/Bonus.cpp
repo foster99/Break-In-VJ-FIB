@@ -11,6 +11,7 @@ void Bonus::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	activeBonus = blaster; 
 	bonusTime = 0.f;
 	tileMapDispl = tileMapPos;
+	bossMode = false;
 
 	// SPRITE AND TEXTURE SET-UP
 	tex.loadFromFile("images/bonus.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -22,9 +23,8 @@ void Bonus::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(doubleSlide,	glm::vec2(2.f / 6.f, 0.f));
 	sprite->addKeyframe(magnet,			glm::vec2(3.f / 6.f, 0.f));
 	sprite->addKeyframe(doublePoints,	glm::vec2(4.f / 6.f, 0.f));
-	sprite->addKeyframe(none,			glm::vec2(4.f / 6.f, 0.f));
+	sprite->addKeyframe(wall,			glm::vec2(5.f / 6.f, 0.f));
 
-	//sprite->addKeyframe(6 + multipleBall,	glm::vec2(0.f / 6.f, 1.f / 2.f));
 	//sprite->addKeyframe(6 + blaster,		glm::vec2(1.f / 6.f, 1.f / 2.f));
 	//sprite->addKeyframe(6 + doubleSlide,	glm::vec2(2.f / 6.f, 1.f / 2.f));
 	//sprite->addKeyframe(6 + magnet,			glm::vec2(3.f / 6.f, 1.f / 2.f));
@@ -54,9 +54,19 @@ bool Bonus::update(int deltaTime)
 	// MODIFICATE BONUS TYPE
 	bonusTypeTime += deltaTime;
 	if (bonusTypeTime > 3000) {
-		bonusTypeTime = 0;
-		activeBonus = (++activeBonus) % 6;
-		sprite->changeAnimation(activeBonus);
+		if (!bossMode)
+		{
+			bonusTypeTime = 0;
+			activeBonus = (++activeBonus) % 4;
+			sprite->changeAnimation(activeBonus);
+		}
+		else if (bossMode)
+		{
+			if (activeBonus == Bonus::blaster)	activeBonus = Bonus::wall;
+			else								activeBonus = Bonus::blaster;
+			sprite->changeAnimation(activeBonus);
+			bonusTypeTime = 0;
+		}
 	}
 
 	// CHECK COLLISION WITH WALLS
@@ -138,6 +148,11 @@ void Bonus::setPlayer(Player* p)
 void Bonus::setRoom(int r)
 {
 	room = r;
+}
+
+void Bonus::setBossMode(bool m)
+{
+	bossMode = m;
 }
 
 void Bonus::restartTime()
