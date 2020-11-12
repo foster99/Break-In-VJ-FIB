@@ -21,7 +21,7 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	actTracking = 0;
 	healthPoints = 100;
 	shieldDurability = 100;
-
+	playerGuard = true;
 	fase1_status = waiting;
 
 	std::default_random_engine generator;
@@ -178,7 +178,8 @@ bool Boss::update(int deltaTime)
 		}
 		else if (fase2_status == part2 && healthPoints > 0) {
 			for (Guardian* guard : guardians) {
- 				guard->update(deltaTime);
+				if (guard->update(deltaTime))
+					playerGuard = true;
 			}
 		}
 		else if (fase2_status == part2 && healthPoints <= 0) {
@@ -322,6 +323,16 @@ void Boss::setBank(int b)
 int Boss::getHunterMode()
 {
 	return hunterMode;
+}
+
+bool Boss::getPlayerGuard()
+{
+	return playerGuard;
+}
+
+void Boss::tooglePlayerGuard()
+{
+	playerGuard = !playerGuard;
 }
 
 void Boss::nextAnimation()

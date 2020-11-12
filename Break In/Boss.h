@@ -24,8 +24,9 @@ public:
 	void setBank(int b);
 
 	int getHunterMode();
-	
+	bool getPlayerGuard();
 
+	void tooglePlayerGuard();
 	void nextAnimation();
 	void trackPlayerPosition();
 	void createNewGuardian(int i, int j);
@@ -96,7 +97,7 @@ private:
 	float speed;
 	float spdModifierX;
 	float spdModifierY;
-	bool movingRight, hitted;
+	bool movingRight, hitted, playerGuard;
 	bool movingX, movingY;
 
 	// Event Control

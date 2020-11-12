@@ -20,6 +20,7 @@ public:
 	void changeModifierX(float value);
 	void changeModifierY(float value);
 	int getRoom();
+	bool getBossFight();
 	void setRoom(int r);
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
