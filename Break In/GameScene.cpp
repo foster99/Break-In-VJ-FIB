@@ -36,6 +36,7 @@ void GameScene::init() {
 	restarted = false;
 	alive = true;
 	gameOver = false;
+	goBoss = false;
 	gameOverAnimation = starts;
 	win = false;
 	winAnimation = starts;
@@ -906,6 +907,7 @@ void GameScene::startBoss()
 
 	weMustCreateTheBoss = true;
 	bossIsAlive = true;
+	goBoss = false;
 	restartPlayerBallBoss();
 }
 
