@@ -156,42 +156,54 @@ bool Boss::update(int deltaTime)
 			fase2_status = waiting;
 		}
 	}
-	else if (bank > 1 && fase == 2) {	// FASE 2
-		if (fase2_status == waiting) {
+	else if (bank > 1 && fase == 2)		// FASE 2
+	{
+		if (fase2_status == waiting)	// incializacion fase2
+		{
 			healthPoints = 100;
 			status = FIRE;
-			numberGuardians = 0;
 			elapsedTime = 0.f;
 			fase2_status = part1;
 		}
-		else if (fase2_status == part1) {
+		else if (fase2_status == part1)	// creacion de guardianes
+		{
 			elapsedTime = 0.f;
-			if (numberGuardians == 0)
-				createNewGuardian(2, 52);
-			else if (numberGuardians == 1)
-				createNewGuardian(18, 52);
-			else {
-				fase2_status = part2;
-				status = NORMAL;
+			numberGuardians = 0;
+			guardians.clear();
+			fase2_status = part2;
+		}
+		else if (fase2_status == part2)
+		{
+			if (elapsedTime > createGuardianDelay)
+			{
+				elapsedTime = 0;
+				     if (numberGuardians == 0)	createNewGuardian(2, 52);
+				else if (numberGuardians == 1)	createNewGuardian(18, 52);
+				else
+				{
+					status = NORMAL;
+					fase2_status = part3;
+				}
 			}
-				
 		}
-		else if (fase2_status == part2 && healthPoints > 0) {
-			for (Guardian* guard : guardians) {
-				if (guard->update(deltaTime))
-					playerGuard = true;
+		else if (fase2_status == part3)
+		{
+			if (healthPoints > 0)
+			{
+				for (Guardian* guard : guardians)
+					if (guard->update(deltaTime))
+						playerGuard = true;
+			}
+			else
+			{
+				fase2_status = done;
+				status = STUNED;
 			}
 		}
-		else if (fase2_status == part2 && healthPoints <= 0) {
-			fase2_status = done;
-			status = STUNED;
-		}
-		else if (fase1_status == done) {
+		else if (fase2_status == done) {
 			fase++;
 			fase3_status = waiting;
 		}
-
-		
 	}
 	else if (bank > 2 && fase == 3) {	// FASE 3
 		if (fase3_status == waiting) {
@@ -320,6 +332,16 @@ void Boss::setBank(int b)
 	bank = b;
 }
 
+int Boss::getFase()
+{
+	return fase;
+}
+
+void Boss::setFase2Status(int f)
+{
+	fase2_status = f;
+}
+
 int Boss::getHunterMode()
 {
 	return hunterMode;
@@ -333,6 +355,11 @@ bool Boss::getPlayerGuard()
 void Boss::tooglePlayerGuard()
 {
 	playerGuard = !playerGuard;
+}
+
+void Boss::setPlayerGuard(bool b)
+{
+	playerGuard = b;
 }
 
 void Boss::nextAnimation()

@@ -23,10 +23,13 @@ public:
 	void setHunterMode(int hm);
 	void setBank(int b);
 
+	int getFase();
+	void setFase2Status(int f);
 	int getHunterMode();
 	bool getPlayerGuard();
 
 	void tooglePlayerGuard();
+	void setPlayerGuard(bool b);
 	void nextAnimation();
 	void trackPlayerPosition();
 	void createNewGuardian(int i, int j);
@@ -66,7 +69,16 @@ public:
 	static constexpr int MOVING			= 2;
 
 	static constexpr float trackingTime = 1000.f;
-	static constexpr float createGuardian = 1000.f;
+	static constexpr float createGuardianDelay = 1000.f;
+
+	static constexpr int waiting = 0;
+	static constexpr int part1 = 1;
+	static constexpr int part2 = 2;
+	static constexpr int part3 = 3;
+	static constexpr int part4 = 4;
+	static constexpr int part5 = 5;
+	static constexpr int part6 = 6;
+	static constexpr int done = 7;
 
 private:
 	glm::ivec2 tileMapDispl, bossSize;
@@ -79,14 +91,7 @@ private:
 	list<Guardian*> guardians;
 	ShaderProgram prog;
 
-	static constexpr int waiting = 0;
-	static constexpr int part1	= 1;
-	static constexpr int part2	= 2;
-	static constexpr int part3	= 3;
-	static constexpr int part4	= 4;
-	static constexpr int part5	= 5;
-	static constexpr int part6	= 6;
-	static constexpr int done	= 7;
+
 
 	// Fase Control
 	int fase1_status, fase2_status, fase3_status;

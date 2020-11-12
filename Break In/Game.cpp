@@ -84,6 +84,7 @@ void Game::loadPoints()
 void Game::restartGameScene()
 {
 	gameScene.init();
+	bank = 1;
 	gameScene.setBank(bank);
 	gameScene.setRoom(1);
 	gameScene.setMoney(0);
@@ -250,7 +251,8 @@ void Game::keyPressed(int key)
 			//case '8':
 			//case '9':
 				if (!gameScene.inGodMode()) break;
-				gameScene.setBank(lower_key - '0');
+				bank = lower_key - '0';
+				gameScene.setBank(bank);
 				gameScene.startBank();
 				break;
 			case ' ':

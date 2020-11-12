@@ -263,7 +263,7 @@ void GameScene::update(int deltaTime) {
 		Game::instance().playBonusSound();
 	}
 	if (guardian->getRoom() == player->getCurrentRoom()) {
-		if (guardian->update(deltaTime))
+		if (!bossIsAlive && guardian->update(deltaTime))
 			if (!godMode) {
 				playerLosesLife();
 			}
@@ -323,8 +323,8 @@ void GameScene::update(int deltaTime) {
 				boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES* map->getTileSize(), (INIT_PLAYER_Y_TILES - 19)* map->getTileSize()));
 			}
 		if (boss->getPlayerGuard()) {
-			player->setBonus(6);
-			boss->tooglePlayerGuard();
+			player->setBonus(Bonus::twix);
+			boss->setPlayerGuard(false);
 		}
 	}
 	
@@ -338,7 +338,7 @@ void GameScene::update(int deltaTime) {
 
 	if (goBossAnimation == finished) {
 		if (!bossIsAlive) {
-
+			Game::instance().stopBossSong();
 			takeGreenCard();
 			if (points > 0) setWin(!bossIsAlive);
 		}
@@ -986,6 +986,10 @@ void GameScene::refreshBoss()
 	player->setBonus(1);
 	boss->setPlayer(player);
 	boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 19) * map->getTileSize()));
+
+	if (bank > 1 && boss->getFase() == 2) {
+		boss->setFase2Status(Boss::part1);
+	}
 }
 
 void GameScene::insertBrick(int i, int j)
