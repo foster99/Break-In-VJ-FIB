@@ -28,6 +28,7 @@ public:
 	int getHunterMode();
 	bool getPlayerGuard();
 
+	void resetBullTime();
 	void tooglePlayerGuard();
 	void setPlayerGuard(bool b);
 	void nextAnimation();
@@ -112,7 +113,7 @@ private:
 
 	bool shield1, shield2;
 
-	int time2Switch, hits2Disable, currentHits, status, healthPoints, shieldDurability, hunterMode;
+	int time2Switch, hits2Disable, currentHits, status, healthPoints, shieldDurability, hunterMode, bullTime;
 	float elapsedTime, actTracking;
 	float brickTime;
 	float statusTime;

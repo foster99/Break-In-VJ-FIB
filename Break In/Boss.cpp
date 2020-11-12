@@ -17,12 +17,13 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	shield1 = false;
 	shield2 = false;
 	status = NORMAL;
-	hunterMode = TRACKING;
+	hunterMode = SLEEP;
 	actTracking = 0;
 	healthPoints = 100;
 	shieldDurability = 100;
 	playerGuard = false;
 	fase1_status = waiting;
+	bullTime = 0;
 
 	std::default_random_engine generator;
 	std::uniform_int_distribution<int> rand(1000, 3000);
@@ -213,7 +214,14 @@ bool Boss::update(int deltaTime)
 		}
 		else if (fase3_status == part1 && healthPoints > 0) {
 			switch (hunterMode) {
-			case SLEEP: break;
+			case SLEEP:
+				if (bullTime > 2000.f) {
+					bullTime = 0;
+					hunterMode = TRACKING;
+				}
+				else
+					bullTime += deltaTime;
+				break;
 			case TRACKING:
 				actTracking += deltaTime;
 				if (actTracking < trackingTime) {
@@ -350,6 +358,11 @@ int Boss::getHunterMode()
 bool Boss::getPlayerGuard()
 {
 	return playerGuard;
+}
+
+void Boss::resetBullTime()
+{
+	bullTime = 0;
 }
 
 void Boss::tooglePlayerGuard()

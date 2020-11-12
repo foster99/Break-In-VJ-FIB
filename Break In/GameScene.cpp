@@ -76,7 +76,11 @@ void GameScene::update(int deltaTime) {
 		}
 		alive = !(player->getDeathAnimation());
 
-		     if (alive && bossIsAlive) restartPlayerBallBoss();
+		if (alive && bossIsAlive) {
+			restartPlayerBallBoss();
+			if(boss->getFase() == 3)
+				boss->resetBullTime();
+		}
 		else if (alive)				   restartPlayerBallBank();
 		else       return;
 	}
@@ -319,12 +323,15 @@ void GameScene::update(int deltaTime) {
 		if (boss->update(deltaTime))
 			if (!godMode) {
 				playerLosesLife();
-				boss->setHunterMode(boss->TRACKING);
+				boss->setHunterMode(boss->SLEEP);
+				boss->resetBullTime();
 				boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES* map->getTileSize(), (INIT_PLAYER_Y_TILES - 19)* map->getTileSize()));
 			}
 		if (boss->getPlayerGuard()) {
-			player->setBonus(Bonus::twix);
-			boss->setPlayerGuard(false);
+			if (!godMode) {
+				player->setBonus(Bonus::twix);
+				boss->setPlayerGuard(false);
+			}
 		}
 	}
 	
