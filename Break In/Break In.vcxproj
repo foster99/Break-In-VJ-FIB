@@ -72,6 +72,7 @@
     <Media Include="sounds\alarm.wav" />
     <Media Include="sounds\bell.wav" />
     <Media Include="sounds\blast.wav" />
+    <Media Include="sounds\bomb.wav" />
     <Media Include="sounds\bonus.wav" />
     <Media Include="sounds\boss_animation_sound.wav" />
     <Media Include="sounds\boss_song.wav" />
@@ -79,22 +80,25 @@
     <Media Include="sounds\double_slide.wav" />
     <Media Include="sounds\gameover.wav" />
     <Media Include="sounds\greenCard.wav" />
+    <Media Include="sounds\hit.wav" />
     <Media Include="sounds\lose_live.wav" />
     <Media Include="sounds\moneyBag_01.wav" />
     <Media Include="sounds\moneyBag_02.wav" />
     <Media Include="sounds\moneyBag_03.wav" />
     <Media Include="sounds\player_collision.wav" />
+    <Media Include="sounds\shield.wav" />
     <Media Include="sounds\title_song.wav" />
     <Media Include="sounds\tueeeeeeeeee.wav" />
     <Media Include="sounds\win_song.wav" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="levels\BANK_01_test.txt" />
     <Text Include="levels\BANK_02.txt" />
     <Text Include="levels\BANK_03.txt" />
+    <Text Include="levels\BOSS_01.txt" />
+    <Text Include="levels\BOSS_02.txt" />
+    <Text Include="levels\BOSS_03.txt" />
     <Text Include="levels\menu.txt" />
     <Text Include="levels\BANK_01.txt" />
-    <Text Include="BOSS_01.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\ball.png" />

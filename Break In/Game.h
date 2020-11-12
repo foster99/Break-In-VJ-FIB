@@ -68,6 +68,8 @@ public:
 	void playMoneySound();
 	void playBossAnimationSound();
 	void playBossHitSound();
+	void playBombSound();
+	void playShieldSound();
 
 	void playAlarmSound();
 	void playTitleSong();
@@ -133,7 +135,8 @@ private:
 	Sound greenCard_sound;
 	Sound boss_animation_sound;
 	Sound bossHit_sound;
-
+	Sound shield_sound;
+	Sound bomb_sound;
 	// GameScene Info
 	int bank;
 

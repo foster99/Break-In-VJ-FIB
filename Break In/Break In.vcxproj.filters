@@ -265,6 +265,15 @@
     <Media Include="sounds\boss_animation_sound.wav">
       <Filter>Resource Files\sound</Filter>
     </Media>
+    <Media Include="sounds\bomb.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\shield.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="sounds\hit.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <Text Include="levels\menu.txt">
@@ -276,13 +285,16 @@
     <Text Include="levels\BANK_02.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
-    <Text Include="levels\BANK_01_test.txt">
-      <Filter>Resource Files\levels</Filter>
-    </Text>
     <Text Include="levels\BANK_03.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
-    <Text Include="BOSS_01.txt">
+    <Text Include="levels\BOSS_01.txt">
+      <Filter>Resource Files\levels</Filter>
+    </Text>
+    <Text Include="levels\BOSS_02.txt">
+      <Filter>Resource Files\levels</Filter>
+    </Text>
+    <Text Include="levels\BOSS_03.txt">
       <Filter>Resource Files\levels</Filter>
     </Text>
   </ItemGroup>

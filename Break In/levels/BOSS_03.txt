@@ -56,25 +56,25 @@ TILEMAP
 ********DDDDDDDD********
 *                      *
 *                      *
-* GG                GG *
-* YYGG            GGYY *
-*   YYGG********GGYY   *
-*   YYGG  KKRR  GGYY   *
-*   YYGG  KKRR  GGYY   *
-*   YYGG  HHHH  GGYY   *
-*   YYGG********GGYY   *
 *                      *
 *                      *
 *                      *
-*  *****RRBBBBRR*****  *
+* RRRRRRRRRRRRRRRRRRRR *
 *                      *
-*         ****         *
 *                      *
-* BBRR            RRBB *
-* RRBB            BBRR *
-* BB                BB *
-* RR                RR *
-* YY                YY *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
 *                      *
 ********        ********
 

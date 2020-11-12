@@ -82,6 +82,12 @@ void Tile::loadTile(char tile, int i, int j, int bank, int tileSheetSizeX)
 		type = staticTile;
 		id_2 = 2 * 6 + (j % 2);
 		break;
+	case bomb1:
+	case bomb2:
+		id_1 = 2 * 7 + (i % 2) * 16 + (j % 2);
+		resistance = infinity;
+		type = dynamicTile;
+		break;
 	case wall:
 		id_1 = bank;
 		resistance = infinity;
