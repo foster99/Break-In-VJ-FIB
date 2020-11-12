@@ -1,4 +1,5 @@
 #include "Boss.h"
+#include "Game.h"
 
 void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
@@ -6,6 +7,7 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	speed = 2;
 	spdModifierX = 1;
 	spdModifierY = 1;
+	fase = 1;
 	movingRight = true;
 	tileMapDispl = tileMapPos;
 
@@ -49,6 +51,9 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 bool Boss::update(int deltaTime)
 {
+	// FEATURES
+
+	hitted = false;
 	int mapX = map->getMapSizeX();
 	int tileSize = map->getTileSize();
 	elapsedTime += deltaTime;
@@ -76,6 +81,20 @@ bool Boss::update(int deltaTime)
 	}
 	
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBoss.x), float(tileMapDispl.y + posBoss.y)));
+	
+	// FASE 1
+	if (fase == 1) {					// FASE 1
+
+	}
+	else if (bank > 1 && fase == 2) {	// FASE 2
+
+	}
+	else if (bank > 2 && fase == 3) {	// FASE 3
+
+	}
+	else {								// END BOSS FIGHT
+
+	}
 	
 	return collisionWithPlayer();
 }
@@ -106,6 +125,7 @@ void Boss::takeDamage(int hp, int source)
 	if (healthPoints <= 0)
 		sprite->changeAnimation(5);
 	hitted = true;
+	Game::instance().playBossHitSound();
 }
 
 bool Boss::checkCollision()

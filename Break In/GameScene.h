@@ -25,7 +25,7 @@ public:
     void update(int deltaTime);
     void render();
 
-    void initBoss();
+    void refreshBoss();
     void insertBrick(int i, int j);
 
     void setUpGameOverSprite();
@@ -151,6 +151,7 @@ private:
     int greenCardAnimation;
 
     // Boss Features
+    bool weMustCreateTheBoss;
     bool bossIsAlive;
 
     // Control variables

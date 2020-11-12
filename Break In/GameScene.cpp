@@ -860,6 +860,7 @@ void GameScene::startBoss()
 	menuMap->setPoints(points);
 	menuMap->setLine(" CASUAL ", " PLAYER ");
 
+	weMustCreateTheBoss = true;
 	bossIsAlive = true;
 	restartPlayerBallBoss();
 }
@@ -907,7 +908,7 @@ void GameScene::restartPlayerBallBoss()
 	player->setRoom(room);
 	player->setTileMap(map);
 
-	initBoss();
+	refreshBoss();
 
 	balls.clear();
 	createNewBall(1, -1, glm::vec2(INIT_BALL_X_TILES * map->getTileSize(), INIT_BALL_Y_TILES * map->getTileSize()));
@@ -934,11 +935,14 @@ void GameScene::restartPlayerBallBoss()
 	Game::instance().stopAlarmSound();
 }
 
-void GameScene::initBoss()
+void GameScene::refreshBoss()
 {
-	boss = new Boss();
-	boss->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	boss->setTileMap(map);
+	if (weMustCreateTheBoss) {
+		boss = new Boss();
+		boss->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		boss->setTileMap(map);
+		weMustCreateTheBoss = false;
+	}
 	boss->setPlayer(player);
 	boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 19) * map->getTileSize()));
 }

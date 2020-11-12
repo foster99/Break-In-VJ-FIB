@@ -68,7 +68,6 @@ public:
 	void playMoneySound();
 	void playBossAnimationSound();
 	void playBossHitSound();
-	
 
 	void playAlarmSound();
 	void playTitleSong();

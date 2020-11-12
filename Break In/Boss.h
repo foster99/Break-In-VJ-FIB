@@ -56,6 +56,8 @@ private:
 	bool movingRight, hitted;
 
 	// Event Control
+	int fase;
+	int bank;
 	int time2Switch, hits2Disable, currentHits, status, healthPoints, shieldDurability;
 	float elapsedTime;
 };
