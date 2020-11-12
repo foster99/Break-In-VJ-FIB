@@ -161,10 +161,11 @@ bool Boss::update(int deltaTime)
 			healthPoints = 100;
 			status = FIRE;
 			numberGuardians = 0;
+			elapsedTime = 0.f;
 			fase2_status = part1;
 		}
-		else if (fase2_status = part1 && elapsedTime >= createGuardian) {
-			elapsedTime = 0;
+		else if (fase2_status == part1 && elapsedTime >= createGuardian) {
+			elapsedTime = 0.f;
 			if (numberGuardians == 0)
 				createNewGuardian(2, 52);
 			else if (numberGuardians == 1)
