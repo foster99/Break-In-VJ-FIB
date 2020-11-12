@@ -42,5 +42,7 @@ public:
 	static constexpr char moneyBag = 'M';
 	static constexpr char outCard = 'O';
 	static constexpr char blueSpheres = 'S';
+	static constexpr char bomb1 = '1';
+	static constexpr char bomb2 = '2';
 };
 #endif

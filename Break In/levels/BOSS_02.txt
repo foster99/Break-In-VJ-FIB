@@ -3,23 +3,47 @@ TILEMAP
 8 8 							    -- Tile size & block size
 16 6 								-- Number of tiles in static tilesheet
 16 4 								-- Number of tiles in dynamic tilesheet
-1									-- Bank Number
+2									-- Bank Number
 3									-- Guardian Room
 ************************
 *       BBBBBBBB       *
-*       GGGGGGGG       *
+*       ********       *
 * RRRRRR        RRRRRR *
-* MMCC            CCMM *
-* MMCC            CCMM *
-* MMCCCC        CCCCMM *
-* MMCCCC        CCCCMM *
-* MMMMMM        MMMMMM *
-* MMMMMM  RRRR  MMMMMM *
-****YYYY  YYYY  YYYY****
-****RRRR  RRRR  RRRR****
-* CC              AAOO *
-* CCRR            AAOO *
-* RRRR            RRRR *
+* MMHH            HHMM *
+* MMHH  ********  HHMM *
+* MMHH            HHMM *
+* MMHH            HHMM *
+* HHHHHHHHHHHHHHHHHHHH *
+* GGYYBBGGYYBBGGYYBBGG *
+****YYYY  OOYY  YYYY****
+****RRRR  OORR  RRRR****
+* MMRR            BBMM *
+* MMRR            BBMM *
+* CCRR            BBCC *
+* CCRR            BBCC *
+* MMRR            BBMM *
+* MMRR            BBMM *
+******            ******
+*         YYYY         *
+*                      *
+*                      *
+*                      *
+********        ********
+********DDDDDDDD********
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*   GGGG        GGGG   *
+* GGKKRR  GGGG  RRRR   *
+* GGKKRR  BBBB  RRYYGG *
+*   YYRR  YYYY  RRYYGG *
+*   YYYY        YYYY   *
+*   BBBB        BBBB   *
+*     GG          GG   *
+*                      *
 *                      *
 *                      *
 *                      *
@@ -33,48 +57,24 @@ TILEMAP
 *                      *
 *                      *
 *                      *
-* GGBBBBGGBBBBGGBBBBGG *
 *                      *
-* BB    BB    BB    BB *
-*   GGGG        GGGG   *
-* GGKKRR  GGGG  RRRR   *
-* GGKKRR  BBBB  RRYYGG *
-*   YYRR  YYYY  RRYYGG *
-*   YYYY        YYYY   *
-*   BBBB        BBBB   *
-*     GG          GG   *
+*                      *
+* RRRRRRRRRRRRRRRRRRRR *
 *                      *
 *                      *
 *                      *
-*       ********       *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
+*                      *
 *                      *
 *                      *
 *                      *
 *                      *
 *                      *
 ********        ********
-************************
-*                      *
-*                      *
-*                      *
-*   RRBBBB    BBBBRR   *
-* RR      BBBB      RR *
-* RRRRRRRR    RRRRRRRR *
-* GGGGGGGGBBBBGGGGGGGG *
-* GG                GG *
-* GGGGGGGGBBBBGGGGGGGG *
-* YYYYYYYY    YYYYYYYY *
-* YY      BBBB      YY *
-*   YYBBBB    BBBBYY   *
-*                      *
-*                      *
-*                      *
-*                      *
-*                      *
-* RRRR            RRRR *
-* GG                GG *
-* YYYY            YYYY *
-*                      *
-*                      *
-*******          *******
 

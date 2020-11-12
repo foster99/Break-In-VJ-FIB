@@ -68,7 +68,7 @@ void TileMap::insertBrick(int i_, int j_)
 	int i = i_;
 	int j = (j_ % 2 == 0) ? j_ : j_+ 1;
 
-	if (!(2 <= i && i <= 20 && 1 <= j && j <= 22))	// Excepcion si pintas en un sitio que no toca.
+	if (!(48 + 2 <= i && i <= 48 + 20 && 1 <= j && j <= 22))	// Excepcion si pintas en un sitio que no toca.
 		assert(false);
 
 	if (tileIsSpecial(i, j)) return;
@@ -104,9 +104,79 @@ bool TileMap::tileIsSpecial(int i, int j)
 		case door:
 		case wall:
 		case death:
+		case Tile::bomb1:
+		case Tile::bomb2:
 			return true;
 	}
 	return false;
+}
+
+void TileMap::insertShield1()
+{
+	int i = 48 + 10;
+	int j = 6;
+
+	loadTile('1', i, j);
+	loadTile('1', i, j + 1);
+	loadTile('1', i + 1, j + 1);
+	loadTile('1', i + 1, j);
+
+
+	insertBrick(i, j - 2);
+	insertBrick(i + 1, j - 2);
+	insertBrick(i, j + 2);
+	insertBrick(i + 1, j + 2);
+	insertBrick(i - 1, j);
+	insertBrick(i + 2, j);
+	insertBrick(i - 1, j + 2);
+	insertBrick(i + 2, j + 2);
+	insertBrick(i - 1, j - 2);
+	insertBrick(i + 2, j - 2);
+
+}
+
+void TileMap::insertShield2()
+{
+	int i = 48 + 10;
+	int j = 18;
+
+	loadTile('1', i, j);
+	loadTile('1', i, j + 1);
+	loadTile('1', i + 1, j + 1);
+	loadTile('1', i + 1, j);
+
+	insertBrick(i, j - 2);
+	insertBrick(i + 1, j - 2);
+	insertBrick(i, j + 2);
+	insertBrick(i + 1, j + 2);
+	insertBrick(i - 1, j);
+	insertBrick(i + 2, j);
+	insertBrick(i - 1, j + 2);
+	insertBrick(i + 2, j + 2);
+	insertBrick(i - 1, j - 2);
+	insertBrick(i + 2, j - 2);
+}
+
+void TileMap::deleteShield1()
+{
+	int i = 48 + 10;
+	int j = 6;
+
+	loadTile(' ', i, j);
+	loadTile(' ', i, j + 1);
+	loadTile(' ', i + 1, j + 1);
+	loadTile(' ', i + 1, j);
+}
+
+void TileMap::deleteShield2()
+{
+	int i = 48 + 10;
+	int j = 18;
+
+	loadTile(' ', i, j);
+	loadTile(' ', i, j + 1);
+	loadTile(' ', i + 1, j + 1);
+	loadTile(' ', i + 1, j);
 }
 
 int TileMap::getGuardianRoom()

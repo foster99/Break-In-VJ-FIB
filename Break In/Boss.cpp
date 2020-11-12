@@ -1,5 +1,6 @@
 #include "Boss.h"
 #include "Game.h"
+#include <random>
 
 void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
@@ -7,15 +8,21 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	speed = 2;
 	spdModifierX = 1;
 	spdModifierY = 1;
-	fase = 3;
+	fase = 1;
+	alive = true;
 	movingRight = true;
 	tileMapDispl = tileMapPos;
-
+	brickTime = 0.f;
+	statusTime = 0.f;
+	shield1 = false;
+	shield2 = false;
 	status = NORMAL;
 	hunterMode = SLEEP;
 	actTracking = 0;
 	healthPoints = 100;
 	shieldDurability = 100;
+
+	fase1_status = waiting;
 
 	std::default_random_engine generator;
 	std::uniform_int_distribution<int> rand(1000, 3000);
@@ -59,30 +66,78 @@ bool Boss::update(int deltaTime)
 	int mapX = map->getMapSizeX();
 	int tileSize = map->getTileSize();
 	elapsedTime += deltaTime;
+	if (elapsedTime > time2Switch) {
+		elapsedTime = 0;
 		
-	// FASE 1
-	if (fase == 1) {					// FASE 1
-		if (elapsedTime > time2Switch) {
-			elapsedTime = 0;
+		std::default_random_engine generator;
+		std::uniform_int_distribution<int> rand(1000, 3000);
+		time2Switch = rand(generator);
 
-			std::default_random_engine generator;
-			std::uniform_int_distribution<int> rand(1000, 3000);
-			time2Switch = rand(generator);
+		movingRight = !movingRight;
+	}
 
+	if (movingRight) {
+		if ((posBoss.x + bossSize.x) < ((mapX - 2) * tileSize))
+			posBoss += glm::vec2(speed, 0);
+		else
 			movingRight = !movingRight;
-		}
+	}
+	else {
+		if (posBoss.x > (tileSize*2))
+			posBoss -= glm::vec2(speed, 0);
+		else
+			movingRight = !movingRight;
+	}
+	
+	
+	// RANDOM BRICKS
+	brickTime += deltaTime;
+	if (brickTime > 1000.f)
+	{
+		std::random_device rd;
+		int i = 48 + 7 + (rd() % 6);
+		int j = 1 + (rd() % 20);
+		map->insertBrick(i, j);
 
-		if (movingRight) {
-			if ((posBoss.x + bossSize.x) < ((mapX - 2) * tileSize))
-				posBoss += glm::vec2(speed, 0);
-			else
-				movingRight = !movingRight;
+		brickTime = 0.f;
+	}
+
+
+	if (fase == 1) {	
+
+		if (fase1_status == waiting)	fase1_status = part1;
+
+		if (fase1_status == part1 && healthPoints > 0) {		// modo normal
+			status = Boss::NORMAL;
+			statusTime = 0.f;
+			if (healthPoints <= 50) fase1_status = part2;
 		}
-		else {
-			if (posBoss.x > (tileSize * 2))
-				posBoss -= glm::vec2(speed, 0);
-			else
-				movingRight = !movingRight;
+		else if (fase1_status == part2 && healthPoints > 0)		// modo stunned
+		{
+			status = Boss::STUNED;		// te stunea
+			statusTime += deltaTime;
+			if (statusTime > 4000.f) {	// si llevas 4sec stuned
+				status = Boss::SHIELD;	// te pones escudo
+				fase1_status = part3;
+			}
+		}
+		else if (fase1_status == part3 && healthPoints > 0)		// modo escudo
+		{
+			shield1 = true;
+			map->insertShield1();
+			fase1_status = part4;
+		}
+		else if (fase1_status == part4 && !shield1 && healthPoints > 0)
+		{
+			status = Boss::NORMAL;
+			fase1_status = part5;
+		}
+		else if (fase1_status == part5 && healthPoints <= 0)
+		{
+			fase1_status = done;
+		}
+		else if (fase1_status == done){
+			fase++;
 		}
 	}
 	else if (bank > 1 && fase == 2) {	// FASE 2
@@ -116,12 +171,19 @@ bool Boss::update(int deltaTime)
 		}
 	}
 	else {								// END BOSS FIGHT
-
+		alive = false;
 	}
-	
+
+	switch (status)
+	{
+	case NORMAL:		sprite->changeAnimation(1);		break;
+	case STUNED:		sprite->changeAnimation(4);		break;
+	case FIRE:			sprite->changeAnimation(7);		break;
+	case SHIELD:		sprite->changeAnimation(10);	break;
+	case BROKENSHIELD:	sprite->changeAnimation(13);	break;
+	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBoss.x), float(tileMapDispl.y + posBoss.y)));
 
-	
 	return collisionWithPlayer();
 }
 
@@ -143,6 +205,29 @@ void Boss::setPosition(const glm::vec2& pos)
 void Boss::setPlayer(Player* p)
 {
 	player = p;
+}
+
+void Boss::setShield1(bool s)
+{
+	shield1 = s;
+	if (!s) {
+		Game::instance().playBombSound();
+		map->deleteShield1();
+	}
+}
+
+void Boss::setShield2(bool s)
+{
+	shield2 = s;
+	if (!s) {
+		Game::instance().playBombSound();
+		map->deleteShield2();
+	}
+}
+
+bool Boss::isAlive()
+{
+	return alive;
 }
 
 void Boss::setFase(int f)
@@ -181,11 +266,15 @@ bool Boss::arrivedTargetPos()
 
 void Boss::takeDamage(int hp, int source)
 {
+	if (status == Boss::SHIELD)
+	{
+		Game::instance().playShieldSound();
+		return;
+	}
 	healthPoints -= hp;
-	if (healthPoints <= 0)
-		sprite->changeAnimation(5);
+	if (healthPoints < 0)
+		healthPoints = 0;
 	hitted = true;
-
 	Game::instance().playBossHitSound();
 }
 

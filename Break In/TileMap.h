@@ -31,6 +31,10 @@ public:
 	
 	void insertBrick(int i, int j);
 	bool tileIsSpecial(int i_, int j_);
+	void insertShield1();
+	void insertShield2();
+	void deleteShield1();
+	void deleteShield2();
 
 	int getTileSize() const { return tileSize; }
 	int getMapSizeX() const { return mapSize.x;  }

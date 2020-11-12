@@ -25,7 +25,11 @@ public:
 	void trackPlayerPosition();
 	bool arrivedTargetPos();
 
+	void setShield1(bool s);
+	void setShield2(bool s);
 
+
+	bool isAlive();
 	void takeDamage(int hp, int source);
 	
 	bool onSlide(const glm::ivec2& pos, int sizeX, float& modifierY, float& modifierX);
@@ -62,6 +66,18 @@ private:
 	TileMap* map;
 	Player* player;
 
+	static constexpr int waiting = 0;
+	static constexpr int part1	= 1;
+	static constexpr int part2	= 2;
+	static constexpr int part3	= 3;
+	static constexpr int part4	= 4;
+	static constexpr int part5	= 5;
+	static constexpr int part6	= 6;
+	static constexpr int done	= 7;
+
+	// Fase Control
+	int fase1_status;
+
 	glm::vec2 targetPos;
 
 	// Speed Control
@@ -71,10 +87,16 @@ private:
 	bool movingRight, hitted;
 
 	// Event Control
+	bool alive;
 	int fase;
 	int bank;
+
+	bool shield1, shield2;
+
 	int time2Switch, hits2Disable, currentHits, status, healthPoints, shieldDurability, hunterMode;
 	float elapsedTime, actTracking;
+	float brickTime;
+	float statusTime;
 };
 
 #endif

@@ -53,8 +53,10 @@ void Game::loadSounds()
 	money_sound_02		= Sound("moneyBag_02.wav", false);
 	money_sound_03		= Sound("moneyBag_03.wav", false);
 	greenCard_sound		= Sound("greenCard.wav", false);
-	bossHit_sound		= Sound("tueeeeeeeeee.wav", false);
+	bossHit_sound		= Sound("hit.wav", false);
 	boss_animation_sound= Sound("boss_animation_sound.wav", false);
+	shield_sound		= Sound("shield.wav", false);
+	bomb_sound			= Sound("bomb.wav", false);
 }
 
 void Game::loadPoints()
@@ -460,6 +462,16 @@ void Game::playBossAnimationSound()
 void Game::playBossHitSound()
 {
 	bossHit_sound.play();
+}
+
+void Game::playBombSound()
+{
+	bomb_sound.play();
+}
+
+void Game::playShieldSound()
+{
+	shield_sound.play();
 }
 
 void Game::playAlarmSound()

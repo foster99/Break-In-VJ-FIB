@@ -178,6 +178,14 @@ void GameScene::update(int deltaTime) {
 						guardian->alarmOn();
 						break;
 
+					case Tile::bomb1:
+						if (bossIsAlive) boss->setShield1(false);
+						break;
+
+					case Tile::bomb2:
+						if (bossIsAlive) boss->setShield2(false);
+						break;
+
 					default: break;
 					}
 				}
@@ -206,6 +214,13 @@ void GameScene::update(int deltaTime) {
 				case Tile::brickLow:
 					Game::instance().playBrickSound();
 					points += 100;
+					break;
+				case Tile::bomb1:
+					if (bossIsAlive) boss->setShield1(false);
+					break;
+
+				case Tile::bomb2:
+					if (bossIsAlive) boss->setShield2(false);
 					break;
 				default: break;
 				}
@@ -298,6 +313,7 @@ void GameScene::update(int deltaTime) {
 
 	// BOSS
 	if (bossIsAlive) {
+		bossIsAlive = boss->isAlive();
 		if (boss->update(deltaTime))
 			if (!godMode) {
 				playerLosesLife();
@@ -825,6 +841,8 @@ bool GameScene::checkBallSlide()
 
 void GameScene::startBank()
 {
+	Game::instance().stopBossSong();
+
 	string path;
 	if (bank < 10)	path = "levels/BANK_0" + to_string(bank) + ".txt";
 	else			path = "levels/BANK_"  + to_string(bank) + ".txt";
