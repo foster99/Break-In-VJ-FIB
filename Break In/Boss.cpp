@@ -87,7 +87,7 @@ bool Boss::update(int deltaTime)
 			else
 				movingRight = !movingRight;
 		}
-		else {
+		else { // moving  left
 			if (posBoss.x > (tileSize * 2))
 				posBoss -= glm::vec2(speed, 0);
 			else
@@ -161,10 +161,11 @@ bool Boss::update(int deltaTime)
 			healthPoints = 100;
 			status = FIRE;
 			numberGuardians = 0;
-			elapsedTime = 0;
+			elapsedTime = 0.f;
 			fase2_status = part1;
 		}
 		else if (fase2_status == part1) {
+			elapsedTime = 0.f;
 			if (numberGuardians == 0)
 				createNewGuardian(2, 52);
 			else if (numberGuardians == 1)
@@ -204,6 +205,9 @@ bool Boss::update(int deltaTime)
 				actTracking += deltaTime;
 				if (actTracking < trackingTime) {
 					nextAnimation();
+					spdModifierX = 0.f;
+					spdModifierY = 0.f;
+					//speed = 0;
 				}
 				else {
 					trackPlayerPosition();
@@ -211,8 +215,7 @@ bool Boss::update(int deltaTime)
 				}
 				break;
 			case MOVING:
-				//arrivedTargetPos()
-				if (false) {
+				if (arrivedTargetPos()) {
 					actTracking = 0;
 					hunterMode = TRACKING;
 				}
@@ -328,6 +331,8 @@ void Boss::trackPlayerPosition()
 	glm::vec2 V = glm::normalize(targetPos - posBoss);
 	spdModifierX = V.x;
 	spdModifierY = V.y;
+
+	speed = 2;
 }
 
 void Boss::createNewGuardian(int i, int j)
@@ -417,7 +422,7 @@ bool Boss::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, flo
 
 	for (int spb = 0; spb < speedBoss; ++spb) {
 		for (int s = 1; s <= speedBall2; ++s) {
-			if ((rightLimit + s) == (posBoss.x + spb) && onSide(pos, size.y)) {
+			if ((rightLimit + s) == ((int)posBoss.x + spb) && onSide(pos, size.y)) {
 				*posJ += s - 1;
 				return true;
 			}
@@ -428,7 +433,7 @@ bool Boss::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, flo
 
 	for (int spb = 0; spb >= (-1 * speedBoss); --spb) {
 		for (int s = 1; s <= speedBall2; ++s) {
-			if ((rightLimit + s) == (posBoss.x + spb) && onSide(pos, size.y)) {
+			if ((rightLimit + s) == ((int)posBoss.x + spb) && onSide(pos, size.y)) {
 				*posJ += s - 1;
 				return true;
 			}
@@ -446,7 +451,7 @@ bool Boss::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, floa
 
 	for (int spb = 0; spb < speedBoss; ++spb) {
 		for (int s = 1; s <= speedBall2; ++s) {
-			if (leftLimit == (posBoss.x + bossSize.x + spb) && onSide(pos, size.y)) {
+			if (leftLimit == ((int)posBoss.x + bossSize.x + spb) && onSide(pos, size.y)) {
 				*posJ -= s - 1;
 				return true;
 			}
@@ -457,7 +462,7 @@ bool Boss::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, floa
 
 	for (int spb = 0; spb >= (-1 * speedBoss); --spb) {
 		for (int s = 1; s <= speedBall2; ++s) {
-			if (leftLimit == (posBoss.x + bossSize.x + spb) && onSide(pos, size.y)) {
+			if (leftLimit == ((int) posBoss.x + bossSize.x + spb) && onSide(pos, size.y)) {
 				*posJ -= s - 1;
 				return true;
 			}
@@ -474,7 +479,7 @@ bool Boss::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, float*
 	int spd = int(speed * abs(modifierY));
 
 	for (int s = 1; s <= spd; ++s) {
-		if ((pos.y - s) == (posBoss.y + bossSize.y) && onSlide(pos, size.x, modifierY, modifierX)) {
+		if ((pos.y - s) == ((int) posBoss.y + bossSize.y) && onSlide(pos, size.x, modifierY, modifierX)) {
 			*posI -= s - 1;
 			return true;
 		}

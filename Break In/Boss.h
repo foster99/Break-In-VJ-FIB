@@ -95,6 +95,7 @@ private:
 	float spdModifierX;
 	float spdModifierY;
 	bool movingRight, hitted;
+	bool movingX, movingY;
 
 	// Event Control
 	bool alive;
