@@ -32,6 +32,7 @@ public:
     void setUpWinSprite();
     void setUpGreenCardSprite();
     void setUpGoBossSprite();
+    void setUpEndGameSprite();
 
     void startBank();
     void startBoss();
@@ -43,10 +44,15 @@ public:
     void animateGameOver();
     void animateWin();
     void animateGoBoss();
+    void animateEndGame();
+    void setEndGame(bool e);
 
     bool getGameOver();
     bool getWin();
     bool getGoBoss();
+
+    bool endAnimationIsActive();
+
 
     int getBank();
     int getRoom();
@@ -145,6 +151,12 @@ private:
     Texture godModeTex;
     Sprite* godModeSprite;
     
+    // END GAME
+    Texture endGameTex;
+    Sprite* endGameSprite;
+    bool endGame;
+    int endGameAnimation;
+
     // GreenCard
     Texture greenCardTex;
     Sprite* greenCardSprite;

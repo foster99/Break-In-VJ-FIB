@@ -365,5 +365,8 @@
     <Image Include="images\boss_animation.png">
       <Filter>Resource Files\images</Filter>
     </Image>
+    <Image Include="images\end_title.png">
+      <Filter>Resource Files\images</Filter>
+    </Image>
   </ItemGroup>
 </Project>

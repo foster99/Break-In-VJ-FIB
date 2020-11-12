@@ -55,6 +55,12 @@ void GameScene::init() {
 void GameScene::update(int deltaTime) {
 
 	this->Scene::update(deltaTime);
+	
+	if (endGame) {
+		auxTime += deltaTime;
+		animateEndGame();
+		return;
+	}
 
 	toggleDeathDoor(!godMode);
 
@@ -419,6 +425,12 @@ void GameScene::render()
 		goBossSprite->changeAnimation(0);
 		goBossSprite->render(glm::mat4(1));
 	}
+
+	if (endGame && endGameAnimation == starts)
+	{
+		endGameSprite->changeAnimation(0);
+		endGameSprite->render(glm::mat4(1));
+	}
 }
 
 void GameScene::setUpGameOverSprite()
@@ -513,6 +525,17 @@ void GameScene::setUpGoBossSprite()
 	goBossSprite->setPosition(glm::vec2(0));
 
 	Game::instance().playBossAnimationSound();
+}
+
+void GameScene::setUpEndGameSprite()
+{
+	// SPRITE AND TEXTURE SET-UP
+	endGameTex.loadFromFile("images/end_title.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	endGameSprite = Sprite::createSprite(glm::ivec2(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT), glm::vec2(1.f, 1.f), &endGameTex, &texProgram);
+	endGameSprite->setNumberAnimations(1);
+	endGameSprite->addKeyframe(0, glm::vec2(0.f));
+	endGameSprite->changeAnimation(0);
+	endGameSprite->setPosition(glm::vec2(0));
 }
 
 void GameScene::toogleChangeBar()
@@ -705,6 +728,33 @@ void GameScene::animateGoBoss()
 	Game::instance().playBossSong();
 
 	return;
+}
+
+void GameScene::animateEndGame()
+{
+	static constexpr float initial_wait_time = 3000.f;
+	static constexpr float wait_time = 14000.f;
+
+	float time_to_wait = 0.f;
+	Game::instance().stopAlarmSound();
+	Game::instance().stopBossSong();
+	
+	time_to_wait += initial_wait_time;
+	if (auxTime < time_to_wait) return;
+	Game::instance().playEndGameSong();
+
+	time_to_wait += wait_time;
+	if (auxTime < time_to_wait) return;
+	Game::instance().stopEndGameSong();
+
+	endGameAnimation = finished;
+
+	return;
+}
+
+void GameScene::setEndGame(bool e)
+{
+	endGame = e;
 }
 
 void GameScene::takeGreenCard()
@@ -1023,6 +1073,11 @@ bool GameScene::getWin()
 bool GameScene::getGoBoss()
 {
 	return (goBossAnimation == finished) && goBoss;
+}
+
+bool GameScene::endAnimationIsActive()
+{
+	return endGameAnimation != finished;
 }
 
 int GameScene::getBank()

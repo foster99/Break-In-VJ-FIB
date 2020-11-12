@@ -78,6 +78,7 @@ public:
 	void playGameOverSong();
 	void playWinSong();
 	void playBossSong();
+	void playEndGameSong();
 
 	void stopAlarmSound();
 	void stopTrackingSound();
@@ -85,6 +86,7 @@ public:
 	void stopGameOverSong();
 	void stopWinSong();
 	void stopBossSong();
+	void stopEndGameSong();
 	void stopAllSongs();
 
 	// Different Modes
@@ -120,6 +122,7 @@ private:
 	
 	// Looped Sounds
 	Sound title_song;
+	Sound end_song;
 	Sound gameover_song;
 	Sound win_song;
 	Sound boss_song;

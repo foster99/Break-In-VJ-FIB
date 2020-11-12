@@ -45,6 +45,7 @@ void Game::loadSounds()
 	gameover_song		= Sound("gameover.wav", true);
 	win_song			= Sound("win_song.wav", true);
 	boss_song			= Sound("boss_song.wav", true);
+	end_song			= Sound("endSong.wav", true);
 
 	slide_sound			= Sound("player_collision.wav", false);
 	brick_sound			= Sound("brick_collision.wav", false);
@@ -112,13 +113,27 @@ bool Game::update(int deltaTime)
 		if (gameScene.getWin()) {						// WIN
 
 			// run animation salu2
-			if (bank == 3)	bank = 1;
-			else			bank++;
-			
-			gameScene.setBank(bank);
-			gameScene.setPoints(0);
-			gameScene.startBank();
-			gameScene.setWin(false);
+			if (bank == 3) {
+				gameScene.setEndGame(true);
+				gameScene.update(deltaTime);
+
+				if (gameScene.endAnimationIsActive())
+				{
+					bank = 1;
+					gameScene.setBank(bank);
+					gameScene.setPoints(0);
+					gameScene.startBank();
+					gameScene.setEndGame(false);
+					gameScene.setWin(false);
+				}
+			}
+			else {
+				bank++;
+				gameScene.setBank(bank);
+				gameScene.setPoints(0);
+				gameScene.startBank();
+				gameScene.setWin(false);
+			}
 		}
 		if (gameScene.getGoBoss())						// WIN
 		{						
@@ -523,6 +538,11 @@ void Game::playBossSong()
 	boss_song.play();
 }
 
+void Game::playEndGameSong()
+{
+	end_song.play();
+}
+
 void Game::stopGameOverSong()
 {
 	gameover_song.drop();
@@ -536,6 +556,11 @@ void Game::stopWinSong()
 void Game::stopBossSong()
 {
 	boss_song.drop();
+}
+
+void Game::stopEndGameSong()
+{
+	end_song.drop();
 }
 
 void Game::stopAllSongs()
