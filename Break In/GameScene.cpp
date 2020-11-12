@@ -50,6 +50,8 @@ void GameScene::init() {
 	godModeSprite->addKeyframe(0, glm::vec2(0.f));
 	godModeSprite->changeAnimation(0);
 	godModeSprite->setPosition(glm::vec2(24.f * 8.f + 3.f, 9.f * 8.f - 2.f));
+
+	setUpEndGameSprite();
 }
 
 void GameScene::update(int deltaTime) {
@@ -402,7 +404,7 @@ void GameScene::render()
 		greenCardSprite->render(glm::mat4(1));
 	}
 
-	if (winAnimation >= 0)
+	if (!endGame && winAnimation >= 0)
 	{
 		winSprite->changeAnimation(0);
 		winSprite->render(glm::mat4(1));
@@ -428,7 +430,6 @@ void GameScene::render()
 
 	if (endGame && endGameAnimation == starts)
 	{
-		endGameSprite->changeAnimation(0);
 		endGameSprite->render(glm::mat4(1));
 	}
 }
@@ -710,6 +711,7 @@ void GameScene::animateWin()
 	Game::instance().stopWinSong();
 	winAnimation = finished;
 
+	auxTime = 0.f;
 	return;
 }
 
@@ -732,21 +734,16 @@ void GameScene::animateGoBoss()
 
 void GameScene::animateEndGame()
 {
-	static constexpr float initial_wait_time = 3000.f;
-	static constexpr float wait_time = 14000.f;
+	static constexpr float wait_time = 24000.f;
 
-	float time_to_wait = 0.f;
 	Game::instance().stopAlarmSound();
 	Game::instance().stopBossSong();
-	
-	time_to_wait += initial_wait_time;
-	if (auxTime < time_to_wait) return;
+
 	Game::instance().playEndGameSong();
+	endGameAnimation = starts;
 
-	time_to_wait += wait_time;
-	if (auxTime < time_to_wait) return;
+	if (auxTime < wait_time) return;
 	Game::instance().stopEndGameSong();
-
 	endGameAnimation = finished;
 
 	return;
@@ -1043,6 +1040,7 @@ void GameScene::refreshBoss()
 		weMustCreateTheBoss = false;
 	}
 	player->setBonus(1);
+	boss->setHunterMode(Boss::SLEEP);
 	boss->setPlayer(player);
 	boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 19) * map->getTileSize()));
 

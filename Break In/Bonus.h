@@ -42,7 +42,7 @@ public:
 	static constexpr int wall			= 5;
 	static constexpr int twix			= 6;
 
-	static constexpr float bonusDelayTime		=  1000.f;
+	static constexpr float bonusDelayTime		=  3500.f;
 	static constexpr float bonusAliveTime		= 15000.f;
 	static constexpr float bonusCollisionTime	=  1000.f;
 

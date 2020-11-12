@@ -94,6 +94,8 @@ void Game::restartGameScene()
 	gameScene.setPoints(0);
 	gameScene.setLives(5);
 	gameScene.startBank();
+	gameScene.setEndGame(false);
+	gameScene.setWin(false);
 	setMode(startMenu);
 }
 
@@ -117,14 +119,9 @@ bool Game::update(int deltaTime)
 				gameScene.setEndGame(true);
 				gameScene.update(deltaTime);
 
-				if (gameScene.endAnimationIsActive())
+				if (!gameScene.endAnimationIsActive())
 				{
-					bank = 1;
-					gameScene.setBank(bank);
-					gameScene.setPoints(0);
-					gameScene.startBank();
-					gameScene.setEndGame(false);
-					gameScene.setWin(false);
+					restartGameScene();
 				}
 			}
 			else {
@@ -310,7 +307,6 @@ void Game::keyPressed(int key)
 	case password:
 		switch (lower_key) {
 			case ESC:	rollbackMode();	break;
-			//case '0':
 			case '1':
 			case '2':
 			case '3':
@@ -321,8 +317,8 @@ void Game::keyPressed(int key)
 				//case '8':
 				//case '9':
 				bank = lower_key - '0';
-				rollbackMode();
-				restartGameScene();
+				gameScene.setBank(bank);
+				gameScene.startBank();
 				setMode(playing);
 				break;
 			default:	break;
