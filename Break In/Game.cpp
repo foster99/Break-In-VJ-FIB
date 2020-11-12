@@ -103,6 +103,7 @@ bool Game::update(int deltaTime)
 		playTitleSong();
 		stopAlarmSound();
 		stopBossSong();
+		stopWinSong();
 		break;
 
 	case playing:
@@ -117,10 +118,8 @@ bool Game::update(int deltaTime)
 			gameScene.startBank();
 			gameScene.setWin(false);
 		}
-		if (gameScene.getGoBoss()) {						// WIN
-
-			// No hace falta cambiar el banco porque el numero del banco
-			// es el mismo numero que el del boss.
+		if (gameScene.getGoBoss())						// WIN
+		{						
 			gameScene.startBoss();
 			gameScene.setGoBoss(false);
 		}
@@ -157,6 +156,7 @@ bool Game::update(int deltaTime)
 		passwordScene.update(deltaTime);
 		stopBossSong();
 		stopAlarmSound();
+		stopWinSong();
 		break;
 
 	case exitGame: break;
