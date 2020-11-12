@@ -42,7 +42,7 @@ bool Ball::update(int deltaTime, int& collided)
 			spdModifierY *= -1;
 			collided = 2;
 		}
-		if (collisionBoss = (spdModifierX > 0 && boss->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
+		else if (collisionBoss = (spdModifierX > 0 && boss->collisionMoveRight(posBall, glm::ivec2(sizeBall, sizeBall), &posBall.y, int(speed * spdModifierY)))) {
 			spdModifierX *= -1;
 			if (spdModifierY < 0) spdModifierY *= -1;
 			sprite->changeAnimation(1);
@@ -103,7 +103,7 @@ bool Ball::update(int deltaTime, int& collided)
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBall.x), float(tileMapDispl.y + posBall.y)));
 
-	return (collisionPlayer || collisionX || collisionY);
+	return (collisionPlayer || collisionX || collisionY || collisionBoss);
 }
 
 void Ball::render(glm::mat4& displacement_mat)

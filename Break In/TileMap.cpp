@@ -562,7 +562,7 @@ bool TileMap::tileIsKey(int i, int j)
 
 bool TileMap::tileIsDeath(int i, int j)
 {
-	return (mapita[i][j].symbol == Tile::death);
+ 	return (mapita[i][j].symbol == Tile::death);
 }
 
 bool TileMap::alarmIsOn()
