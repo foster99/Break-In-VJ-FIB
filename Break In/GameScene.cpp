@@ -264,7 +264,9 @@ void GameScene::update(int deltaTime) {
 	}
 	if (guardian->getRoom() == player->getCurrentRoom()) {
 		if (guardian->update(deltaTime))
-			if (!godMode) playerLosesLife();
+			if (!godMode) {
+				playerLosesLife();
+			}
 	}
 	else {
 		map->setAlarm(false);
@@ -320,6 +322,10 @@ void GameScene::update(int deltaTime) {
 				boss->setHunterMode(boss->TRACKING);
 				boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES* map->getTileSize(), (INIT_PLAYER_Y_TILES - 19)* map->getTileSize()));
 			}
+		if (boss->getPlayerGuard()) {
+			player->setBonus(6);
+			boss->tooglePlayerGuard();
+		}
 	}
 	
 	if (reset)
@@ -977,6 +983,7 @@ void GameScene::refreshBoss()
 		boss->setBank(bank);
 		weMustCreateTheBoss = false;
 	}
+	player->setBonus(1);
 	boss->setPlayer(player);
 	boss->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), (INIT_PLAYER_Y_TILES - 19) * map->getTileSize()));
 }

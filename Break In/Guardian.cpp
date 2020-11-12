@@ -128,6 +128,11 @@ int Guardian::getRoom()
 	return guardianRoom;
 }
 
+bool Guardian::getBossFight()
+{
+	return bossFight;
+}
+
 void Guardian::setRoom(int r)
 {
 	posGuardian.x = 0;
