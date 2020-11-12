@@ -28,6 +28,9 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	std::uniform_int_distribution<int> rand(1000, 3000);
 	time2Switch= rand(generator);
 	
+	prog = shaderProgram;
+
+
 	tex.loadFromFile("images/boss.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(bossSize, glm::vec2(1.f / 3.f,1.f/5.f), &tex, &shaderProgram);
 	sprite->setNumberAnimations(15);
@@ -66,29 +69,31 @@ bool Boss::update(int deltaTime)
 	int mapX = map->getMapSizeX();
 	int tileSize = map->getTileSize();
 	elapsedTime += deltaTime;
-	if (elapsedTime > time2Switch) {
-		elapsedTime = 0;
-		
-		std::default_random_engine generator;
-		std::uniform_int_distribution<int> rand(1000, 3000);
-		time2Switch = rand(generator);
-
-		movingRight = !movingRight;
-	}
-
-	if (movingRight) {
-		if ((posBoss.x + bossSize.x) < ((mapX - 2) * tileSize))
-			posBoss += glm::vec2(speed, 0);
-		else
-			movingRight = !movingRight;
-	}
-	else {
-		if (posBoss.x > (tileSize*2))
-			posBoss -= glm::vec2(speed, 0);
-		else
-			movingRight = !movingRight;
-	}
 	
+	if (fase < 3) {
+		if (elapsedTime > time2Switch) {
+			elapsedTime = 0;
+
+			std::default_random_engine generator;
+			std::uniform_int_distribution<int> rand(1000, 3000);
+			time2Switch = rand(generator);
+
+			movingRight = !movingRight;
+		}
+
+		if (movingRight) {
+			if ((posBoss.x + bossSize.x) < ((mapX - 2) * tileSize))
+				posBoss += glm::vec2(speed, 0);
+			else
+				movingRight = !movingRight;
+		}
+		else {
+			if (posBoss.x > (tileSize * 2))
+				posBoss -= glm::vec2(speed, 0);
+			else
+				movingRight = !movingRight;
+		}
+	}
 	
 	// RANDOM BRICKS
 	brickTime += deltaTime;
@@ -138,13 +143,42 @@ bool Boss::update(int deltaTime)
 		}
 		else if (fase1_status == done){
 			fase++;
+			fase2_status = waiting;
 		}
 	}
 	else if (bank > 1 && fase == 2) {	// FASE 2
+		if (fase2_status == waiting) {
+			healthPoints = 100;
+			status = FIRE;
+			numberGuardians = 0;
+			fase2_status = part1;
+		}
+		else if (fase2_status = part1 && elapsedTime >= createGuardian) {
+			elapsedTime = 0;
+			if (numberGuardians == 0)
+				createNewGuardian(2, 52);
+			else if (numberGuardians == 1)
+				createNewGuardian(18, 52);
+			else
+				fase2_status = part2;
+		}
+		else if (fase2_status == part2 && healthPoints > 0) {
+			for (Guardian* guard : guardians) {
+				guard->update(deltaTime);
+			}
+		}
+		else if (fase2_status == part2 && healthPoints <= 0) {
+			fase2_status = done;
+		}
+		else if (fase1_status == done) {
+			fase++;
+			fase3_status = waiting;
+		}
 
+		
 	}
 	//bank > 2 && fase == 3
-	else if (fase == 3) {	// FASE 3
+	else if (bank > 2 && fase == 3) {	// FASE 3
 		switch (hunterMode) {
 			case SLEEP: break;
 				break;
@@ -190,6 +224,12 @@ bool Boss::update(int deltaTime)
 void Boss::render(glm::mat4& displacement_mat)
 {
 	sprite->render(displacement_mat);
+	if (fase == 2) {
+		for (Guardian* guard : guardians) {
+			guard->render(displacement_mat);
+		}
+	}
+		
 }
 
 void Boss::setTileMap(TileMap* tileMap)
@@ -257,6 +297,19 @@ void Boss::trackPlayerPosition()
 	glm::vec2 V = glm::normalize(targetPos - posBoss);
 	spdModifierX = V.x;
 	spdModifierY = V.y;
+}
+
+void Boss::createNewGuardian(int i, int j)
+{
+	guardian = new Guardian();
+	guardian->init(glm::ivec2(0,0), prog);
+	guardian->setTileMap(map);
+	guardian->setPosition(glm::vec2(i * map->getTileSize(), j * map->getTileSize()));
+	guardian->setPlayer(player);
+	guardian->setRoom(map->getGuardianRoom());
+	guardian->toogleBossFight();
+	guardians.push_back(guardian);
+	++numberGuardians;
 }
 
 bool Boss::arrivedTargetPos()

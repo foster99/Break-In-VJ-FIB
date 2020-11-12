@@ -24,6 +24,7 @@ public:
 	void setPosition(const glm::vec2& pos);
 	void setPlayer(Player* p);
 	void restartTime();
+	void toogleBossFight();
 	bool isAwake();
 	bool checkCollision();
 	glm::vec2 getPosition();
@@ -52,6 +53,7 @@ private:
 	// Time Control
 	int guardianMode;
 	float guardianTime;
+	bool bossFight;
 
 	// Speed Control
 	glm::vec2 targetPos;

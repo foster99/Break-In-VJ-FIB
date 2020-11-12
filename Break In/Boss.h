@@ -4,6 +4,8 @@
 #include "Sprite.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "Guardian.h"
+#include <list>
 #include <random>
 
 class Boss
@@ -23,6 +25,7 @@ public:
 
 	void nextAnimation();
 	void trackPlayerPosition();
+	void createNewGuardian(int i, int j);
 	bool arrivedTargetPos();
 
 	void setShield1(bool s);
@@ -57,6 +60,7 @@ public:
 	static constexpr int MOVING			= 2;
 
 	static constexpr float trackingTime = 1000.f;
+	static constexpr float createGuardian = 1000.f;
 
 private:
 	glm::ivec2 tileMapDispl, bossSize;
@@ -65,6 +69,9 @@ private:
 	Sprite* sprite;
 	TileMap* map;
 	Player* player;
+	Guardian* guardian;
+	list<Guardian*> guardians;
+	ShaderProgram prog;
 
 	static constexpr int waiting = 0;
 	static constexpr int part1	= 1;
@@ -76,8 +83,8 @@ private:
 	static constexpr int done	= 7;
 
 	// Fase Control
-	int fase1_status;
-
+	int fase1_status, fase2_status, fase3_status;
+	int numberGuardians;
 	glm::vec2 targetPos;
 
 	// Speed Control

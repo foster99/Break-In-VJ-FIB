@@ -148,6 +148,11 @@ void Guardian::restartTime()
 	guardianTime = 0.f;
 }
 
+void Guardian::toogleBossFight()
+{
+	bossFight = !bossFight;
+}
+
 bool Guardian::isAwake()
 {
 	return guardianMode != 0;
