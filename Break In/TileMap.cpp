@@ -138,12 +138,12 @@ void TileMap::insertShield1()
 void TileMap::insertShield2()
 {
 	int i = 48 + 10;
-	int j = 18;
+	int j = 16;
 
-	loadTile('1', i, j);
-	loadTile('1', i, j + 1);
-	loadTile('1', i + 1, j + 1);
-	loadTile('1', i + 1, j);
+	loadTile('2', i, j);
+	loadTile('2', i, j + 1);
+	loadTile('2', i + 1, j + 1);
+	loadTile('2', i + 1, j);
 
 	insertBrick(i, j - 2);
 	insertBrick(i + 1, j - 2);
@@ -171,7 +171,7 @@ void TileMap::deleteShield1()
 void TileMap::deleteShield2()
 {
 	int i = 48 + 10;
-	int j = 18;
+	int j = 16;
 
 	loadTile(' ', i, j);
 	loadTile(' ', i, j + 1);
@@ -685,13 +685,21 @@ void TileMap::closeDoor()
 	}
 }
 
-void TileMap::toggleDeathDoor()
+void TileMap::closeDeathDoor()
+{
+	for (int i_ = 71, j_ = 0; j_ < mapSize.x; ++j_) {
+		loadTile(Tile::wall, i_, j_);
+	}
+	prepareStaticArrays();
+}
+
+void TileMap::toggleDeathDoor(bool die)
 {
 	char tile;
 	int i = mapSize.y;
 
-	if (mapita[i][0].symbol == Tile::death)	tile = Tile::wall;
-	else									tile = Tile::death;
+	if (die)	tile = Tile::death;
+	else		tile = Tile::wall;							
 
 	for (int j = 0; j < mapSize.x; j++)
 		loadTile(tile, i, j);

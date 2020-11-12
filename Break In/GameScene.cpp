@@ -55,6 +55,8 @@ void GameScene::update(int deltaTime) {
 
 	this->Scene::update(deltaTime);
 
+	toggleDeathDoor(!godMode);
+
 	glm::vec2 previousPlayerPos = player->getPosition();
 
 	if ((timeToDelete % 4) == 0)					// DELETEAR BULLETS SI DESTROY TRUE
@@ -140,7 +142,7 @@ void GameScene::update(int deltaTime) {
 						ball->toogleMagnet();
 				}
 				else if (collided == BOSS_COLLISION) {
-					boss->takeDamage(5, boss->BALL);
+					boss->takeDamage(3, boss->BALL);
 					boss->setHunterMode(boss->TRACKING);
 				}
 				else {
@@ -200,7 +202,7 @@ void GameScene::update(int deltaTime) {
 			if (!bullet->getDestroy() && bullet->update(deltaTime,collided)) {
 				glm::ivec2 tile = bullet->getLastCollision();
 				if (collided == BOSS_COLLISION) {
-					boss->takeDamage(2, boss->BULLET);
+					boss->takeDamage(1, boss->BULLET);
 					boss->setHunterMode(boss->TRACKING);
 				}
 					
@@ -804,9 +806,9 @@ void GameScene::closeDoor()
 	if (godMode) map->closeDoor();
 }
 
-void GameScene::toggleDeathDoor()
+void GameScene::toggleDeathDoor(bool die)
 {
-	map->toggleDeathDoor();
+	map->toggleDeathDoor(die);
 }
 
 bool GameScene::inGodMode()
@@ -967,6 +969,7 @@ void GameScene::refreshBoss()
 		boss = new Boss();
 		boss->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		boss->setTileMap(map);
+		boss->setBank(bank);
 		weMustCreateTheBoss = false;
 	}
 	boss->setPlayer(player);
@@ -1077,5 +1080,4 @@ void GameScene::setGoBoss(bool w)
 void GameScene::toggleGodMode()
 {
 	godMode = !godMode;
-	toggleDeathDoor();
 }

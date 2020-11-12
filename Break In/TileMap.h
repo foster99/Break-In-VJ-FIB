@@ -62,7 +62,8 @@ public:
 	void collisionBrick(char brick, int i, int j);
 	void openDoor();
 	void closeDoor();
-	void toggleDeathDoor();
+	void closeDeathDoor();
+	void toggleDeathDoor(bool die);
 	void deleteSpecialTile(int i, int j, char tile);
 
 	bool loadLevel(const string &levelFile);
