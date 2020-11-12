@@ -17,7 +17,7 @@ void Boss::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	shield1 = false;
 	shield2 = false;
 	status = NORMAL;
-	hunterMode = SLEEP;
+	hunterMode = TRACKING;
 	actTracking = 0;
 	healthPoints = 100;
 	shieldDurability = 100;
@@ -161,24 +161,28 @@ bool Boss::update(int deltaTime)
 			healthPoints = 100;
 			status = FIRE;
 			numberGuardians = 0;
+			elapsedTime = 0;
 			fase2_status = part1;
 		}
-		else if (fase2_status = part1 && elapsedTime >= createGuardian) {
-			elapsedTime = 0;
+		else if (fase2_status == part1) {
 			if (numberGuardians == 0)
 				createNewGuardian(2, 52);
 			else if (numberGuardians == 1)
 				createNewGuardian(18, 52);
-			else
+			else {
 				fase2_status = part2;
+				status = NORMAL;
+			}
+				
 		}
 		else if (fase2_status == part2 && healthPoints > 0) {
 			for (Guardian* guard : guardians) {
-				guard->update(deltaTime);
+ 				guard->update(deltaTime);
 			}
 		}
 		else if (fase2_status == part2 && healthPoints <= 0) {
 			fase2_status = done;
+			status = STUNED;
 		}
 		else if (fase1_status == done) {
 			fase++;
@@ -188,10 +192,14 @@ bool Boss::update(int deltaTime)
 		
 	}
 	else if (bank > 2 && fase == 3) {	// FASE 3
-		map->closeDeathDoor();
-		switch (hunterMode) {
+		if (fase3_status == waiting) {
+			map->closeDeathDoor();
+			healthPoints = 100;
+			fase3_status = part1;
+		}
+		if (fase3_status == part1) {
+			switch (hunterMode) {
 			case SLEEP: break;
-				break;
 			case TRACKING:
 				actTracking += deltaTime;
 				if (actTracking < trackingTime) {
@@ -203,7 +211,8 @@ bool Boss::update(int deltaTime)
 				}
 				break;
 			case MOVING:
-				if (arrivedTargetPos()) {
+				//arrivedTargetPos()
+				if (false) {
 					actTracking = 0;
 					hunterMode = TRACKING;
 				}
@@ -212,7 +221,9 @@ bool Boss::update(int deltaTime)
 					posBoss.y += speed * spdModifierY;
 				}
 				break;
+			}
 		}
+		
 	}
 	else {								// END BOSS FIGHT
 		alive = false;
@@ -300,6 +311,11 @@ void Boss::setBank(int b)
 	bank = b;
 }
 
+int Boss::getHunterMode()
+{
+	return hunterMode;
+}
+
 void Boss::nextAnimation()
 {
 	
@@ -321,8 +337,9 @@ void Boss::createNewGuardian(int i, int j)
 	guardian->setTileMap(map);
 	guardian->setPosition(glm::vec2(i * map->getTileSize(), j * map->getTileSize()));
 	guardian->setPlayer(player);
-	guardian->setRoom(map->getGuardianRoom());
+	//guardian->setRoom(map->getGuardianRoom());
 	guardian->toogleBossFight();
+	guardian->wakeUp();
 	guardians.push_back(guardian);
 	++numberGuardians;
 }
@@ -394,30 +411,29 @@ bool Boss::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size, flo
 {
 	int rightLimit = pos.x + size.x;
 	int speedBall2 = abs(speedBall);
+	int speedBoss = int(speed * abs(spdModifierX));
 
-	//if (movingRight) {
-		for (int spb = 0; spb < speed; ++spb) {
-			for (int s = 1; s <= speedBall2; ++s) {
-				if ((rightLimit + s) == (posBoss.x + spb) && onSide(pos, size.y)) {
-					*posJ += s - 1;
-					return true;
-				}
-			}
 
-		}
-	//}
 
-	//else {
-		for (int spb = 0; spb >= (-1 * speed); --spb) {
-			for (int s = 1; s <= speedBall2; ++s) {
-				if ((rightLimit + s) == (posBoss.x + spb) && onSide(pos, size.y)) {
-					*posJ += s - 1;
-					return true;
-				}
+	for (int spb = 0; spb < speedBoss; ++spb) {
+		for (int s = 1; s <= speedBall2; ++s) {
+			if ((rightLimit + s) == (posBoss.x + spb) && onSide(pos, size.y)) {
+				*posJ += s - 1;
+				return true;
 			}
 		}
-	//}
 
+	}
+
+
+	for (int spb = 0; spb >= (-1 * speedBoss); --spb) {
+		for (int s = 1; s <= speedBall2; ++s) {
+			if ((rightLimit + s) == (posBoss.x + spb) && onSide(pos, size.y)) {
+				*posJ += s - 1;
+				return true;
+			}
+		}
+	}
 
 	return false;
 }
@@ -426,28 +442,28 @@ bool Boss::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, floa
 {
 	int leftLimit = pos.x;
 	int speedBall2 = abs(speedBall);
+	int speedBoss = int(speed * abs(spdModifierX));
 
-	//if (movingRight) {
-		for (int spb = 0; spb < speed; ++spb) {
-			for (int s = 1; s <= speedBall2; ++s) {
-				if (leftLimit == (posBoss.x + bossSize.x + spb) && onSide(pos, size.y)) {
-					*posJ -= s - 1;
-					return true;
-				}
+	for (int spb = 0; spb < speedBoss; ++spb) {
+		for (int s = 1; s <= speedBall2; ++s) {
+			if (leftLimit == (posBoss.x + bossSize.x + spb) && onSide(pos, size.y)) {
+				*posJ -= s - 1;
+				return true;
 			}
 		}
-	//}
+	}
 
-	//else {
-		for (int spb = 0; spb >= (-1 * speed); --spb) {
-			for (int s = 1; s <= speedBall2; ++s) {
-				if (leftLimit == (posBoss.x + bossSize.x + spb) && onSide(pos, size.y)) {
-					*posJ -= s - 1;
-					return true;
-				}
+
+
+	for (int spb = 0; spb >= (-1 * speedBoss); --spb) {
+		for (int s = 1; s <= speedBall2; ++s) {
+			if (leftLimit == (posBoss.x + bossSize.x + spb) && onSide(pos, size.y)) {
+				*posJ -= s - 1;
+				return true;
 			}
 		}
-	//}
+	}
+
 		
 	return false;
 }
@@ -455,7 +471,7 @@ bool Boss::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size, floa
 
 bool Boss::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, float* posI, int speed, float& modifierY, float& modifierX)
 {
-	int spd = int(speed + abs(modifierY));
+	int spd = int(speed * abs(modifierY));
 
 	for (int s = 1; s <= spd; ++s) {
 		if ((pos.y - s) == (posBoss.y + bossSize.y) && onSlide(pos, size.x, modifierY, modifierX)) {

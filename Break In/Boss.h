@@ -23,6 +23,9 @@ public:
 	void setHunterMode(int hm);
 	void setBank(int b);
 
+	int getHunterMode();
+	
+
 	void nextAnimation();
 	void trackPlayerPosition();
 	void createNewGuardian(int i, int j);

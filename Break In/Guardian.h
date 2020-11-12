@@ -13,6 +13,7 @@ public:
 	void render(glm::mat4& displacement_mat);
 
 	void alarmOn();
+	void wakeUp();
 	void nextAnimation();
 	bool arrivedTargetPos();
 	void trackPlayerPosition();
