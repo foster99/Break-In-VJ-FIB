@@ -58,7 +58,7 @@ bool Guardian::update(int deltaTime) {
 		break;
 	}
 
-	Game::instance().playAlarmSound();
+	//Game::instance().playAlarmSound();
 
 	sprite->setPosition(glm::vec2(	float(tileMapDispl.x + posGuardian.x),
 									float(tileMapDispl.y + posGuardian.y)));
@@ -77,8 +77,15 @@ void Guardian::render(glm::mat4& displacement_mat)
 void Guardian::alarmOn()
 {
 	if (!isAwake()) {
-		guardianMode = tracking;
+		wakeUp();
 		Game::instance().playAlarmSound();
+	}
+}
+
+void Guardian::wakeUp()
+{
+	if (!isAwake()) {
+		guardianMode = tracking;
 	}
 }
 
